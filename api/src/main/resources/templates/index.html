@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: common_header(~{::title},~{::link})">
+    <title>BBCOW</title>
+    <link/>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">bbcow</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">BBCOW</a>
+        </div>
+        <p class="navbar-text navbar-right">@大辉</p>
+    </div>
+</nav>
+<div class="container">
+    <form action="/search" method="post" class="">
+        <div class="col-lg-12">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon3">https://www.bbcow.com</span>
+                <input type="text" class="form-control" name="word" placeholder="书名 作者名" th:value="${word}"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜......</button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </form>
+</div>
+<div class="container" style="margin-top: 20px;">
+    <label class="col-md-2" th:each="word:${words}">
+        <a th:href="@{/search?word={word}(word=${word.word})}" th:text="${word.word}"></a>
+    </label>
+</div>
+<!--<div class="container" style="margin-top: 20px;">-->
+    <!--<ol class="">-->
+        <!--<li th:each="result: ${results}" class="col-md-12"  style="padding-bottom: 10px">-->
+            <!--<label class="col-md-3"><a th:href="@{/books/{id}(id=${result.fields.id})}" th:utext="${result.fields.name}"></a></label>-->
+            <!--<label th:text ="${result.fields.author}" class="col-md-3"></label>-->
+            <!--<label th:text ="${result.fields.cp}" class="col-md-3"></label>-->
+            <!--<label th:text ="${result.fields.tags}" class="col-md-3"></label>-->
+        <!--</li>-->
+
+    <!--</ol>-->
+<!--</div>-->
+
+</body>
+</html>
