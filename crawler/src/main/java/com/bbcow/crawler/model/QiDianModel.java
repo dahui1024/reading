@@ -12,7 +12,7 @@ import java.util.List;
  * Created by adan on 2017/10/18.
  */
 @TargetUrl("https://book.qidian.com/info/*")
-@HelpUrl("https://www.qidian.com/rank/\\w+")
+//@HelpUrl("https://www.qidian.com/rank/\\w+")
 public class QiDianModel implements AfterExtractor{
     @ExtractBy(value = "/html/body/div[2]/div[6]/div[1]/div[2]/h1/em/text()")
     public String name;
