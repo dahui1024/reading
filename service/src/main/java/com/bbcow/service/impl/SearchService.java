@@ -1,4 +1,4 @@
-package com.bbcow.service;
+package com.bbcow.service.impl;
 
 import com.bbcow.service.mongo.entity.SearchWord;
 import com.bbcow.service.mongo.reporitory.SearchWordRepository;

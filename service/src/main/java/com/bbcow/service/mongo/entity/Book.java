@@ -21,7 +21,7 @@ public class Book {
     private String author;
     private int is_vip;
     private int is_finish;
-    private int is_sign;
+    private int is_sign = 1;
     private String description;
     private String cp_image_url;
     private String cp_host;

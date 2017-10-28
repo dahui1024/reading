@@ -1,23 +1,18 @@
 package com.bbcow.crawler.site;
 
-import com.bbcow.crawler.model.FindModel;
-import com.bbcow.crawler.model.QiDianModel;
-import com.bbcow.crawler.model.QiDianRankModel;
-import com.bbcow.service.BookService;
-import com.bbcow.service.BookUrlsService;
-import com.bbcow.service.mongo.entity.Book;
+import com.bbcow.crawler.proxy.FindProxy;
+import com.bbcow.service.impl.BookService;
+import com.bbcow.service.impl.SiteService;
+import com.bbcow.service.mongo.entity.BookUrl;
+import com.bbcow.service.mongo.entity.SiteUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,30 +23,33 @@ import java.util.TreeSet;
 @Component
 public class FindCrawler implements CommandLineRunner{
     @Autowired
-    BookUrlsService bookUrlsService;
-    public static int count = 0;
+    BookService bookService;
+    @Autowired
+    SiteService siteService;
+    FindProxy findProxy;
 
     @Override
     public void run(String... strings) throws Exception {
         OOSpider bookSpider = new OOSpider(new Processor());
-
-        bookSpider.addUrl("https://www.qidian.com/all?orderId=&page=1&style=1&pageSize=50&siteid=1&pubflag=0&hiddenField=0");
+        siteService.load().forEach(site -> {
+            bookSpider.addUrl(site.getStart_url());
+        });
         bookSpider.thread(2).start();
 
+        findProxy = new FindProxy(siteService.loadElements());
     }
     class Processor implements PageProcessor{
 
         @Override
         public void process(Page page) {
-            List<String> links = page.getHtml().xpath("//*[@id=\"page-container\"]/div/ul").links().all();
 
-            page.addTargetRequests(links);
+            findProxy.getSites(page).forEach(siteUrl -> {
+                siteService.saveUrl(siteUrl);
+                page.addTargetRequest(siteUrl.getUrl());
+            });
 
-            List<String> bookLinks = page.getHtml().links().regex(".*info.*").all();
-            Set<String> uniqueLinks = new TreeSet<>(bookLinks);
-
-            uniqueLinks.forEach(s -> {
-                bookUrlsService.save(s, "www.qidian.com");
+            findProxy.getBookUrls(page).forEach(bookUrl -> {
+                bookService.saveUrl(bookUrl);
             });
 
         }

@@ -1,8 +1,7 @@
 package com.bbcow.api.web;
 
-import com.bbcow.service.BookService;
-import com.bbcow.service.SearchService;
-import com.bbcow.service.mongo.entity.Book;
+import com.bbcow.service.impl.BookService;
+import com.bbcow.service.impl.SearchService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
