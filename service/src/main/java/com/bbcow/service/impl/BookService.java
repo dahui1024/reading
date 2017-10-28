@@ -98,11 +98,10 @@ public class BookService {
         update.set("crawl_time", new Date());
 
         int n = mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(url)), update, BookUrl.class).getN();
-        System.out.println(n);
     }
 
     public List<BookUrl> getUrlQueue(){
-        PageRequest pageRequest = new PageRequest(1, 1, Sort.Direction.ASC, "crawl_time");
+        PageRequest pageRequest = new PageRequest(1, 4, Sort.Direction.ASC, "crawl_time");
         return bookUrlRepository.findAll(pageRequest).getContent();
     }
 }
