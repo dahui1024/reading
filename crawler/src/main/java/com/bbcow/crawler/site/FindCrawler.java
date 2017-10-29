@@ -34,7 +34,7 @@ public class FindCrawler implements CommandLineRunner{
         siteService.load().forEach(site -> {
             bookSpider.addUrl(site.getStart_url());
         });
-        bookSpider.thread(2).start();
+        bookSpider.thread(4).start();
 
         findProxy = new FindProxy(siteService.loadElements());
     }

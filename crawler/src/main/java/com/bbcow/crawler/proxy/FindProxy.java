@@ -15,6 +15,7 @@ import java.util.*;
 public class FindProxy {
 
     private Map<String, SiteElement> elementMap;
+    private Map<String, Integer> countMap = new HashMap<>();
 
     public FindProxy(Map<String, SiteElement> elementMap){
         this.elementMap = elementMap;
@@ -52,9 +53,58 @@ public class FindProxy {
             Html html = page.getHtml();
             List<String> links = html.xpath(siteElement.getUrl()).links().all();
 
-            List<SiteUrl> siteUrls = new LinkedList<>();
+
+            return urlProcessor(host, links);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
 
+        return Collections.emptyList();
+    }
+
+    private List<SiteUrl> urlProcessor(String host, List<String> links){
+        List<SiteUrl> siteUrls = new LinkedList<>();
+        String template = null;
+
+        int count = 0;
+
+        if (!links.isEmpty()){
+            for (String link : links){
+                if (link.contains("page=")){
+                    template = link.replaceFirst("page=[\\d]*", "page=@count");
+                    int index = link.indexOf("page=") + 5;
+                    int lastSymbolIndex = link.lastIndexOf("&");
+                    if (lastSymbolIndex > index){
+                        int endIndex = link.indexOf("&", index);
+                        if (Integer.valueOf(link.substring(index, endIndex)) > count){
+                            count = Integer.valueOf(link.substring(index, endIndex));
+                        }
+                    } else {
+                        if (Integer.valueOf(link.substring(index)) > count){
+                            count = Integer.valueOf(link.substring(index));
+                        }
+                    }
+                }
+            }
+            // 初始化
+            if (template != null && !countMap.containsKey(template)){
+                countMap.put(template, 1);
+            }
+        }
+        if (template != null && count > countMap.get(template)){
+            for (int i = countMap.get(template); i < count; i++) {
+                SiteUrl siteUrl = new SiteUrl();
+                siteUrl.setHost(host);
+                siteUrl.setUrl(template.replace("@count", i+""));
+                siteUrls.add(siteUrl);
+            }
+            // 更新最大页数
+            countMap.put(template, count);
+        }else if (template != null && count <= countMap.get(template)){
+
+        }else {
             links.forEach(link -> {
                 if (!StringUtils.isEmpty(link)){
                     SiteUrl siteUrl = new SiteUrl();
@@ -64,14 +114,10 @@ public class FindProxy {
                     siteUrls.add(siteUrl);
                 }
             });
-
-            return siteUrls;
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         }
 
-
-        return Collections.emptyList();
+        siteUrls.forEach(link -> System.out.println(link.getUrl()));
+        System.out.println("------------");
+        return siteUrls;
     }
 }

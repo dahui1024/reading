@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: common_header(~{::title},~{::link})">
-    <title th:text="${book.name}"></title>
+    <title>[[ ${book.name} ]]_木头搜</title>
     <link/>
 </head>
 <body>
@@ -9,17 +9,16 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">bbcow</span>
+                <span class="sr-only">木头搜</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">BBCOW</a>
+            <a class="navbar-brand" href="/">木头搜</a>
         </div>
         <p class="navbar-text navbar-right">@大辉</p>
     </div>
 </nav>
-
 <div class="container" style="margin-top: 20px;">
 
     <div class="media">
@@ -41,5 +40,6 @@
     </div>
 </div>
 
+<footer th:replace="footer :: common_footer()"></footer>
 </body>
 </html>
