@@ -60,6 +60,12 @@ public class BookService {
         }
     }
 
+    public int resetPageScore(String name, int score){
+        Update bookUpdate = new Update();
+        bookUpdate.set("page_score", score);
+        return mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), bookUpdate, Book.class).getN();
+    }
+
     public Book getById(ObjectId id) {
         return bookRepository.findOne(id);
     }

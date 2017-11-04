@@ -1,5 +1,6 @@
 package com.bbcow.crawler.site;
 
+import com.bbcow.crawler.CrawlerProperties;
 import com.bbcow.crawler.proxy.FindProxy;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.SiteService;
@@ -26,10 +27,15 @@ public class FindCrawler implements CommandLineRunner{
     BookService bookService;
     @Autowired
     SiteService siteService;
+    @Autowired
+    CrawlerProperties crawlerProperties;
     FindProxy findProxy;
 
     @Override
     public void run(String... strings) throws Exception {
+        if (!crawlerProperties.isFind()){
+            return;
+        }
         OOSpider bookSpider = new OOSpider(new Processor());
         siteService.load().forEach(site -> {
             bookSpider.addUrl(site.getStart_url());

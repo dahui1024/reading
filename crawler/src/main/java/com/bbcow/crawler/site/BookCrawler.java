@@ -1,5 +1,6 @@
 package com.bbcow.crawler.site;
 
+import com.bbcow.crawler.CrawlerProperties;
 import com.bbcow.crawler.proxy.BookProxy;
 import com.bbcow.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,15 @@ import us.codecraft.webmagic.processor.PageProcessor;
 public class BookCrawler implements CommandLineRunner{
     @Autowired
     BookService bookService;
+    @Autowired
+    CrawlerProperties crawlerProperties;
     BookProxy bookProxy;
 
     @Override
     public void run(String... strings) throws Exception {
+        if (!crawlerProperties.isBook()){
+            return;
+        }
         OOSpider bookSpider = new OOSpider(new BookCrawler.Processor());
         bookSpider.addUrl("https://www.qidian.com");
         bookSpider.setExitWhenComplete(false);

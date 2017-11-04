@@ -7,6 +7,7 @@ import com.bbcow.service.mongo.reporitory.BookElementRepository;
 import com.bbcow.service.mongo.reporitory.BookRepository;
 import com.bbcow.service.mongo.reporitory.SiteElementRepository;
 import com.bbcow.service.search.RemoteUpload;
+import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class BookTest {
     BookRepository bookRepository;
     @Autowired
     BookElementRepository bookElementRepository;
+
+    @Test
+    public void s(){
+        bookRepository.findOne(new ObjectId("59e74c37a316861935b14fff"));
+    }
 
     @Test
     public void test(){
