@@ -1,0 +1,6 @@
+server:
+  port: 8010
+
+spring:
+  profiles:
+    include: service-dev
