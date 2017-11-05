@@ -4,13 +4,16 @@ import com.bbcow.service.mongo.entity.ScoreBook;
 import com.bbcow.service.mongo.entity.ScoreSite;
 import com.bbcow.service.mongo.reporitory.ScoreBookRepository;
 import com.bbcow.service.mongo.reporitory.ScoreSiteRepository;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,18 +27,29 @@ public class ScoreService {
     ScoreBookRepository scoreBookRepository;
 
     public void updateBookPageScore(String name, int score){
-        ScoreBook scoreBook = scoreBookRepository.findOne(name);
+        Date date = new Date();
+        Date day = DateUtils.truncate(date, Calendar.DATE);
+        ScoreBook scoreBook = scoreBookRepository.findByNameAndDay(name, day);
         if (scoreBook == null){
             scoreBook = new ScoreBook();
             scoreBook.setName(name);
             scoreBook.setScore(score);
-            scoreBook.setCreate_time(new Date());
+            scoreBook.setCreate_time(date);
+            scoreBook.setDay(day);
             scoreBookRepository.save(scoreBook);
         }else {
             Update update = new Update();
             update.inc("score", score);
             mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), update, ScoreBook.class).getN();
         }
+    }
+
+    public long countScoreBook(){
+        return scoreBookRepository.count();
+    }
+
+    public List<ScoreBook> findByDay(Date day){
+        return scoreBookRepository.findByDay(day);
     }
 
     public void addSite(String host){
@@ -48,8 +62,17 @@ public class ScoreService {
             scoreSiteRepository.save(scoreSite);
         }
     }
-    public List<ScoreSite> findAll(){
+    public List<ScoreSite> findEnabelSite(){
         return scoreSiteRepository.findByStatus(1);
+    }
+
+    public long getCrawlCount(){
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.group("name").sum("crawl_count").as("crawl_count"),
+                Aggregation.project().andExclude("_id")
+        );
+        System.out.println(aggregation);
+        return mongoTemplate.aggregate(aggregation, "score_site", ScoreSite.class).getUniqueMappedResult().getCrawl_count();
     }
 
     public void finishCrawl(String host){

@@ -2,6 +2,7 @@ package com.bbcow.api.web;
 
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.SearchService;
+import com.bbcow.service.mongo.entity.Book;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +39,16 @@ public class WebIndexController {
     }
     @RequestMapping("/books/{id}")
     public String get(@PathVariable String id, Model model){
+        Book book = bookService.getById(new ObjectId(id));
+        model.addAttribute("book", book);
 
-        model.addAttribute("book", bookService.getById(new ObjectId(id)));
-
+        model.addAttribute("recommendBooks", bookService.recommend(book.getAuthor()));
         return "books";
+    }
+    @RequestMapping("/books/rank/page_score")
+    public String getRank(Model model){
+        model.addAttribute("books", bookService.getTop50());
+
+        return "ranks";
     }
 }

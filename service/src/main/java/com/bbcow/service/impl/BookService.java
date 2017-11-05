@@ -78,6 +78,16 @@ public class BookService {
         return elementMap;
     }
 
+    public List<Book> getTop50(){
+        PageRequest pageRequest = new PageRequest(0, 50, Sort.Direction.DESC, "page_score");
+
+        return bookRepository.findAll(pageRequest).getContent();
+    }
+
+    public List<Book> recommend(String author){
+        PageRequest pageRequest = new PageRequest(0, 5);
+        return bookRepository.findByAuthor(author, pageRequest).getContent();
+    }
 
     public BookElement findElementByHost(String host){
         return bookElementRepository.findOne(host);

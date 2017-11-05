@@ -1,5 +1,10 @@
 server:
   port: 8000
+
+spring:
+  profiles:
+    include: service-dev
+
 crawler:
   book: false
   find: false

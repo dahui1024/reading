@@ -1,2 +1,12 @@
 server:
   port: 8000
+
+spring:
+  profiles:
+    include: service-prod
+
+crawler:
+  book: false
+  find: false
+  spider: false
+  score: true

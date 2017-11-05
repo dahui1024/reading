@@ -23,7 +23,7 @@ public class Book {
     private int is_finish;
     private int is_sign = 1;
     @Indexed
-    private float page_score = 0.0f;
+    private int page_score = 0;
     private String description;
     private String cp_image_url;
     private String cp_host;
@@ -145,11 +145,11 @@ public class Book {
         this.is_sign = is_sign;
     }
 
-    public float getPage_score() {
+    public int getPage_score() {
         return page_score;
     }
 
-    public void setPage_score(float page_score) {
+    public void setPage_score(int page_score) {
         this.page_score = page_score;
     }
 }

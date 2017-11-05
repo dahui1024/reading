@@ -39,7 +39,7 @@ public class SearchWordRepositoryImpl implements SearchWordRepository {
         Query query = new Query();
         Sort sort = new Sort(Sort.Direction.DESC, "count");
         query.with(sort);
-        query.limit(10);
+        query.limit(30);
         return mongoTemplate.find(query, SearchWord.class);
     }
 }

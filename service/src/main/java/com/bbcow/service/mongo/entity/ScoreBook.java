@@ -15,6 +15,8 @@ public class ScoreBook {
 
     private long score;
 
+    private Date day;
+
     private Date create_time;
 
     public String getName() {
@@ -39,5 +41,13 @@ public class ScoreBook {
 
     public void setCreate_time(Date create_time) {
         this.create_time = create_time;
+    }
+
+    public Date getDay() {
+        return day;
+    }
+
+    public void setDay(Date day) {
+        this.day = day;
     }
 }

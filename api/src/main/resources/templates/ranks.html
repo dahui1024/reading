@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: common_header(~{::title},~{::link})">
-    <title>[[ ${book.name} ]]_木头搜</title>
+    <title>木头搜，搜书就搜我</title>
     <link/>
 </head>
 <body>
@@ -16,6 +16,7 @@
             </button>
             <a class="navbar-brand" href="/">木头搜</a>
         </div>
+
         <p class="navbar-text">
             <a href="/books/rank/page_score" class="navbar-link">网络热度榜</a>
         </p>
@@ -23,37 +24,26 @@
     </div>
 </nav>
 <div class="container" style="margin-top: 20px;">
-    <div class="media">
+<h2>网络热度榜 TOP50</h2>
+    <div class="media" th:each="book: ${books}">
         <div class="media-left">
             <a href="#">
-                <img class="media-object" height="128px"  th:src="${book.cp_image_url}" th:alt="${book.name}">
+                <img class="media-object" height="128px" th:src="${book.cp_image_url}" th:alt="${book.name}">
             </a>
         </div>
         <div class="media-body">
             <h4 class="media-heading">
-                <a th:href="@{/search?word={word}(word=${book.name})}">[[${book.name}]]</a>
+                <a th:href="@{/books/{id}?(id=${book.id})}">[[${book.name}]]</a>
                 &nbsp;&nbsp;<small th:text="${book.author}"></small>
             </h4>
             <p class="lead">热度值：<b>[[${book.page_score / 10.0}]]</b></p>
             [[${book.description}]]
+            <mark th:text="${book.cp_name}"></mark>
+            <mark th:text="${book.tags}"></mark>
         </div>
+        <hr/>
     </div>
-    <hr/>
-    <p>来源：[[${book.cp_name}]]</p>
-    <p>标签：[[${book.tags}]]</p>
-    <p>签约：[[${book.is_sign == 1} ? '已签约' : '未签约']]</p>
-    <p>状态：[[${book.is_finish == 1} ? '完结' : '连载']]</p>
-    <p>收费：[[${book.is_vip == 1} ? '收费' : '免费']]</p>
-    <p>源链接：[[${book.cp_url}]]</p>
-    <hr/>
-    <p class="lead">同名推荐</p>
-    <ol>
-        <li th:each="book : ${recommendBooks}">
-            <p><a th:href="@{/search?word={word}(word=${book.name})}">[[${book.name}]]&nbsp;&nbsp;</a><small>热度值：[[${book.page_score / 10.0}]]</small></p>
-        </li>
-    </ol>
 </div>
-
 <footer th:replace="footer :: common_footer()"></footer>
 </body>
 </html>
