@@ -14,5 +14,6 @@ import java.util.List;
  */
 public interface BookRepository extends MongoRepository<Book, ObjectId> , PagingAndSortingRepository<Book, ObjectId> {
     Book findByNameAndAuthor(String name, String author);
+    List<Book> findByName(String name);
     Page<Book> findByAuthor(String author, Pageable pageable);
 }

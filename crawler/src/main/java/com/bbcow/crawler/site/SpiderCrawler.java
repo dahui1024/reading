@@ -30,7 +30,7 @@ public class SpiderCrawler implements CommandLineRunner{
             return;
         }
         OOSpider bookSpider = new OOSpider(new SpiderCrawler.Processor());
-        bookSpider.addUrl("http://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baidu&wd=%E5%85%83%E5%B0%8A&oq=%25E5%2585%2583%25E5%25B0%258A&rsv_pq=f86c10040001b443&rsv_t=643cFdFlw9uN6fpL6Jx7tf%2F6Z2N2Qllf%2FuXaNUNqENw4OgDG%2B4tjkOmng5A&rqlang=cn&rsv_enter=0");
+        bookSpider.addUrl("http://www.baidu.com/s?wd=%E6%96%97%E7%A0%B4%E8%8B%8D%E7%A9%B9%E5%B0%8F%E8%AF%B4&rsv_spt=1&rsv_iqid=0x9c949fce000298a1&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=0&oq=%25E6%2596%2597%25E7%25A0%25B4%25E8%258B%258D%25E7%25A9%25B9%25E5%25B0%258F%25E8%25AF%25B4&rsv_t=b9ff2f6G2oQDRvmkP5H52thCLj%2BLzt%2FITgSGqI07Hyk1M63ekgEfr34ujkPO3bGFJAuM&rsv_pq=e9d0285600025eb1&rsv_sug=9");
         bookSpider.setExitWhenComplete(true);
         bookSpider.thread(1).start();
     }

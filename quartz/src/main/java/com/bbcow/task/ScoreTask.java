@@ -45,7 +45,10 @@ public class ScoreTask {
                 if (result.intValue() <=0 ){
                     continue;
                 }
-                bookService.resetPageScore(scoreBook.getName(), result.intValue());
+                int n = bookService.resetPageScore(scoreBook.getName(), result.intValue());
+                if (n > 0) {
+                    scoreService.addScoreLog(scoreBook.getName(), day, result.intValue());
+                }
             }
 
         }

@@ -1,7 +1,9 @@
 package com.bbcow.service.impl;
 
 import com.bbcow.service.mongo.entity.ScoreBook;
+import com.bbcow.service.mongo.entity.ScoreBookLog;
 import com.bbcow.service.mongo.entity.ScoreSite;
+import com.bbcow.service.mongo.reporitory.ScoreBookLogRepository;
 import com.bbcow.service.mongo.reporitory.ScoreBookRepository;
 import com.bbcow.service.mongo.reporitory.ScoreSiteRepository;
 import org.apache.commons.lang3.time.DateUtils;
@@ -25,6 +27,8 @@ public class ScoreService {
     MongoTemplate mongoTemplate;
     @Autowired
     ScoreBookRepository scoreBookRepository;
+    @Autowired
+    ScoreBookLogRepository scoreBookLogRepository;
 
     public void updateBookPageScore(String name, int score){
         Date date = new Date();
@@ -42,6 +46,21 @@ public class ScoreService {
             update.inc("score", score);
             mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), update, ScoreBook.class).getN();
         }
+    }
+
+    public List<ScoreBookLog> findNewly30ByName(String name){
+        Query query = Query.query(Criteria.where("name").is(name));
+
+        return mongoTemplate.find(query, ScoreBookLog.class);
+//        return scoreBookLogRepository.findNewly30ByName(name);
+    }
+    public void addScoreLog(String name, Date day, int pageScore){
+        ScoreBookLog scoreBookLog = new ScoreBookLog();
+        scoreBookLog.setDay(day);
+        scoreBookLog.setName(name);
+        scoreBookLog.setPageScore(pageScore);
+
+        scoreBookLogRepository.save(scoreBookLog);
     }
 
     public long countScoreBook(){

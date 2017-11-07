@@ -44,13 +44,10 @@ public class ScoreCrawler{
 
         OOSpider bookSpider = new OOSpider(new ScoreCrawler.Processor());
         // 一天限制爬取一次
-        scoreService.findEnabelSite().stream().filter(new Predicate<ScoreSite>() {
-            @Override
-            public boolean test(ScoreSite scoreSite) {
-                if (scoreSite.getCrawl_time() == null)
-                    return true;
-                return scoreSite.getCrawl_time().before(day);
-            }
+        scoreService.findEnabelSite().stream().filter(scoreSite -> {
+            if (scoreSite.getCrawl_time() == null)
+                return true;
+            return scoreSite.getCrawl_time().before(day);
         }).forEach(scoreSite -> bookSpider.addUrl("http://" + scoreSite.getHost()));
         bookSpider.setExitWhenComplete(true);
         bookSpider.thread(1).start();

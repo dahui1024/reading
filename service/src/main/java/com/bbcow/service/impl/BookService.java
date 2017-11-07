@@ -61,9 +61,11 @@ public class BookService {
     }
 
     public int resetPageScore(String name, int score){
-        Update bookUpdate = new Update();
-        bookUpdate.set("page_score", score);
-        return mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), bookUpdate, Book.class).getN();
+        List<Book> books = bookRepository.findByName(name);
+        books.forEach(book -> {
+            book.setPage_score(score);
+        });
+        return bookRepository.save(books).size();
     }
 
     public Book getById(ObjectId id) {

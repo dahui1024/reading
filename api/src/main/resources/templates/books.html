@@ -39,6 +39,7 @@
         </div>
     </div>
     <hr/>
+    <div id="chart"></div>
     <p>来源：[[${book.cp_name}]]</p>
     <p>标签：[[${book.tags}]]</p>
     <p>签约：[[${book.is_sign == 1} ? '已签约' : '未签约']]</p>
@@ -53,7 +54,34 @@
         </li>
     </ol>
 </div>
-
 <footer th:replace="footer :: common_footer()"></footer>
+<script src="/js/frappe-charts.min.iife.js" ></script>x
+<script>
+  var labels = ['[(${#strings.arrayJoin(labels, "','")})]'];
+  var values = [ [(${#strings.arrayJoin(values, ",")})] ];
+  // Javascript
+  let data = {
+    labels: labels,
+
+    datasets: [
+      {
+        title: "[(${book.name})]",
+        color: "light-blue",
+        values: values
+      }
+    ]
+  };
+
+  let chart = new Chart({
+    parent: "#chart",
+    title: "月热度趋势图",
+    data: data,
+    type: 'line',
+    height: 250
+  });
+
+  chart.show_averages();
+
+</script>
 </body>
 </html>
