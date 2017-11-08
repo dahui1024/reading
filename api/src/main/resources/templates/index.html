@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: common_header(~{::title},~{::link})">
-    <title>木头搜，搜书就搜我</title>
+    <title>烂白菜，搜书就搜我</title>
     <link/>
 </head>
 <body>
@@ -9,12 +9,12 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">木头搜</span>
+                <span class="sr-only">烂白菜</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">木头搜</a>
+            <a class="navbar-brand" href="/">烂白菜</a>
         </div>
 
         <p class="navbar-text">
@@ -27,7 +27,7 @@
     <form action="/search" method="post" class="">
         <div class="col-lg-12">
             <div class="input-group input-group-lg">
-                <span class="input-group-addon" id="basic-addon3">木头搜</span>
+                <span class="input-group-addon" id="basic-addon3">烂白菜</span>
                 <input type="text" class="form-control" name="word" placeholder="书名 作者名" th:value="${word}"/>
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">搜......</button>

@@ -2,6 +2,7 @@ package com.bbcow.service.mongo.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
@@ -13,9 +14,14 @@ public class ScoreSite {
     @Id
     private String host;
     private int status;
-    private Date crawl_time;
-    private int crawl_count;
-    private Date create_time;
+    private int rank;
+    private String notes;
+    @Field("crawl_time")
+    private Date crawlTime;
+    @Field("crawl_count")
+    private int crawlCount;
+    @Field("create_time")
+    private Date createTime;
 
     public String getHost() {
         return host;
@@ -33,27 +39,43 @@ public class ScoreSite {
         this.status = status;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public int getRank() {
+        return rank;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
-    public Date getCrawl_time() {
-        return crawl_time;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setCrawl_time(Date crawl_time) {
-        this.crawl_time = crawl_time;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
-    public int getCrawl_count() {
-        return crawl_count;
+    public Date getCrawlTime() {
+        return crawlTime;
     }
 
-    public void setCrawl_count(int crawl_count) {
-        this.crawl_count = crawl_count;
+    public void setCrawlTime(Date crawlTime) {
+        this.crawlTime = crawlTime;
+    }
+
+    public int getCrawlCount() {
+        return crawlCount;
+    }
+
+    public void setCrawlCount(int crawlCount) {
+        this.crawlCount = crawlCount;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

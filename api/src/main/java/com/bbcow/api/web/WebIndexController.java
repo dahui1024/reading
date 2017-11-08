@@ -56,14 +56,14 @@ public class WebIndexController {
         String[] values = new String[30];
 
 
-        List<ScoreBookLog> scoreBookLogs = scoreService.findNewly30ByName(book.getName());
+        List<ScoreBookLog> scoreBookLogs = scoreService.findTop30ByName(book.getName());
 
 
         Date today = DateUtils.truncate(new Date(), Calendar.DATE);
 
         for (int i = 1; i <= 30; i++) {
             int index = 30 - i;
-            Date date = DateUtils.addDays(today, -i);
+            Date date = DateUtils.addDays(today, -(i-1));
             labels[index] = DateFormatUtils.format(date, "MM-dd");
 
             for (ScoreBookLog scoreBookLog : scoreBookLogs){

@@ -1,6 +1,7 @@
 package com.bbcow.crawler.site;
 
 import com.bbcow.crawler.CrawlerProperties;
+import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.mongo.entity.ScoreSite;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,8 @@ public class ScoreCrawler{
     ScoreService scoreService;
     @Autowired
     CrawlerProperties crawlerProperties;
+    @Autowired
+    BookService bookService;
     int basicScore = 10;
 
     public void crawl() throws Exception {
@@ -44,10 +47,10 @@ public class ScoreCrawler{
 
         OOSpider bookSpider = new OOSpider(new ScoreCrawler.Processor());
         // 一天限制爬取一次
-        scoreService.findEnabelSite().stream().filter(scoreSite -> {
-            if (scoreSite.getCrawl_time() == null)
+        scoreService.findEnableSite().stream().filter(scoreSite -> {
+            if (scoreSite.getCrawlTime() == null)
                 return true;
-            return scoreSite.getCrawl_time().before(day);
+            return scoreSite.getCrawlTime().before(day);
         }).forEach(scoreSite -> bookSpider.addUrl("http://" + scoreSite.getHost()));
         bookSpider.setExitWhenComplete(true);
         bookSpider.thread(1).start();
@@ -67,36 +70,35 @@ public class ScoreCrawler{
         @Override
         public void process(Page page) {
             Document document = page.getHtml().getDocument();
-
-            URI uri;
+            Elements elements = document.select("a");
+            URI uri = null;
             try {
                 uri = new URI(page.getUrl().get());
-                scoreService.finishCrawl(uri.getHost());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
 
+            int usefulLinkCount = 0;
             Set<String> names = new HashSet<>();
-
-            Elements elements = document.select("a");
             int score = elements.size() * basicScore;
 
             for (Element element : elements){
                 String href = element.absUrl("href");
                 String name = element.text();
-                if (StringUtils.length(name) > 20 || StringUtils.startsWith(name, "第") || StringUtils.contains(name, "章 ") || StringUtils.endsWithAny(name, "下载", "网", "小说")){
+
+                if (!names.contains(name) && bookService.existsWithName(name)){
+                    scoreService.updateBookPageScore(name, score/elements.size());
+                    names.add(name);
+
+                    usefulLinkCount += 1;
+                }else {
                     continue;
                 }
 
-                    score -= basicScore;
-                if (!names.contains(name) && StringUtils.isNotEmpty(name)){
-                    scoreService.updateBookPageScore(name, score/elements.size());
-                    names.add(name);
-                    System.out.println(name+"--"+score/elements.size());
-                }
-
+                score -= basicScore;
             }
 
+            scoreService.finishCrawl(uri.getHost(), usefulLinkCount);
         }
 
         @Override

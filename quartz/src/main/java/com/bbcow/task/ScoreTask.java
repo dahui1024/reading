@@ -32,7 +32,7 @@ public class ScoreTask {
         }
         isRunning = true;
 
-        BigDecimal siteCount = new BigDecimal(scoreService.findEnabelSite().size());
+        BigDecimal siteCount = new BigDecimal(scoreService.getFinishCrawlSiteCountToday());
 
         Date day = DateUtils.truncate(new Date(), Calendar.DATE);
 

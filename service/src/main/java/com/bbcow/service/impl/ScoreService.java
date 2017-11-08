@@ -8,6 +8,7 @@ import com.bbcow.service.mongo.reporitory.ScoreBookRepository;
 import com.bbcow.service.mongo.reporitory.ScoreSiteRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -48,11 +49,8 @@ public class ScoreService {
         }
     }
 
-    public List<ScoreBookLog> findNewly30ByName(String name){
-        Query query = Query.query(Criteria.where("name").is(name));
-
-        return mongoTemplate.find(query, ScoreBookLog.class);
-//        return scoreBookLogRepository.findNewly30ByName(name);
+    public List<ScoreBookLog> findTop30ByName(String name){
+        return scoreBookLogRepository.findTop30ByName(name, new Sort(Sort.Direction.DESC, "day"));
     }
     public void addScoreLog(String name, Date day, int pageScore){
         ScoreBookLog scoreBookLog = new ScoreBookLog();
@@ -63,10 +61,6 @@ public class ScoreService {
         scoreBookLogRepository.save(scoreBookLog);
     }
 
-    public long countScoreBook(){
-        return scoreBookRepository.count();
-    }
-
     public List<ScoreBook> findByDay(Date day){
         return scoreBookRepository.findByDay(day);
     }
@@ -75,29 +69,40 @@ public class ScoreService {
         if(scoreSiteRepository.findOne(host)== null){
             ScoreSite scoreSite = new ScoreSite();
             scoreSite.setHost(host);
-            scoreSite.setCreate_time(new Date());
+            scoreSite.setCreateTime(new Date());
             scoreSite.setStatus(1);
 
             scoreSiteRepository.save(scoreSite);
         }
     }
-    public List<ScoreSite> findEnabelSite(){
+    public List<ScoreSite> findEnableSite(){
         return scoreSiteRepository.findByStatus(1);
     }
 
-    public long getCrawlCount(){
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.group("name").sum("crawl_count").as("crawl_count"),
-                Aggregation.project().andExclude("_id")
-        );
-        System.out.println(aggregation);
-        return mongoTemplate.aggregate(aggregation, "score_site", ScoreSite.class).getUniqueMappedResult().getCrawl_count();
+    public int getFinishCrawlSiteCountToday(){
+        Date date = DateUtils.truncate(new Date(), Calendar.DATE);
+        List<ScoreSite> scoreSites = scoreSiteRepository.findByStatusAndCrawlTimeGreaterThan(1, date);
+
+        if (scoreSites != null){
+            return scoreSites.size();
+        }
+        return 0;
     }
 
-    public void finishCrawl(String host){
+    public void finishCrawl(String host, int usefulLinkCount){
         Update update = new Update();
         update.inc("crawl_count", 1);
         update.set("crawl_time", new Date());
+        // 评级网站
+        if (usefulLinkCount <= 0){
+            update.set("status", 0);
+            update.set("rank", 0);
+        }else if (usefulLinkCount < 10){
+            update.set("rank", 5);
+        }else {
+            update.set("rank", 10);
+            update.set("status", 1);
+        }
         mongoTemplate.updateFirst(Query.query(Criteria.where("host").is(host)), update, ScoreSite.class).getN();
     }
 }

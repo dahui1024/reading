@@ -60,6 +60,9 @@ public class BookService {
         }
     }
 
+    public boolean existsWithName(String name){
+        return !bookRepository.findByName(name).isEmpty();
+    }
     public int resetPageScore(String name, int score){
         List<Book> books = bookRepository.findByName(name);
         books.forEach(book -> {
