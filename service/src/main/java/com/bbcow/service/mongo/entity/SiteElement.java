@@ -3,6 +3,7 @@ package com.bbcow.service.mongo.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
@@ -17,7 +18,8 @@ public class SiteElement {
     private String[] params;
     private String url;
     private String target;
-    private Date create_time;
+    @Field("create_time")
+    private Date createTime;
 
     public String getHost() {
         return host;
@@ -59,11 +61,11 @@ public class SiteElement {
         this.target = target;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

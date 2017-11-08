@@ -29,7 +29,7 @@ public class SiteTest {
     @Test
     public void siteElement(){
         SiteElement siteElement = new SiteElement();
-        siteElement.setCreate_time(new Date());
+        siteElement.setCreateTime(new Date());
         siteElement.setHost("www.qidian.com");
         siteElement.setUrl("//*[@id=\"page-container\"]/div/ul");
 
@@ -41,13 +41,13 @@ public class SiteTest {
         String host = "yc.ireader.com.cn";
         Site site = new Site();
         site.setHost(host);
-        site.setStart_url("http://yc.ireader.com.cn/books/");
+        site.setStartUrl("http://yc.ireader.com.cn/books/");
         site.setCreate_time(new Date());
 
         siteRepository.save(site);
 
         SiteElement siteElement = new SiteElement();
-        siteElement.setCreate_time(new Date());
+        siteElement.setCreateTime(new Date());
         siteElement.setHost(host);
         siteElement.setUrl("/html/body/div[2]/div[3]/div/span");
         siteElement.setTarget("/html/body/div[2]/div[3]/ul/li/a");
@@ -57,11 +57,11 @@ public class SiteTest {
     public void site(){
         Site site = new Site();
         site.setHost("www.qidian.com");
-        site.setStart_url("https://www.qidian.com/mm/all");
+        site.setStartUrl("https://www.qidian.com/mm/all");
         site.setCreate_time(new Date());
 
         siteRepository.save(site);
-        site.setStart_url("https://www.qidian.com/all");
+        site.setStartUrl("https://www.qidian.com/all");
         siteRepository.save(site);
     }
 }

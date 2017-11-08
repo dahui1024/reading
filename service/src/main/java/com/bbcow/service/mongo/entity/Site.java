@@ -11,10 +11,18 @@ import java.util.Date;
 @Document(collection = "site")
 public class Site {
     @Id
-    private String start_url;
+    private String startUrl;
     private String host;
-    private int status;
+    private int status = 1;
     private Date create_time;
+
+    public String getStartUrl() {
+        return startUrl;
+    }
+
+    public void setStartUrl(String startUrl) {
+        this.startUrl = startUrl;
+    }
 
     public String getHost() {
         return host;
@@ -22,14 +30,6 @@ public class Site {
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    public String getStart_url() {
-        return start_url;
-    }
-
-    public void setStart_url(String start_url) {
-        this.start_url = start_url;
     }
 
     public int getStatus() {

@@ -38,13 +38,13 @@ public class BookProxy{
         book.setAuthor(getAuthor());
         book.setTags(html.xpath(bookElement.getTag()).all());
         book.setDescription(getDescription());
-        book.setIs_vip(getVip());
-        book.setIs_finish(getFinish());
-        book.setIs_sign(getSign());
-        book.setCp_url(page.getUrl().get());
-        book.setCp_name(bookElement.getCp_name());
-        book.setCp_image_url(html.xpath(bookElement.getImage_url()).get());
-        book.setCp_host(bookElement.getHost());
+        book.setIsVip(getVip());
+        book.setIsFinish(getFinish());
+        book.setIsSign(getSign());
+        book.setCpUrl(page.getUrl().get());
+        book.setCpName(bookElement.getCpName());
+        book.setCpImageUrl(html.xpath(bookElement.getImageUrl()).get());
+        book.setCpHost(bookElement.getHost());
 
         System.out.println(book.getName());
         return book;

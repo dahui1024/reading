@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.List;
@@ -19,19 +20,29 @@ public class Book {
     private String name;
     @Indexed
     private String author;
-    private int is_vip;
-    private int is_finish;
-    private int is_sign = 1;
+    @Field("is_vip")
+    private int isVip;
+    @Field("is_finish")
+    private int isFinish;
+    @Field("is_sign")
+    private int isSign = 1;
     @Indexed
-    private int page_score = 0;
+    @Field("page_score")
+    private int pageScore = 0;
     private String description;
-    private String cp_image_url;
-    private String cp_host;
-    private String cp_name;
-    private String cp_url;
+    @Field("cp_image_url")
+    private String cpImageUrl;
+    @Field("cp_host")
+    private String cpHost;
+    @Field("cp_name")
+    private String cpName;
+    @Field("cp_url")
+    private String cpUrl;
     private List<String> tags;
-    private Date create_time;
-    private Date update_time;
+    @Field("create_time")
+    private Date createTime;
+    @Field("update_time")
+    private Date updateTime;
 
     public ObjectId getId() {
         return id;
@@ -57,20 +68,36 @@ public class Book {
         this.author = author;
     }
 
-    public int getIs_vip() {
-        return is_vip;
+    public int getIsVip() {
+        return isVip;
     }
 
-    public void setIs_vip(int is_vip) {
-        this.is_vip = is_vip;
+    public void setIsVip(int isVip) {
+        this.isVip = isVip;
     }
 
-    public int getIs_finish() {
-        return is_finish;
+    public int getIsFinish() {
+        return isFinish;
     }
 
-    public void setIs_finish(int is_finish) {
-        this.is_finish = is_finish;
+    public void setIsFinish(int isFinish) {
+        this.isFinish = isFinish;
+    }
+
+    public int getIsSign() {
+        return isSign;
+    }
+
+    public void setIsSign(int isSign) {
+        this.isSign = isSign;
+    }
+
+    public int getPageScore() {
+        return pageScore;
+    }
+
+    public void setPageScore(int pageScore) {
+        this.pageScore = pageScore;
     }
 
     public String getDescription() {
@@ -81,36 +108,36 @@ public class Book {
         this.description = description;
     }
 
-    public String getCp_image_url() {
-        return cp_image_url;
+    public String getCpImageUrl() {
+        return cpImageUrl;
     }
 
-    public void setCp_image_url(String cp_image_url) {
-        this.cp_image_url = cp_image_url;
+    public void setCpImageUrl(String cpImageUrl) {
+        this.cpImageUrl = cpImageUrl;
     }
 
-    public String getCp_host() {
-        return cp_host;
+    public String getCpHost() {
+        return cpHost;
     }
 
-    public void setCp_host(String cp_host) {
-        this.cp_host = cp_host;
+    public void setCpHost(String cpHost) {
+        this.cpHost = cpHost;
     }
 
-    public String getCp_name() {
-        return cp_name;
+    public String getCpName() {
+        return cpName;
     }
 
-    public void setCp_name(String cp_name) {
-        this.cp_name = cp_name;
+    public void setCpName(String cpName) {
+        this.cpName = cpName;
     }
 
-    public String getCp_url() {
-        return cp_url;
+    public String getCpUrl() {
+        return cpUrl;
     }
 
-    public void setCp_url(String cp_url) {
-        this.cp_url = cp_url;
+    public void setCpUrl(String cpUrl) {
+        this.cpUrl = cpUrl;
     }
 
     public List<String> getTags() {
@@ -121,35 +148,19 @@ public class Book {
         this.tags = tags;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdate_time() {
-        return update_time;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdate_time(Date update_time) {
-        this.update_time = update_time;
-    }
-
-    public int getIs_sign() {
-        return is_sign;
-    }
-
-    public void setIs_sign(int is_sign) {
-        this.is_sign = is_sign;
-    }
-
-    public int getPage_score() {
-        return page_score;
-    }
-
-    public void setPage_score(int page_score) {
-        this.page_score = page_score;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

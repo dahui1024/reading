@@ -35,7 +35,7 @@ public class FindProxy {
                 BookUrl bookUrl = new BookUrl();
                 bookUrl.setHost(host);
                 bookUrl.setUrl(link);
-                bookUrl.setCreate_time(now);
+                bookUrl.setCreateTime(now);
                 bookUrls.add(bookUrl);
 
             });

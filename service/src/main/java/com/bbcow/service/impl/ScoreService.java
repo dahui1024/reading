@@ -39,7 +39,7 @@ public class ScoreService {
             scoreBook = new ScoreBook();
             scoreBook.setName(name);
             scoreBook.setScore(score);
-            scoreBook.setCreate_time(date);
+            scoreBook.setCreateTime(date);
             scoreBook.setDay(day);
             scoreBookRepository.save(scoreBook);
         }else {

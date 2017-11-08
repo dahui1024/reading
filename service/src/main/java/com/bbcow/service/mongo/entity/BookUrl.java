@@ -3,6 +3,7 @@ package com.bbcow.service.mongo.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
@@ -15,9 +16,12 @@ public class BookUrl {
     private String url;
     private String host;
     @Indexed
-    private Date crawl_time;
-    private Date create_time;
-    private int crawl_count;
+    @Field("crawl_time")
+    private Date crawlTime;
+    @Field("create_time")
+    private Date createTime;
+    @Field("crawl_count")
+    private int crawlCount;
 
     public String getUrl() {
         return url;
@@ -35,27 +39,27 @@ public class BookUrl {
         this.host = host;
     }
 
-    public Date getCrawl_time() {
-        return crawl_time;
+    public Date getCrawlTime() {
+        return crawlTime;
     }
 
-    public void setCrawl_time(Date crawl_time) {
-        this.crawl_time = crawl_time;
+    public void setCrawlTime(Date crawlTime) {
+        this.crawlTime = crawlTime;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public int getCrawl_count() {
-        return crawl_count;
+    public int getCrawlCount() {
+        return crawlCount;
     }
 
-    public void setCrawl_count(int crawl_count) {
-        this.crawl_count = crawl_count;
+    public void setCrawlCount(int crawlCount) {
+        this.crawlCount = crawlCount;
     }
 }

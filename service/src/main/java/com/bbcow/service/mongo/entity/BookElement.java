@@ -2,6 +2,7 @@ package com.bbcow.service.mongo.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -18,9 +19,12 @@ public class BookElement {
     private String status;
     private String sign;
     private String description;
-    private String image_url;
-    private String cp_name;
-    private String cp_url;
+    @Field("image_url")
+    private String imageUrl;
+    @Field("cp_name")
+    private String cpName;
+    @Field("cp_url")
+    private String cpUrl;
     private String tag;
     private String other;
 
@@ -80,28 +84,28 @@ public class BookElement {
         this.description = description;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getCp_name() {
-        return cp_name;
+    public String getCpName() {
+        return cpName;
     }
 
-    public void setCp_name(String cp_name) {
-        this.cp_name = cp_name;
+    public void setCpName(String cpName) {
+        this.cpName = cpName;
     }
 
-    public String getCp_url() {
-        return cp_url;
+    public String getCpUrl() {
+        return cpUrl;
     }
 
-    public void setCp_url(String cp_url) {
-        this.cp_url = cp_url;
+    public void setCpUrl(String cpUrl) {
+        this.cpUrl = cpUrl;
     }
 
     public String getTag() {

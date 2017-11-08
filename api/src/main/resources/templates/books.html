@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: common_header(~{::title},~{::link})">
-    <title>[[ ${book.name} ]]_烂白菜</title>
+    <title>[( ${book.name} )] ([( ${book.author} )])- 烂白菜</title>
     <meta name="description" content="[[${word}]]，[[${book.description}]]">
     <link/>
 </head>
@@ -15,10 +15,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">烂白菜</a>
+            <a class="navbar-brand" href="/" title="烂白菜">烂白菜</a>
         </div>
         <p class="navbar-text">
-            <a href="/books/rank/page_score" class="navbar-link">网络新鲜榜</a>
+            <a href="/books/rank/page_score" title="网络新鲜榜" class="navbar-link">网络新鲜榜</a>
         </p>
     </div>
 </nav>
@@ -26,31 +26,31 @@
     <div class="media">
         <div class="media-left">
             <a href="#">
-                <img class="media-object" height="128px"  th:src="${book.cp_image_url}" th:alt="${book.name}">
+                <img class="media-object" height="128px"  th:src="${book.cpImageUrl}" th:alt="${book.name}">
             </a>
         </div>
         <div class="media-body">
             <h4 class="media-heading">
-                <a th:href="@{/search?word={word}(word=${book.name})}">[[${book.name}]]</a>
+                <a th:href="@{/search?word={word}(word=${book.name})}" th:title="${book.name}">[[${book.name}]]</a>
                 &nbsp;&nbsp;<small th:text="${book.author}"></small>
             </h4>
-            <p class="lead">新鲜度：<b>[[${book.page_score / 10.0}]]</b></p>
+            <p class="lead">新鲜度：<b>[[${book.pageScore / 10.0}]]</b></p>
             [[${book.description}]]
         </div>
     </div>
     <hr/>
     <div id="chart"></div>
-    <p>来源：[[${book.cp_name}]]</p>
+    <p>来源：[[${book.cpName}]]</p>
     <p>标签：[[${book.tags}]]</p>
-    <p>签约：[[${book.is_sign == 1} ? '已签约' : '未签约']]</p>
-    <p>状态：[[${book.is_finish == 1} ? '完结' : '连载']]</p>
-    <p>收费：[[${book.is_vip == 1} ? '收费' : '免费']]</p>
-    <p>源链接：[[${book.cp_url}]]</p>
+    <p>签约：[[${book.isSign == 1} ? '已签约' : '未签约']]</p>
+    <p>状态：[[${book.isFinish == 1} ? '完结' : '连载']]</p>
+    <p>收费：[[${book.isVip == 1} ? '收费' : '免费']]</p>
+    <p>源链接：[[${book.cpUrl}]]</p>
     <hr/>
     <p class="lead">同名推荐</p>
     <ol>
         <li th:each="book : ${recommendBooks}">
-            <p><a th:href="@{/search?word={word}(word=${book.name})}">[[${book.name}]]&nbsp;&nbsp;</a><small>热度值：[[${book.page_score / 10.0}]]</small></p>
+            <p><a th:href="@{/search?word={word}(word=${book.name})}">[[${book.name}]]&nbsp;&nbsp;</a><small>新鲜度：[[${book.pageScore / 10.0}]]</small></p>
         </li>
     </ol>
 </div>

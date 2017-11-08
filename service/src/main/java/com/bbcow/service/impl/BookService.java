@@ -45,16 +45,16 @@ public class BookService {
         if (book_record == null){
             bookRepository.save(book);
         } else {
-            book_record.setIs_sign(book.getIs_sign());
+            book_record.setIsSign(book.getIsSign());
             if (!StringUtils.isEmpty(book.getDescription()))
                 book_record.setDescription(book.getDescription());
             if (book.getTags() != null && !book.getTags().isEmpty())
                 book_record.setTags(book.getTags());
-            if (book.getCp_image_url() != null)
-                book_record.setCp_image_url(book.getCp_image_url());
-            if (book.getCp_name() != null)
-                book_record.setCp_name(book.getCp_name());
-            book_record.setUpdate_time(new Date());
+            if (book.getCpImageUrl() != null)
+                book_record.setCpImageUrl(book.getCpImageUrl());
+            if (book.getCpName() != null)
+                book_record.setCpName(book.getCpName());
+            book_record.setUpdateTime(new Date());
 
             bookRepository.save(book_record);
         }
@@ -66,7 +66,7 @@ public class BookService {
     public int resetPageScore(String name, int score){
         List<Book> books = bookRepository.findByName(name);
         books.forEach(book -> {
-            book.setPage_score(score);
+            book.setPageScore(score);
         });
         return bookRepository.save(books).size();
     }
@@ -103,7 +103,7 @@ public class BookService {
             BookUrl bookUrl = new BookUrl();
             bookUrl.setHost(host);
             bookUrl.setUrl(url);
-            bookUrl.setCreate_time(new Date());
+            bookUrl.setCreateTime(new Date());
             bookUrlRepository.save(bookUrl);
         }
     }

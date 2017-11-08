@@ -38,7 +38,7 @@ public class FindCrawler implements CommandLineRunner{
         }
         OOSpider bookSpider = new OOSpider(new Processor());
         siteService.load().forEach(site -> {
-            bookSpider.addUrl(site.getStart_url());
+            bookSpider.addUrl(site.getStartUrl());
         });
         bookSpider.thread(4).start();
 
