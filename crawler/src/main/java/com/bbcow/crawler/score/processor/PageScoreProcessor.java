@@ -1,6 +1,5 @@
 package com.bbcow.crawler.score.processor;
 
-import com.bbcow.crawler.CrawlerProperties;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.ScoreService;
 import org.jsoup.nodes.Document;

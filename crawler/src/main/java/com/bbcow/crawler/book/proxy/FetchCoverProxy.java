@@ -1,4 +1,4 @@
-package com.bbcow.crawler.proxy;
+package com.bbcow.crawler.book.proxy;
 
 import com.bbcow.service.mongo.entity.Book;
 import com.bbcow.service.mongo.entity.BookElement;
@@ -14,13 +14,13 @@ import java.util.Map;
 /**
  * Created by adan on 2017/10/18.
  */
-public class BookProxy{
+public class FetchCoverProxy {
 
     private BookElement bookElement;
     private Html html;
     private Map<String, BookElement> elementMap;
 
-    public BookProxy(Map<String, BookElement> elementMap){
+    public FetchCoverProxy(Map<String, BookElement> elementMap){
         this.elementMap = elementMap;
     }
 

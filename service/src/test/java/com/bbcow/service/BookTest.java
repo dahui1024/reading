@@ -2,30 +2,39 @@ package com.bbcow.service;
 
 import com.bbcow.service.mongo.entity.Book;
 import com.bbcow.service.mongo.entity.BookElement;
+import com.bbcow.service.mongo.entity.BookUrl;
 import com.bbcow.service.mongo.entity.SiteElement;
 import com.bbcow.service.mongo.reporitory.BookElementRepository;
 import com.bbcow.service.mongo.reporitory.BookRepository;
+import com.bbcow.service.mongo.reporitory.BookUrlRepository;
 import com.bbcow.service.mongo.reporitory.SiteElementRepository;
 import com.bbcow.service.search.RemoteUpload;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by adan on 2017/10/21.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
+//@SpringBootApplication
+@ActiveProfiles("service-dev")
 public class BookTest {
     @Autowired
     BookRepository bookRepository;
     @Autowired
     BookElementRepository bookElementRepository;
+    @Autowired
+    BookUrlRepository bookUrlRepository;
 
     @Test
     public void s(){
@@ -68,7 +77,10 @@ public class BookTest {
     }
     @Test
     public void site(){
-        Book book_record = bookRepository.findByNameAndAuthor("我真不是神探", "卓牧闲");
-        System.out.println(book_record.getId());
+//        Book book_record = bookRepository.findByNameAndAuthor("我真不是神探", "卓牧闲");
+//        System.out.println(book_record.getId());
+
+        List<BookUrl> bookUrls = bookUrlRepository.existsByCrawlTime(null);
+        System.out.println(bookUrls.size());
     }
 }

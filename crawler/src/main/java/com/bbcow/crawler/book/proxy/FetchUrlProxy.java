@@ -1,4 +1,4 @@
-package com.bbcow.crawler.proxy;
+package com.bbcow.crawler.book.proxy;
 
 import com.bbcow.service.mongo.entity.*;
 import org.springframework.util.StringUtils;
@@ -12,12 +12,12 @@ import java.util.*;
 /**
  * Created by adan on 2017/10/18.
  */
-public class FindProxy {
+public class FetchUrlProxy {
 
     private Map<String, SiteElement> elementMap;
     private Map<String, Integer> countMap = new HashMap<>();
 
-    public FindProxy(Map<String, SiteElement> elementMap){
+    public FetchUrlProxy(Map<String, SiteElement> elementMap){
         this.elementMap = elementMap;
     }
     public List<BookUrl> getBookUrls(Page page) {

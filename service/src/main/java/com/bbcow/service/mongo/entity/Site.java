@@ -2,6 +2,7 @@ package com.bbcow.service.mongo.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
@@ -14,7 +15,11 @@ public class Site {
     private String startUrl;
     private String host;
     private int status = 1;
-    private Date create_time;
+    private String protocol;
+    @Field("complete_init")
+    private int completeInit = 0;
+    @Field("create_time")
+    private Date createTime;
 
     public String getStartUrl() {
         return startUrl;
@@ -40,11 +45,27 @@ public class Site {
         this.status = status;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public String getProtocol() {
+        return protocol;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getCompleteInit() {
+        return completeInit;
+    }
+
+    public void setCompleteInit(int completeInit) {
+        this.completeInit = completeInit;
     }
 }

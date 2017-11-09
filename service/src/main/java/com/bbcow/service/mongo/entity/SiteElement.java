@@ -17,6 +17,8 @@ public class SiteElement {
     private String template;
     private String[] params;
     private String url;
+    @Field("url_regex")
+    private String urlRegex;
     private String target;
     @Field("create_time")
     private Date createTime;
@@ -47,6 +49,14 @@ public class SiteElement {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getUrlRegex() {
+        return urlRegex;
+    }
+
+    public void setUrlRegex(String urlRegex) {
+        this.urlRegex = urlRegex;
     }
 
     public void setUrl(String url) {

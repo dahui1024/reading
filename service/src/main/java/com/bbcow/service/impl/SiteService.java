@@ -9,9 +9,7 @@ import com.bbcow.service.mongo.reporitory.SiteUrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by adan on 2017/10/28.
@@ -26,7 +24,15 @@ public class SiteService {
     SiteRepository siteRepository;
 
     public List<Site> load(){
-        return siteRepository.findAll();
+        return siteRepository.findByCompleteInit(0);
+    }
+    public Collection<String> loadFindUrl(){
+        List<Site> sites = siteRepository.findAll();
+        Set<String> strings = new HashSet<>();
+
+        sites.forEach(site -> strings.add(site.getProtocol()+"://"+site.getHost()));
+
+        return strings;
     }
     public Map<String, SiteElement> loadElements(){
         Map<String, SiteElement> elementMap = new TreeMap<>();

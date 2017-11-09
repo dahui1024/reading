@@ -42,7 +42,7 @@ public class SiteTest {
         Site site = new Site();
         site.setHost(host);
         site.setStartUrl("http://yc.ireader.com.cn/books/");
-        site.setCreate_time(new Date());
+        site.setCreateTime(new Date());
 
         siteRepository.save(site);
 
@@ -58,7 +58,7 @@ public class SiteTest {
         Site site = new Site();
         site.setHost("www.qidian.com");
         site.setStartUrl("https://www.qidian.com/mm/all");
-        site.setCreate_time(new Date());
+        site.setCreateTime(new Date());
 
         siteRepository.save(site);
         site.setStartUrl("https://www.qidian.com/all");

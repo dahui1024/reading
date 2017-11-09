@@ -125,4 +125,7 @@ public class BookService {
         PageRequest pageRequest = new PageRequest(1, 4, Sort.Direction.ASC, "crawl_time");
         return bookUrlRepository.findAll(pageRequest).getContent();
     }
+    public List<BookUrl> getNewBookUrl(){
+        return bookUrlRepository.existsByCrawlTime(null);
+    }
 }
