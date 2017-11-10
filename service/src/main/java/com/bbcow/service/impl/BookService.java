@@ -63,10 +63,11 @@ public class BookService {
     public boolean existsWithName(String name){
         return !bookRepository.findByName(name).isEmpty();
     }
-    public int resetPageScore(String name, int score){
+    public int resetPageScore(String name, int score, int count){
         List<Book> books = bookRepository.findByName(name);
         books.forEach(book -> {
             book.setPageScore(score);
+            book.setPageCount(count);
         });
         return bookRepository.save(books).size();
     }
@@ -84,9 +85,7 @@ public class BookService {
     }
 
     public List<Book> getTop50(){
-        PageRequest pageRequest = new PageRequest(0, 50, Sort.Direction.DESC, "page_score");
-
-        return bookRepository.findAll(pageRequest).getContent();
+        return bookRepository.findTop50ByIsSignAndPageScoreGreaterThan(1,60, new Sort(Sort.Direction.DESC, "page_score"));
     }
 
     public List<Book> recommend(String author){

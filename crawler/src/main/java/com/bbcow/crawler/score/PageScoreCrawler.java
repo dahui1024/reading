@@ -34,9 +34,10 @@ public class PageScoreCrawler extends TaskCrawler<PageScoreProcessor> {
 
         // 一天限制爬取一次
         scoreService.findEnableSite().stream().filter(scoreSite -> {
-            if (scoreSite.getCrawlTime() == null)
-                return true;
-            return scoreSite.getCrawlTime().before(day);
+//            if (scoreSite.getCrawlTime() == null)
+//                return true;
+//            return scoreSite.getCrawlTime().before(day);
+            return true;
         }).forEach(scoreSite -> spider.addUrl("http://" + scoreSite.getHost()));
         spider.thread(1);
         spider.start();

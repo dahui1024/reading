@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by adan on 2017/10/17.
@@ -15,7 +16,8 @@ public class ScoreBook {
     private String name;
 
     private long score;
-
+    @Field("site_scores")
+    private List<Integer> siteScores;
     private Date day;
 
     @Field("create_time")
@@ -51,5 +53,13 @@ public class ScoreBook {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public List<Integer> getSiteScores() {
+        return siteScores;
+    }
+
+    public void setSiteScores(List<Integer> siteScores) {
+        this.siteScores = siteScores;
     }
 }

@@ -1,13 +1,11 @@
 package com.bbcow.service;
 
 import com.bbcow.service.impl.ScoreService;
+import com.bbcow.service.mongo.entity.ScoreBook;
 import com.bbcow.service.mongo.entity.ScoreBookLog;
 import com.bbcow.service.mongo.entity.Site;
 import com.bbcow.service.mongo.entity.SiteElement;
-import com.bbcow.service.mongo.reporitory.ScoreBookLogRepository;
-import com.bbcow.service.mongo.reporitory.ScoreSiteRepository;
-import com.bbcow.service.mongo.reporitory.SiteElementRepository;
-import com.bbcow.service.mongo.reporitory.SiteRepository;
+import com.bbcow.service.mongo.reporitory.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +33,8 @@ public class ScoreTest {
     ScoreBookLogRepository scoreBookLogRepository;
     @Autowired
     ScoreSiteRepository scoreSiteRepository;
+    @Autowired
+    ScoreBookRepository scoreBookRepository;
 
     @Test
     public void siteElement(){
@@ -46,8 +46,16 @@ public class ScoreTest {
     @Test
     public void one(){
         Date date = DateUtils.truncate(new Date(), Calendar.DATE);
-        System.out.println(date);
-        System.out.println(scoreSiteRepository.findByStatusAndCrawlTimeGreaterThan(1, date).size());
+        List<ScoreBook> scoreBooks = scoreBookRepository.findTop250ByDay(date, new Sort(Sort.Direction.DESC, "score"));
+        int score = 0;
+        int count = 0;
+        for (ScoreBook scoreBook : scoreBooks){
+            score += scoreBook.getScore();
+            count += scoreBook.getSiteScores().size();
+        }
+        System.out.println(score/250.0);
+        System.out.println(count/250.0);
+        System.out.println(score/1.0/count);
     }
 
 }

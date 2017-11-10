@@ -4,6 +4,7 @@ import com.bbcow.service.mongo.entity.Book;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -16,4 +17,5 @@ public interface BookRepository extends MongoRepository<Book, ObjectId> , Paging
     Book findByNameAndAuthor(String name, String author);
     List<Book> findByName(String name);
     Page<Book> findByAuthor(String author, Pageable pageable);
+    List<Book> findTop50ByIsSignAndPageScoreGreaterThan(int siSign, int pageScore, Sort sort);
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -39,12 +40,16 @@ public class ScoreService {
             scoreBook = new ScoreBook();
             scoreBook.setName(name);
             scoreBook.setScore(score);
+            List<Integer> scores = new LinkedList<>();
+            scores.add(score);
+            scoreBook.setSiteScores(scores);
             scoreBook.setCreateTime(date);
             scoreBook.setDay(day);
             scoreBookRepository.save(scoreBook);
         }else {
             Update update = new Update();
             update.inc("score", score);
+            update.push("site_scores", score);
             mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), update, ScoreBook.class).getN();
         }
     }
@@ -52,11 +57,12 @@ public class ScoreService {
     public List<ScoreBookLog> findTop30ByName(String name){
         return scoreBookLogRepository.findTop30ByName(name, new Sort(Sort.Direction.DESC, "day"));
     }
-    public void addScoreLog(String name, Date day, int pageScore){
+    public void addScoreLog(String name, Date day, int pageScore, int pageCount){
         ScoreBookLog scoreBookLog = new ScoreBookLog();
         scoreBookLog.setDay(day);
         scoreBookLog.setName(name);
         scoreBookLog.setPageScore(pageScore);
+        scoreBookLog.setPageCount(pageCount);
 
         scoreBookLogRepository.save(scoreBookLog);
     }

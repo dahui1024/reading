@@ -22,6 +22,8 @@ public class ScoreBookLog {
 
     @Field("page_score")
     private long pageScore;
+    @Field("page_count")
+    private long pageCount;
 
     private Date day;
 
@@ -55,5 +57,13 @@ public class ScoreBookLog {
 
     public void setDay(Date day) {
         this.day = day;
+    }
+
+    public long getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(long pageCount) {
+        this.pageCount = pageCount;
     }
 }

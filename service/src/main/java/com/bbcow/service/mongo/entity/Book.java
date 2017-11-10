@@ -29,6 +29,8 @@ public class Book {
     @Indexed
     @Field("page_score")
     private int pageScore = 0;
+    @Field("page_count")
+    private int pageCount = 0;
     private String description;
     @Field("cp_image_url")
     private String cpImageUrl;
@@ -98,6 +100,14 @@ public class Book {
 
     public void setPageScore(int pageScore) {
         this.pageScore = pageScore;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 
     public String getDescription() {
