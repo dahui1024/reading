@@ -1,11 +1,8 @@
 package com.bbcow.service.impl;
 
-import com.bbcow.service.mongo.entity.Book;
-import com.bbcow.service.mongo.entity.BookElement;
-import com.bbcow.service.mongo.entity.BookUrl;
-import com.bbcow.service.mongo.reporitory.BookElementRepository;
-import com.bbcow.service.mongo.reporitory.BookRepository;
-import com.bbcow.service.mongo.reporitory.BookUrlRepository;
+import com.bbcow.service.mongo.entity.*;
+import com.bbcow.service.mongo.reporitory.*;
+import com.bbcow.service.util.MD5;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -18,10 +15,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by adan on 2017/10/17.
@@ -36,6 +30,10 @@ public class BookService {
     BookRepository bookRepository;
     @Autowired
     BookElementRepository bookElementRepository;
+    @Autowired
+    BookChapterRepository bookChapterRepository;
+    @Autowired
+    BookWordRepository bookWordRepository;
 
     public void save(Book book){
         if (book.getName() == null || book.getAuthor() == null) {
@@ -93,19 +91,6 @@ public class BookService {
         return bookRepository.findByAuthor(author, pageRequest).getContent();
     }
 
-    public BookElement findElementByHost(String host){
-        return bookElementRepository.findOne(host);
-    }
-
-    public void saveUrl(String url, String host){
-        if (bookUrlRepository.findOne(url) == null){
-            BookUrl bookUrl = new BookUrl();
-            bookUrl.setHost(host);
-            bookUrl.setUrl(url);
-            bookUrl.setCreateTime(new Date());
-            bookUrlRepository.save(bookUrl);
-        }
-    }
     public void saveUrl(BookUrl bookUrl) {
         if (bookUrlRepository.findOne(bookUrl.getUrl()) == null){
             bookUrlRepository.save(bookUrl);
@@ -119,12 +104,55 @@ public class BookService {
 
         int n = mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(url)), update, BookUrl.class).getN();
     }
-
-    public List<BookUrl> getUrlQueue(){
-        PageRequest pageRequest = new PageRequest(1, 4, Sort.Direction.ASC, "crawl_time");
-        return bookUrlRepository.findAll(pageRequest).getContent();
+    public void finishChapterUrl(String referenceKey){
+        Update update = new Update();
+        update.inc("chapter_crawl_count", 1);
+        update.set("chapter_crawl_time", new Date());
+        update.set("chapter_status", 1);
+        mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class).getN();
+    }
+    public void finishChapterWord(String referenceKey){
+        Update update = new Update();
+        update.set("chapter_status", 2);
+        mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class).getN();
     }
     public List<BookUrl> getNewBookUrl(){
         return bookUrlRepository.existsByCrawlTime(null);
+    }
+    public List<BookUrl> getNewBookChapterUrl(){
+        PageRequest pageRequest = new PageRequest(0, 50);
+        return bookUrlRepository.findByChapterStatus(0, pageRequest);
+    }
+    public List<BookUrl> getFinishBookChapter(){
+        PageRequest pageRequest = new PageRequest(0, 10);
+        return bookUrlRepository.findByChapterStatus(1, pageRequest);
+    }
+    public List<BookChapter> getBookChapters(String referenceKey){
+        return bookChapterRepository.findByReferenceKey(referenceKey);
+    }
+    public void saveChapterUrl(int sn, String url, String referenceKey){
+        BookChapter bookChapter = new BookChapter();
+        bookChapter.setSn(sn);
+        bookChapter.setReferenceKey(referenceKey);
+        bookChapter.setId(MD5.digest_16bit(url));
+        bookChapter.setUrl(url);
+
+        bookChapterRepository.save(bookChapter);
+    }
+    public void updateChapterContent(String url, String text){
+        BookChapter bookChapter = bookChapterRepository.findOne(MD5.digest_16bit(url));
+        bookChapter.setContent(text);
+        bookChapterRepository.save(bookChapter);
+    }
+
+    public void saveWords(Iterable<BookWord> bookWords){
+        bookWords.forEach(bookWord -> {
+            if (bookWord.getTag() != null && bookWord.getCount() > 1){
+                bookWordRepository.save(bookWord);
+            }
+            if (bookWord.getTag() == null && bookWord.getCount() > 10){
+                bookWordRepository.save(bookWord);
+            }
+        });
     }
 }

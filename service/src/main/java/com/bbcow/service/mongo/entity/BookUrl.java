@@ -22,6 +22,20 @@ public class BookUrl {
     private Date createTime;
     @Field("crawl_count")
     private int crawlCount;
+    @Field("chapter_url")
+    private String chapterUrl;
+    @Indexed
+    @Field("reference_key")
+    private String referenceKey;
+    // 0：待抓取，1：抓取完成，2：分析完成
+    @Indexed
+    @Field("chapter_status")
+    private int chapterStatus;
+    @Indexed
+    @Field("chapter_crawl_time")
+    private Date chapterCrawlTime;
+    @Field("chapter_crawl_count")
+    private int chapterCrawlCount;
 
     public String getUrl() {
         return url;
@@ -61,5 +75,45 @@ public class BookUrl {
 
     public void setCrawlCount(int crawlCount) {
         this.crawlCount = crawlCount;
+    }
+
+    public String getChapterUrl() {
+        return chapterUrl;
+    }
+
+    public void setChapterUrl(String chapterUrl) {
+        this.chapterUrl = chapterUrl;
+    }
+
+    public String getReferenceKey() {
+        return referenceKey;
+    }
+
+    public void setReferenceKey(String referenceKey) {
+        this.referenceKey = referenceKey;
+    }
+
+    public Date getChapterCrawlTime() {
+        return chapterCrawlTime;
+    }
+
+    public void setChapterCrawlTime(Date chapterCrawlTime) {
+        this.chapterCrawlTime = chapterCrawlTime;
+    }
+
+    public int getChapterCrawlCount() {
+        return chapterCrawlCount;
+    }
+
+    public void setChapterCrawlCount(int chapterCrawlCount) {
+        this.chapterCrawlCount = chapterCrawlCount;
+    }
+
+    public int getChapterStatus() {
+        return chapterStatus;
+    }
+
+    public void setChapterStatus(int chapterStatus) {
+        this.chapterStatus = chapterStatus;
     }
 }

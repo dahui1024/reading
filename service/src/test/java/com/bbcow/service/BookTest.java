@@ -9,12 +9,14 @@ import com.bbcow.service.mongo.reporitory.BookRepository;
 import com.bbcow.service.mongo.reporitory.BookUrlRepository;
 import com.bbcow.service.mongo.reporitory.SiteElementRepository;
 import com.bbcow.service.search.RemoteUpload;
+import com.bbcow.service.util.MD5;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -39,6 +41,32 @@ public class BookTest {
     @Test
     public void s(){
         bookRepository.findOne(new ObjectId("59e74c37a316861935b14fff"));
+    }
+    @Test
+    public void init(){
+
+        long count = bookUrlRepository.count();
+
+        long page = count/50 + 1;
+
+        for (int i = 0; i < page; i++) {
+            PageRequest pageRequest = new PageRequest(i, 50);
+            List<BookUrl> bookUrls = bookUrlRepository.findAll(pageRequest).getContent();
+
+            bookUrls.forEach(bookUrl -> {
+                if (bookUrl.getHost().equals("www.qidian.com")){
+                    String url = bookUrl.getUrl();
+
+                    String chapterUrl = url.replace("book.", "m.").replace(".com/", ".com/book/").replace("info/", "")+"/catalog";
+
+                    bookUrl.setChapterUrl(chapterUrl);
+                    bookUrl.setChapterStatus(0);
+                    bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+
+                    bookUrlRepository.save(bookUrl);
+                }
+            });
+        }
     }
 
     @Test

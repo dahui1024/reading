@@ -27,6 +27,8 @@ public class BookElement {
     private String cpUrl;
     private String tag;
     private String other;
+    private String chapter;
+    private String content;
 
     public String getHost() {
         return host;
@@ -122,5 +124,21 @@ public class BookElement {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+    public String getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(String chapter) {
+        this.chapter = chapter;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
