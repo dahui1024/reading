@@ -1,5 +1,6 @@
 package com.bbcow.service;
 
+import com.bbcow.service.impl.SiteService;
 import com.bbcow.service.mongo.entity.Book;
 import com.bbcow.service.mongo.entity.BookElement;
 import com.bbcow.service.mongo.entity.BookUrl;
@@ -7,21 +8,23 @@ import com.bbcow.service.mongo.entity.SiteElement;
 import com.bbcow.service.mongo.reporitory.BookElementRepository;
 import com.bbcow.service.mongo.reporitory.BookRepository;
 import com.bbcow.service.mongo.reporitory.BookUrlRepository;
-import com.bbcow.service.mongo.reporitory.SiteElementRepository;
-import com.bbcow.service.search.RemoteUpload;
 import com.bbcow.service.util.MD5;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adan on 2017/10/21.
@@ -37,6 +40,10 @@ public class BookTest {
     BookElementRepository bookElementRepository;
     @Autowired
     BookUrlRepository bookUrlRepository;
+    @Autowired
+    MongoTemplate mongoTemplate;
+    @Autowired
+    SiteService siteService;
 
     @Test
     public void s(){
@@ -44,29 +51,137 @@ public class BookTest {
     }
     @Test
     public void init(){
+        Query query = Query.query(Criteria.where("reference_key").exists(false));
+        query.addCriteria(Criteria.where("host").is("www.qidian.com"));
 
-        long count = bookUrlRepository.count();
+        long count = mongoTemplate.count(query, BookUrl.class);
 
         long page = count/50 + 1;
 
+        query.with(new PageRequest(0, 50));
         for (int i = 0; i < page; i++) {
-            PageRequest pageRequest = new PageRequest(i, 50);
-            List<BookUrl> bookUrls = bookUrlRepository.findAll(pageRequest).getContent();
+
+            List<BookUrl> bookUrls = mongoTemplate.find(query, BookUrl.class);
 
             bookUrls.forEach(bookUrl -> {
-                if (bookUrl.getHost().equals("www.qidian.com")){
-                    String url = bookUrl.getUrl();
+                String url = bookUrl.getUrl();
 
-                    String chapterUrl = url.replace("book.", "m.").replace(".com/", ".com/book/").replace("info/", "")+"/catalog";
+                String chapterUrl = url.replace("book.", "m.").replace(".com/", ".com/book/").replace("info/", "")+"/catalog";
 
-                    bookUrl.setChapterUrl(chapterUrl);
-                    bookUrl.setChapterStatus(0);
-                    bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+                bookUrl.setChapterUrl(chapterUrl);
+                bookUrl.setChapterStatus(0);
+                bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+
+                bookUrlRepository.save(bookUrl);
+            });
+        }
+    }
+    @Test
+    public void initRK(){
+        Query query = Query.query(Criteria.where("cp_host").is("book.qidian.com"));
+        query.addCriteria(Criteria.where("reference_key").exists(false));
+        long count = mongoTemplate.count(query, Book.class);
+
+        long page = count/50 + 1;
+
+        query.with(new PageRequest(0, 50));
+        for (int i = 0; i < page; i++) {
+            System.out.println(i+"---");
+            List<Book> books = mongoTemplate.find(query, Book.class);
+            if (books.isEmpty()){
+                continue;
+            }
+
+            books.forEach(book -> {
+
+                BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
+
+                if (bookUrl == null){
+                    System.out.println(book.getCpUrl());
+                }else {
+                    book.setReferenceKey(bookUrl.getReferenceKey());
+
+                    bookRepository.save(book);
+                }
+
+            });
+
+        }
+    }
+    @Test
+    public void clean(){
+        Map<String, SiteElement> elementMap= siteService.loadElements();
+        long count = bookRepository.count();
+        long page = count/50 + 1;
+        for (int i = 0; i < page; i++) {
+            List<Book> books = bookRepository.findAll(new PageRequest(i, 50)).getContent();
+
+            books.forEach(book -> {
+
+                BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
+
+                if (bookUrl == null){
+                    bookUrl = new BookUrl();
+                    bookUrl.setHost(book.getCpHost());
+                    bookUrl.setUrl(book.getCpUrl());
+                    bookUrl.setCrawlTime(new Date());
+                    bookUrl.setCrawlCount(1);
+
+                    if (elementMap.containsKey(book.getCpHost())) {
+                        String chapterUrl = book.getCpUrl() + elementMap.get(book.getCpHost()).getChapterSuffix();
+                        bookUrl.setChapterUrl(chapterUrl);
+                        bookUrl.setChapterStatus(0);
+                        bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+                    }
+
+                    bookUrl.setCreateTime(new Date());
 
                     bookUrlRepository.save(bookUrl);
+
                 }
             });
         }
+    }
+    @Test
+    public void initIReader(){
+        Query query = Query.query(Criteria.where("reference_key").exists(false));
+        query.addCriteria(Criteria.where("host").is("yc.ireader.com.cn"));
+
+        long count = mongoTemplate.count(query, BookUrl.class);
+
+        long page = count/50 + 1;
+
+        query.with(new PageRequest(0, 50));
+        for (int i = 0; i < page; i++) {
+
+            List<BookUrl> bookUrls = mongoTemplate.find(query, BookUrl.class);
+
+            bookUrls.forEach(bookUrl -> {
+                String url = bookUrl.getUrl();
+
+
+                String chapterUrl = url+"chapters/";
+
+                bookUrl.setChapterUrl(chapterUrl);
+                bookUrl.setChapterStatus(0);
+                bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+
+                bookUrlRepository.save(bookUrl);
+
+                Query bookQuery = Query.query(Criteria.where("cp_url").is(url));
+                Update bookUpdate = Update.update("reference_key", bookUrl.getReferenceKey());
+
+                mongoTemplate.updateFirst(bookQuery,bookUpdate, Book.class);
+            });
+        }
+    }
+    @Test
+    public void resetCp(){
+        Query query = Query.query(Criteria.where("cp_host").is("yc.ireader.com.cn"));
+
+        Update u = Update.update("cp_name", "掌阅");
+
+        mongoTemplate.updateMulti(query, u, Book.class);
     }
 
     @Test

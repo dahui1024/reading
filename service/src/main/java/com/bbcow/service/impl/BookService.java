@@ -3,9 +3,9 @@ package com.bbcow.service.impl;
 import com.bbcow.service.mongo.entity.*;
 import com.bbcow.service.mongo.reporitory.*;
 import com.bbcow.service.util.MD5;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -144,7 +143,6 @@ public class BookService {
         bookChapter.setContent(text);
         bookChapterRepository.save(bookChapter);
     }
-
     public void saveWords(Iterable<BookWord> bookWords){
         bookWords.forEach(bookWord -> {
             if (bookWord.getTag() != null && bookWord.getCount() > 1){
@@ -154,5 +152,12 @@ public class BookService {
                 bookWordRepository.save(bookWord);
             }
         });
+    }
+
+    public List<BookWord> getBookPerson(String referenceKey){
+        if (StringUtils.isBlank(referenceKey)){
+            return Collections.EMPTY_LIST;
+        }
+        return bookWordRepository.findByReferenceKeyAndTagOrderByCountDesc(referenceKey, "PER");
     }
 }

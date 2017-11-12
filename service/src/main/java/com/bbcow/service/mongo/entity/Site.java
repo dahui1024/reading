@@ -14,8 +14,10 @@ public class Site {
     @Id
     private String startUrl;
     private String host;
+    private String name;
     private int status = 1;
     private String protocol;
+    private String contact;
     @Field("complete_init")
     private int completeInit = 0;
     @Field("create_time")
@@ -35,6 +37,14 @@ public class Site {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getStatus() {
@@ -59,6 +69,14 @@ public class Site {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public int getCompleteInit() {
