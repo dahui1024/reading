@@ -78,7 +78,7 @@ public class BookTest {
     }
     @Test
     public void initRK(){
-        Query query = Query.query(Criteria.where("cp_host").is("book.qidian.com"));
+        Query query = Query.query(Criteria.where("cp_host").is("www.qidian.com"));
         query.addCriteria(Criteria.where("reference_key").exists(false));
         long count = mongoTemplate.count(query, Book.class);
 

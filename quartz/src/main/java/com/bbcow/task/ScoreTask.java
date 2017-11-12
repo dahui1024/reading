@@ -42,7 +42,7 @@ public class ScoreTask {
                 BigDecimal siteCount = new BigDecimal(scoreBook.getSiteScores().size() + BASIC_COUNT);
                 BigDecimal result = bigDecimal.divide(siteCount, 0, BigDecimal.ROUND_FLOOR);
 
-                if (result.intValue() <=0 ){
+                if (result.intValue() <= 0){
                     continue;
                 }
                 int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue());

@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface SiteRepository extends MongoRepository<Site, String> , PagingAndSortingRepository<Site, String> {
     List<Site> findByCompleteInitAndStatus(int completeInit, int status);
+    List<Site> findByStatus(int status);
 }

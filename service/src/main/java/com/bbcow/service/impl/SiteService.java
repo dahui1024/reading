@@ -48,7 +48,7 @@ public class SiteService {
         return siteRepository.findByCompleteInitAndStatus(0, 1);
     }
     public Collection<String> loadFindUrl(){
-        List<Site> sites = siteRepository.findAll();
+        List<Site> sites = siteRepository.findByStatus(1);
         Set<String> strings = new HashSet<>();
 
         sites.forEach(site -> strings.add(site.getProtocol()+"://"+site.getHost()));

@@ -23,6 +23,12 @@
             <artifactId>service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.baidu.aip/java-sdk -->
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
