@@ -1,6 +1,7 @@
 package com.bbcow.crawler.book.proxy;
 
 import com.bbcow.service.mongo.entity.*;
+import com.bbcow.service.util.MD5;
 import org.springframework.util.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Html;
@@ -35,6 +36,11 @@ public class FetchUrlProxy {
                 BookUrl bookUrl = new BookUrl();
                 bookUrl.setHost(host);
                 bookUrl.setUrl(link);
+                String chapterUrl = link + siteElement.getChapterSuffix();
+
+                bookUrl.setChapterUrl(chapterUrl);
+                bookUrl.setChapterStatus(0);
+                bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
                 bookUrl.setCreateTime(now);
                 bookUrls.add(bookUrl);
 

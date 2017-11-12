@@ -29,7 +29,7 @@ public abstract class TaskCrawler<T extends PageProcessor> {
 
     public abstract void execute();
 
-    @Scheduled(cron = "30 0/1 * * * ?")
+    @Scheduled(cron = "30 0/5 * * * ?")
     public void task(){
         if (spider.getStatus() == Spider.Status.Running){
             return;

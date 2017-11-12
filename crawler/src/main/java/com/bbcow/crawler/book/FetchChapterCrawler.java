@@ -2,7 +2,6 @@ package com.bbcow.crawler.book;
 
 import com.bbcow.crawler.TaskCrawler;
 import com.bbcow.crawler.book.processor.FetchChapterProcessor;
-import com.bbcow.crawler.book.processor.FetchCoverProcessor;
 import com.bbcow.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ public class FetchChapterCrawler extends TaskCrawler<FetchChapterProcessor> {
             }
         });
 
-        spider.thread(1).start();
+        spider.thread(4).start();
     }
 
     public static void main(String[] args) {

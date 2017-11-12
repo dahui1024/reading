@@ -1,11 +1,6 @@
 package com.bbcow.crawler.book.proxy;
 
-import com.baidu.aip.nlp.AipNlp;
 import com.bbcow.service.mongo.entity.BookElement;
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import us.codecraft.webmagic.Page;
 
 import java.net.MalformedURLException;
