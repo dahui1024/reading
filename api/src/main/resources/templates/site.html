@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <title>烂白菜 - 网络小说 | TXT小说 | 全本小说 | 元尊</title>
+    <meta name="description" content="烂白菜，网文世界风向标，告诉你关于网文的一切。">
+    <meta name="keywords" content="烂白菜,白菜,大白菜,网文,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜">
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+
+<section class="fdb-block">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 col-md-5 text-center">
+                <div class="fdb-box fdb-touch">
+                    <div class="row">
+                        <div class="col">
+                            <h1>合作方接入申请</h1>
+                        </div>
+                    </div>
+                    <form action="/site/apply" method="post">
+                        <div class="row">
+                            <div class="col mt-4">
+                                <input type="text" class="form-control" name="name" placeholder="名称：烂白菜">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <input type="text" class="form-control" name="website" placeholder="网站：http://www.bbcow.com">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <textarea class="form-control" name="contact" placeholder="联系方式" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <button class="btn" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

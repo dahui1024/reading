@@ -68,7 +68,7 @@ public class WebIndexController {
 
             for (ScoreBookLog scoreBookLog : scoreBookLogs){
                 if (DateUtils.isSameInstant(date, scoreBookLog.getDay())){
-                    values[index] = scoreBookLog.getPageScore() / 10+"";
+                    values[index] = scoreBookLog.getPageScore() / 10.0+"";
                 }
             }
             if (values[index] == null) {
@@ -78,6 +78,7 @@ public class WebIndexController {
 
         model.addAttribute("labels", labels);
         model.addAttribute("values", values);
+        model.addAttribute("person", bookService.getBookPerson(book.getReferenceKey()));
         model.addAttribute("recommendBooks", bookService.recommend(book.getAuthor()));
         return "books";
     }
