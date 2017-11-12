@@ -6,9 +6,7 @@ import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.mongo.entity.BookChapter;
 import com.bbcow.service.mongo.entity.BookUrl;
 import com.bbcow.service.mongo.entity.BookWord;
-import com.bbcow.service.mongo.entity.ScoreBook;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by adan on 2017/11/5.
