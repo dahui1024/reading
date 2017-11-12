@@ -6,6 +6,7 @@ import com.bbcow.service.impl.ScoreService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import us.codecraft.webmagic.Spider;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +31,11 @@ public class PageScoreCrawler extends TaskCrawler<PageScoreProcessor> {
 
         if (finishDay != null && !day.after(finishDay)){
             return;
+        }
+
+        // 关闭爬虫，清理重复队列
+        if (spider.getStatus() == Spider.Status.Stopped){
+            spider.close();
         }
 
         // 一天限制爬取一次
