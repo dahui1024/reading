@@ -6,6 +6,7 @@ import com.bbcow.service.mongo.entity.ScoreSite;
 import com.bbcow.service.mongo.reporitory.ScoreBookLogRepository;
 import com.bbcow.service.mongo.reporitory.ScoreBookRepository;
 import com.bbcow.service.mongo.reporitory.ScoreSiteRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -59,19 +60,28 @@ public class ScoreService {
     }
     public void addScoreLog(String name, Date day, int pageScore, int pageCount){
 
-        ScoreBook yesterdayRecord = scoreBookLogRepository.findByNameAndDay(name, DateUtils.addDays(day, -1));
-
-        ScoreBookLog scoreBookLog = new ScoreBookLog();
-        scoreBookLog.setDay(day);
-        scoreBookLog.setName(name);
-        scoreBookLog.setPageScore(pageScore);
-        scoreBookLog.setPageCount(pageCount);
-
-        if (yesterdayRecord == null){
-            scoreBookLog.setIsNew(1);
+        if (StringUtils.isBlank(name)){
+            return;
         }
 
-        scoreBookLogRepository.save(scoreBookLog);
+        try {
+            ScoreBookLog yesterdayRecord = scoreBookLogRepository.findByNameAndDay(name, DateUtils.addDays(day, -1));
+
+            ScoreBookLog scoreBookLog = new ScoreBookLog();
+            scoreBookLog.setDay(day);
+            scoreBookLog.setName(name);
+            scoreBookLog.setPageScore(pageScore);
+            scoreBookLog.setPageCount(pageCount);
+
+            if (yesterdayRecord == null){
+                scoreBookLog.setIsNew(1);
+            }
+
+            scoreBookLogRepository.save(scoreBookLog);
+
+        }catch (Exception e){
+            System.out.println(name);
+        }
     }
 
     public List<ScoreBook> findByDay(Date day){
