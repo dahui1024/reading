@@ -9,7 +9,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class SiteListener implements MessageListener{
     @Autowired
     UrlRedisTemplate urlRedisTemplate;
