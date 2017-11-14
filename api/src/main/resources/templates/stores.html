@@ -33,9 +33,11 @@
             </div>
         </div>
     </div>
-    <div class="container">
+</section>
+<section class="fdb-block">
+    <div class="container text-center">
         <a th:href="@{/books/stores?page={page}(page=${last_page})}">上一页</a>
-        <a href="@{/books/stores?page={page}(page=${next_page})}">下一页</a>
+        <a th:href="@{/books/stores?page={page}(page=${next_page})}">下一页</a>
     </div>
 </section>
 <footer th:replace="common/footer :: default()"></footer>
