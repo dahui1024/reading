@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <title>AI榜 | 玄幻排行榜 | 都市排行榜 | 总裁排行榜 - 烂白菜 </title>
+    <meta name="description" content="AI榜，一个机器智能排序榜单，每日由机器智能自动打分排序，无人工影响。">
+    <meta name="keywords" content="AI榜,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜">
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+<section class="fdb-block">
+    <div class="container" th:each="book,bookStat: ${books}">
+        <div class="row align-items-center pb-xl-5">
+            <div class="col-12 col-md-10 col-xl-10">
+                <h2>[[${bookStat.index+1}]].  [(${book.name})]&nbsp;&nbsp;<small>[(${book.author})]</small></h2>
+                <p class="text-h3">[(${book.description})]</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-2 m-sm-auto mr-md-0 ml-md-auto pt-4 pt-md-0">
+                <img alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <h3><strong style="color:red">[[${book.pageScore / 10.0}]]</strong>分</h3>
+                <p>AI新鲜度</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <h3><strong style="color:red">[[${book.pageCount}]]</strong>条</h3>
+                <p>网站收录数</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <a th:href="@{/books/{id}(id=${book.id})}" th:title="${book.name}">查看详情</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <a th:href="@{/books/stores?page={page}(page=${last_page})}">上一页</a>
+        <a href="@{/books/stores?page={page}(page=${next_page})}">下一页</a>
+    </div>
+</section>
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

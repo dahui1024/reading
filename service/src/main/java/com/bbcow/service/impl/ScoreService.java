@@ -58,11 +58,18 @@ public class ScoreService {
         return scoreBookLogRepository.findTop30ByName(name, new Sort(Sort.Direction.DESC, "day"));
     }
     public void addScoreLog(String name, Date day, int pageScore, int pageCount){
+
+        ScoreBook yesterdayRecord = scoreBookLogRepository.findByNameAndDay(name, DateUtils.addDays(day, -1));
+
         ScoreBookLog scoreBookLog = new ScoreBookLog();
         scoreBookLog.setDay(day);
         scoreBookLog.setName(name);
         scoreBookLog.setPageScore(pageScore);
         scoreBookLog.setPageCount(pageCount);
+
+        if (yesterdayRecord == null){
+            scoreBookLog.setIsNew(1);
+        }
 
         scoreBookLogRepository.save(scoreBookLog);
     }

@@ -17,13 +17,13 @@ import java.util.Date;
 public class ScoreBookLog {
     @Id
     private ObjectId id;
-
     private String name;
-
     @Field("page_score")
     private long pageScore;
     @Field("page_count")
     private long pageCount;
+    @Field("is_new")
+    private int isNew;
 
     private Date day;
 
@@ -65,5 +65,13 @@ public class ScoreBookLog {
 
     public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public int getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(int isNew) {
+        this.isNew = isNew;
     }
 }

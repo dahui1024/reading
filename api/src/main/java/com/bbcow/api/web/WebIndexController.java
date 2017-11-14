@@ -88,4 +88,11 @@ public class WebIndexController {
 
         return "ranks";
     }
+    @RequestMapping("/books/stores")
+    public String stores(@RequestParam(defaultValue = "1") int page, Model model){
+        model.addAttribute("books", bookService.getBookWithScore(page));
+        model.addAttribute("next_page", page+1);
+        model.addAttribute("last_page", page<1 ? 1 : page-1);
+        return "stores";
+    }
 }
