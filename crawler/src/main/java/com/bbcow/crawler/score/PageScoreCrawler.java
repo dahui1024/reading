@@ -1,12 +1,12 @@
 package com.bbcow.crawler.score;
 
+import com.bbcow.crawler.scheduler.DefaultScheduler;
 import com.bbcow.crawler.TaskCrawler;
 import com.bbcow.crawler.score.processor.PageScoreProcessor;
 import com.bbcow.service.impl.ScoreService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.Spider;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -32,11 +32,7 @@ public class PageScoreCrawler extends TaskCrawler<PageScoreProcessor> {
         if (finishDay != null && !day.after(finishDay)){
             return;
         }
-
-        // 关闭爬虫，清理重复队列
-        if (spider.getStatus() == Spider.Status.Stopped){
-            spider.close();
-        }
+        spider.setScheduler(new DefaultScheduler());
 
         // 一天限制爬取一次
         scoreService.findEnableSite().stream().filter(scoreSite -> {
