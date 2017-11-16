@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
+@ActiveProfiles("service-dev")
 public class SiteTest {
     @Autowired
     SiteElementRepository siteElementRepository;
@@ -37,7 +39,7 @@ public class SiteTest {
         siteElementRepository.save(siteElement);
     }
     @Test
-    public void zongheng(){
+    public void zhangyue(){
         String host = "yc.ireader.com.cn";
         Site site = new Site();
         site.setHost(host);
@@ -51,6 +53,23 @@ public class SiteTest {
         siteElement.setHost(host);
         siteElement.setUrl("/html/body/div[2]/div[3]/div/span");
         siteElement.setTarget("/html/body/div[2]/div[3]/ul/li/a");
+        siteElementRepository.save(siteElement);
+    }
+    @Test
+    public void zongheng(){
+        String host = "www.zongheng.com";
+        Site site = new Site();
+        site.setHost(host);
+        site.setStartUrl("http://book.zongheng.com/store/c0/c0/b9/u1/p1/v9/s9/t0/ALL.html");
+        site.setCreateTime(new Date());
+
+        siteRepository.save(site);
+
+        SiteElement siteElement = new SiteElement();
+        siteElement.setCreateTime(new Date());
+        siteElement.setHost(host);
+        siteElement.setUrl(null);
+        siteElement.setTarget("/html/body/div[4]/div[7]/div/div[1]/div/ul/li/span[2]/a[1]");
         siteElementRepository.save(siteElement);
     }
     @Test

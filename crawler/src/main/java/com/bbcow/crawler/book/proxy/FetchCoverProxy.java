@@ -8,6 +8,7 @@ import us.codecraft.webmagic.selector.Html;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +46,8 @@ public class FetchCoverProxy {
         book.setCpName(bookElement.getCpName());
         book.setCpImageUrl(html.xpath(bookElement.getImageUrl()).get());
         book.setCpHost(bookElement.getHost());
+        book.setCreateTime(new Date());
 
-        System.out.println(book.getName());
         return book;
     }
     String getName(){
@@ -65,7 +66,7 @@ public class FetchCoverProxy {
     int getVip(){
         List<String> others = html.xpath(bookElement.getOther()).all();
         String vip = html.xpath(bookElement.getVip()).get();
-        if (others.contains("VIP") || (!StringUtils.isEmpty(vip) && vip.contains("上架"))){
+        if (others.contains("VIP") || others.contains("vip") || (!StringUtils.isEmpty(vip) && vip.contains("上架"))){
             return 1;
         }
         return 0;
@@ -73,7 +74,7 @@ public class FetchCoverProxy {
     int getFinish(){
         List<String> others = html.xpath(bookElement.getOther()).all();
         String finish = html.xpath(bookElement.getStatus()).get();
-        if (others.contains("完本") || (!StringUtils.isEmpty(finish) && finish.contains("完"))){
+        if (others.contains("完本") || (!StringUtils.isEmpty(finish) && org.apache.commons.lang3.StringUtils.containsAny(finish, "end", "完", "finish"))){
             return 1;
         }
         return 0;
@@ -81,7 +82,7 @@ public class FetchCoverProxy {
     int getSign(){
         List<String> others = html.xpath(bookElement.getOther()).all();
         String sign = html.xpath(bookElement.getSign()).get();
-        if (others.contains("签约") || (!StringUtils.isEmpty(sign) && sign.contains("签约"))){
+        if (others.contains("签约") || others.contains("sign") || (!StringUtils.isEmpty(sign) && sign.contains("签约"))){
             return 1;
         }
         return 0;

@@ -115,7 +115,12 @@ public class BookService {
         update.inc("chapter_crawl_count", 1);
         update.set("chapter_crawl_time", new Date());
         update.set("chapter_status", 1);
-        mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class).getN();
+        String id = mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class).getUpsertedId().toString();
+
+        Book book = bookRepository.findByCpUrl(id);
+        book.setReferenceKey(referenceKey);
+        book.setUpdateTime(new Date());
+        bookRepository.save(book);
     }
     public void finishChapterWord(String referenceKey){
         Update update = new Update();

@@ -201,8 +201,26 @@ public class BookTest {
 
         bookElementRepository.save(bookElement);
     }
+
     @Test
     public void zongheng(){
+        BookElement bookElement = new BookElement();
+        bookElement.setName("/html/body/div[4]/div/div[1]/div/div/div/div[2]/h1/a/text()");
+        bookElement.setAuthor("/html/body/div[4]/div/div[1]/div/div/div/div[2]/div[1]/a[1]/text()");
+        bookElement.setCpName("纵横中文网");
+        bookElement.setDescription("/html/body/div[4]/div/div[1]/div/div/div/div[2]/div[2]/p/tidyText()");
+        bookElement.setStatus("/html/body/div[4]/div/div[1]/div/div/div/div[2]/div[1]/a[2]/text()");
+        bookElement.setHost("book.zongheng.com");
+        bookElement.setImageUrl("/html/body/div[4]/div/div[1]/div/div/div/div[1]/p/a/img/@abs:src");
+        bookElement.setSign("/html/body/div[4]/div/div[1]/div/div/div/div[2]/h1/em[@class=\"sign    \"]");
+        bookElement.setTag("/html/body/div[4]/div/div[1]/div/div/div/div[2]/div[1]/a[2]/text()");
+        bookElement.setVip("/html/body/div[4]/div/div[1]/div/div/div/div[2]/h1/em[@class=\"vip\"]");
+        bookElement.setOther("/html/body/div[2]/div[1]/div[1]/div[3]/div[4]/p/a/text()");
+
+        bookElementRepository.save(bookElement);
+    }
+    @Test
+    public void zhangyue(){
         BookElement bookElement = new BookElement();
         bookElement.setName("/html/body/div[2]/div[1]/div[1]/div[3]/div[1]/h3/a/text()");
         bookElement.setAuthor("/html/body/div[2]/div[1]/div[1]/div[3]/p/span[1]/text()");

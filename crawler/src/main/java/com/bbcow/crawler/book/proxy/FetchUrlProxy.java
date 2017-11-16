@@ -36,9 +36,19 @@ public class FetchUrlProxy {
                 BookUrl bookUrl = new BookUrl();
                 bookUrl.setHost(host);
                 bookUrl.setUrl(link);
-                String chapterUrl = link + siteElement.getChapterSuffix();
+                if (siteElement.getChapterSuffix().contains("..")){
+                    String suffix = link.substring(link.lastIndexOf("/"));
+                    String prefix = link.replace(suffix, "");
+                    prefix = prefix.substring(0, prefix.lastIndexOf("/"));
+                    String chapterUrl = prefix + siteElement.getChapterSuffix().replace("../", "/") + suffix;
 
-                bookUrl.setChapterUrl(chapterUrl);
+                    bookUrl.setChapterUrl(chapterUrl);
+                }else {
+                    String chapterUrl = link + siteElement.getChapterSuffix();
+
+                    bookUrl.setChapterUrl(chapterUrl);
+                }
+
                 bookUrl.setChapterStatus(0);
                 bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
                 bookUrl.setCreateTime(now);
@@ -122,8 +132,6 @@ public class FetchUrlProxy {
             });
         }
 
-        siteUrls.forEach(link -> System.out.println(link.getUrl()));
-        System.out.println("------------");
         return siteUrls;
     }
 }
