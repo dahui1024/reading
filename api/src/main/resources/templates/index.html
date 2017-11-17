@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
-    <title>烂白菜 - 网络小说 | TXT小说 | 全本小说 | 元尊</title>
-    <meta name="description" content="烂白菜，网文世界风向标，告诉你关于网文的一切。">
-    <meta name="keywords" content="烂白菜,白菜,大白菜,网文,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜">
-
-    <meta name="applicable-device" content="pc,mobile">
-    <meta http-equiv="mobile-agent" content="format=html5; url=http://m.zongheng.com"/>
-    <meta name="mobile-agent" content="format=html5; url=http://m.zongheng.com/h5/" />
     <link/>
 </head>
 <body>
@@ -34,7 +27,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <label class="col-md-2" th:each="word:${words}">
-                <a th:href="@{/search?word={word}(word=${word.word})}" th:text="${word.word}"></a>
+                <a th:href="@{/search?word={word}(word=${word.word})}" th:title="${word.word+'相关小说'}" th:text="${word.word}"></a>
             </label>
         </div>
     </div>

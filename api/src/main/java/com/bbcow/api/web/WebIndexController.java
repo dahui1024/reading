@@ -37,6 +37,10 @@ public class WebIndexController {
 
         model.addAttribute("words", searchService.getHotWords());
 
+        model.addAttribute("bbcow_t", "烂白菜-网文世界风向标");
+        model.addAttribute("bbcow_d", "烂白菜，网文世界风向标，告诉你关于网文的一切。");
+        model.addAttribute("bbcow_k", "烂白菜,白菜,大白菜,网文,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜");
+        model.addAttribute("bbcow_mu", "/");
         return "index";
     }
     @RequestMapping("/search")
@@ -45,6 +49,11 @@ public class WebIndexController {
 
         model.addAttribute("results", searchService.search(word));
         model.addAttribute("word", word);
+
+        model.addAttribute("bbcow_t", word + "相关小说-烂白菜");
+        model.addAttribute("bbcow_d", word+"相关小说，烂白菜，网文世界风向标，告诉你关于网文的一切。");
+        model.addAttribute("bbcow_k", word+",烂白菜");
+        model.addAttribute("bbcow_mu", "/");
         return "result";
     }
     @RequestMapping("/books/{id}")
@@ -76,6 +85,11 @@ public class WebIndexController {
             }
         }
 
+        model.addAttribute("bbcow_t", "【报告】_"+book.getName()+"("+book.getAuthor()+"著)怎么样-烂白菜");
+        model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你深度解析"+book.getName()+"究竟怎样，给你一个满意的答案。");
+        model.addAttribute("bbcow_k", book.getName()+","+book.getAuthor()+","+book.getTags()+",烂白菜");
+        model.addAttribute("bbcow_mu", "/books/"+book.getId().toString());
+
         model.addAttribute("labels", labels);
         model.addAttribute("values", values);
         model.addAttribute("person", bookService.getBookPerson(book.getReferenceKey()));
@@ -86,6 +100,11 @@ public class WebIndexController {
     public String getRank(Model model){
         model.addAttribute("books", bookService.getTop50());
 
+        model.addAttribute("bbcow_t", "白菜榜_TOP_热门小说推荐榜-烂白菜");
+        model.addAttribute("bbcow_d", "白菜榜，一个智能排名榜单，每日由机器自动打分分析，实时反应社会热度。");
+        model.addAttribute("bbcow_k", "白菜榜,烂白菜,小说排行榜");
+        model.addAttribute("bbcow_mu", "/books/rank/page_score");
+
         return "ranks";
     }
     @RequestMapping("/books/stores")
@@ -93,6 +112,11 @@ public class WebIndexController {
         model.addAttribute("books", bookService.getBookWithScore(page));
         model.addAttribute("next_page", page+1);
         model.addAttribute("last_page", page<=1 ? 1 : page-1);
+
+        model.addAttribute("bbcow_t", "白菜地_大全_小说库-烂白菜");
+        model.addAttribute("bbcow_d", "白菜地，高质量网文书库");
+        model.addAttribute("bbcow_k", "白菜地,烂白菜,小说大全,小说书库");
+        model.addAttribute("bbcow_mu", "/books/stores?page="+page);
         return "stores";
     }
 }

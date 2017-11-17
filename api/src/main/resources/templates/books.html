@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
-    <title>[( ${book.name} )] [( ${book.author} )] [( ${book.name} )]最新评价 - 烂白菜</title>
-    <meta name="description" th:attr="content=${'烂白菜提供'+book.name+'的最新最全评价，是否值得看，口碑如何，以及'+book.author+'新书，答案统统在这里！'}">
-    <meta name="keywords" th:attr="content=${book.name+','+book.name+'最新评价,'+book.author+','+book.author+'的新书'}">
     <link/>
 </head>
 <body>
@@ -16,13 +13,13 @@
                 <p class="text-h3">[(${book.description})]</p>
             </div>
             <div class="col-12 col-sm-6 col-md-2 m-sm-auto mr-md-0 ml-md-auto pt-4 pt-md-0">
-                <img alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
+                <img th:alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
             </div>
         </div>
         <div class="row pt-1">
             <div class="col-12 col-sm-6 col-md-3">
-                <h3><strong style="color:red">[[${book.pageScore / 10.0}]]</strong>分</h3>
-                <p>AI新鲜度</p>
+                <h3><strong style="color:red">[[${book.pageScore / 10.0}]]</strong>KG</h3>
+                <p>重量</p>
             </div>
             <div class="col-12 col-sm-6 col-md-3">
                 <h3><strong style="color:red">[[${book.pageCount}]]</strong>条</h3>
@@ -78,7 +75,7 @@
                 <div class="row">
                     <div class="col-3">
                         <a th:href="@{/books/{id}(id=${book.id})}" th:title="${book.name}">
-                            <img alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
+                            <img th:alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
                         </a>
                     </div>
                     <div class="col-9">
