@@ -47,7 +47,7 @@ public class PageScoreProcessor implements PageProcessor {
             String name = element.text();
 
             if (!names.contains(name) && bookService.existsWithName(name)){
-                scoreService.updateBookPageScore(name, score/elements.size());
+                scoreService.updateBookPageScore(name, href, score/elements.size());
                 names.add(name);
 
                 usefulLinkCount += 1;

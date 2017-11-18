@@ -33,7 +33,7 @@ public class ScoreService {
     @Autowired
     ScoreBookLogRepository scoreBookLogRepository;
 
-    public void updateBookPageScore(String name, int score){
+    public void updateBookPageScore(String name, String url, int score){
         Date date = new Date();
         Date day = DateUtils.truncate(date, Calendar.DATE);
         ScoreBook scoreBook = scoreBookRepository.findByNameAndDay(name, day);
@@ -44,6 +44,9 @@ public class ScoreService {
             List<Integer> scores = new LinkedList<>();
             scores.add(score);
             scoreBook.setSiteScores(scores);
+            List<String> urls = new LinkedList<>();
+            urls.add(url);
+            scoreBook.setUrls(urls);
             scoreBook.setCreateTime(date);
             scoreBook.setDay(day);
             scoreBookRepository.save(scoreBook);
@@ -51,6 +54,7 @@ public class ScoreService {
             Update update = new Update();
             update.inc("score", score);
             update.push("site_scores", score);
+            update.addToSet("urls", url);
             mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)), update, ScoreBook.class).getN();
         }
     }

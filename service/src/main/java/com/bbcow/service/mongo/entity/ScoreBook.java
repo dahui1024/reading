@@ -18,6 +18,7 @@ public class ScoreBook {
     private long score;
     @Field("site_scores")
     private List<Integer> siteScores;
+    private List<String> urls;
     private Date day;
 
     @Field("create_time")
@@ -61,5 +62,13 @@ public class ScoreBook {
 
     public void setSiteScores(List<Integer> siteScores) {
         this.siteScores = siteScores;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }

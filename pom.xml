@@ -18,6 +18,9 @@
     <properties>
         <spring-boot-starter-parent.version>1.5.7.RELEASE</spring-boot-starter-parent.version>
         <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
+        <guava.version>23.0</guava.version>
+        <commons-lang3.version>3.6</commons-lang3.version>
+        <java-jwt.version>3.3.0</java-jwt.version>
         <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
     </properties>
 
@@ -27,15 +30,30 @@
         <version>1.5.7.RELEASE</version>
     </parent>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.6</version>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
     </dependencies>
 </project>
