@@ -62,22 +62,23 @@ public class ScoreService {
     public List<ScoreBookLog> findTop30ByName(String name){
         return scoreBookLogRepository.findTop30ByName(name, new Sort(Sort.Direction.DESC, "day"));
     }
-    public void addScoreLog(String name, Date day, int pageScore, int pageCount){
+    public void addScoreLog(String name, Date day, List<String> urls, int pageScore, int pageCount){
 
         if (StringUtils.isBlank(name)){
             return;
         }
 
         try {
-            ScoreBookLog yesterdayRecord = scoreBookLogRepository.findByNameAndDay(name, DateUtils.addDays(day, -1));
+            long recordCount = scoreBookLogRepository.countByName(name);
 
             ScoreBookLog scoreBookLog = new ScoreBookLog();
             scoreBookLog.setDay(day);
             scoreBookLog.setName(name);
             scoreBookLog.setPageScore(pageScore);
             scoreBookLog.setPageCount(pageCount);
+            scoreBookLog.setUrls(urls);
 
-            if (yesterdayRecord == null){
+            if (recordCount <= 0){
                 scoreBookLog.setIsNew(1);
             }
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
@@ -33,7 +34,7 @@ public class WebIndexController {
     SearchService searchService;
 
     @RequestMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpServletRequest request) {
 
         model.addAttribute("words", searchService.getHotWords());
 
@@ -41,6 +42,12 @@ public class WebIndexController {
         model.addAttribute("bbcow_d", "烂白菜，网文世界风向标，告诉你关于网文的一切。");
         model.addAttribute("bbcow_k", "烂白菜,白菜,大白菜,网文,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜");
         model.addAttribute("bbcow_mu", "/");
+
+        if (request.getParameter("token") != null){
+            model.addAttribute("name", request.getParameter("name"));
+            model.addAttribute("token", request.getParameter("token"));
+        }
+
         return "index";
     }
     @RequestMapping("/search")
@@ -67,7 +74,6 @@ public class WebIndexController {
 
         List<ScoreBookLog> scoreBookLogs = scoreService.findTop30ByName(book.getName());
 
-
         Date today = DateUtils.truncate(new Date(), Calendar.DATE);
 
         for (int i = 1; i <= 30; i++) {
@@ -92,8 +98,15 @@ public class WebIndexController {
 
         model.addAttribute("labels", labels);
         model.addAttribute("values", values);
+        if (!scoreBookLogs.isEmpty()){
+            ScoreBookLog yesterdayLog = scoreBookLogs.get(0);
+            if (yesterdayLog.getUrls() != null && !yesterdayLog.getUrls().isEmpty()){
+                model.addAttribute("log", yesterdayLog.getUrls().subList(0, yesterdayLog.getUrls().size()>10 ? 10 : yesterdayLog.getUrls().size()));
+            }
+        }
+
         model.addAttribute("person", bookService.getBookPerson(book.getReferenceKey()));
-        model.addAttribute("recommendBooks", bookService.recommend(book.getAuthor()));
+        model.addAttribute("recommendBooks", bookService.recommend(book.getName(), book.getAuthor()));
         return "books";
     }
     @RequestMapping("/books/rank/page_score")
@@ -107,6 +120,18 @@ public class WebIndexController {
 
         return "ranks";
     }
+    @RequestMapping("/books/rank/7kg")
+    public String rank7kg(@RequestParam(defaultValue = "1") int page, Model model){
+        model.addAttribute("books", bookService.getBooksWithScoreScope(70,  80, page));
+        model.addAttribute("next_page", page+1);
+        model.addAttribute("last_page", page<=1 ? 1 : page-1);
+
+        model.addAttribute("bbcow_t", "7KG_大全_小说库-烂白菜");
+        model.addAttribute("bbcow_d", "7kG，白菜地，高质量网文书库");
+        model.addAttribute("bbcow_k", "7KG,白菜地,烂白菜,小说大全,小说书库");
+        model.addAttribute("bbcow_mu", "/books/rank/7kg");
+        return "stores";
+    }
     @RequestMapping("/books/stores")
     public String stores(@RequestParam(defaultValue = "1") int page, Model model){
         model.addAttribute("books", bookService.getBookWithScore(page));
@@ -119,4 +144,5 @@ public class WebIndexController {
         model.addAttribute("bbcow_mu", "/books/stores?page="+page);
         return "stores";
     }
+
 }

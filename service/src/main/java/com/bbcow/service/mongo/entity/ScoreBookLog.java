@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by adan on 2017/10/17.
@@ -22,6 +23,7 @@ public class ScoreBookLog {
     private long pageScore;
     @Field("page_count")
     private long pageCount;
+    private List<String> urls;
     @Field("is_new")
     private int isNew;
 
@@ -65,6 +67,14 @@ public class ScoreBookLog {
 
     public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 
     public int getIsNew() {

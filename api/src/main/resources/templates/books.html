@@ -63,15 +63,30 @@
         </div>
     </div>
 </section>
+
 <section class="fdb-block">
     <div class="container">
         <div class="row text-center">
             <div class="col-12">
-                <h1>同作者推荐</h1>
+                <h3>来源</h3>
             </div>
         </div>
-        <div class="row text-left mt-5">
-            <div class="col-12 col-md-4"  th:each="book : ${recommendBooks}">
+        <div class="row text-left mt-2">
+            <ol>
+                <li th:each="url : ${urls}">[(${url})]</li>
+            </ol>
+        </div>
+    </div>
+</section>
+<section class="fdb-block">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12">
+                <h3>同作者推荐</h3>
+            </div>
+        </div>
+        <div class="row text-left mt-3">
+            <div class="col-12 col-md-4 pt-3"  th:each="book : ${recommendBooks}">
                 <div class="row">
                     <div class="col-3">
                         <a th:href="@{/books/{id}(id=${book.id})}" th:title="${book.name}">
@@ -107,7 +122,7 @@
 
   let chart = new Chart({
     parent: "#chart",
-    title: "AI新鲜史",
+    title: "重量史",
     data: data,
     type: 'line',
     height: 200

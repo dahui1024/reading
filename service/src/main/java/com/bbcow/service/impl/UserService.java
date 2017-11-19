@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     UserTokenRepository userTokenRepository;
 
-    public UserToken register(String name, String phone, String password, String confirmPassword, int code) {
+    public UserToken register(String name, String phone, String password) {
 
         if (userRepository.findByName(name) == null && userRepository.findByPhone(phone) == null){
             User user = new User();
@@ -67,7 +67,7 @@ public class UserService {
         }
     }
     public UserToken loginWithName(String name, String password){
-        User user = userRepository.findByNameAndPassword(name, password);
+        User user = userRepository.findByNameAndPassword(name, MD5.digest(password));
         if (user != null){
             UserToken userToken = userTokenRepository.findOne(user.getId());
 
@@ -81,13 +81,14 @@ public class UserService {
             userToken.setRefreshTime(DateUtils.addHours(userToken.getLoginTime(), 3));
             userToken.setExpireTime(DateUtils.addDays(userToken.getLoginTime(), 30));
 
+            userTokenRepository.save(userToken);
             return userToken;
         }else {
             return null;
         }
     }
 
-    public int reset(String phone, String password, String confirmPassword, int code){
+    public int reset(String phone, String password){
         User user = userRepository.findByPhone(phone);
         if (user != null){
             user.setPassword(MD5.digest("bbcow@"+password));
@@ -96,7 +97,7 @@ public class UserService {
 
             return 1;
         }else {
-            register(phone, phone, password, confirmPassword, code);
+            register(phone, phone, password);
 
             return 1;
         }

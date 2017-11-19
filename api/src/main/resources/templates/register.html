@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <meta name="robots" content="nofollow" />
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+
+<section class="fdb-block">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+                <div class="row">
+                    <div class="col text-center">
+                        <h1>注册</h1>
+                        <p class="text-h3">欢迎加入白菜帮。</p>
+                    </div>
+                </div>
+                <form action="/user" method="post">
+                    <div class="row align-items-center">
+                        <div class="col mt-4">
+                            <input type="text" class="form-control" name="name" placeholder="用户名" minlength="3" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-4">
+                        <div class="col">
+                            <input type="text" class="form-control" name="phone" placeholder="手机号" maxlength="11" minlength="11" required pattern="^1[3-9]\d{9}$">
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-4">
+                        <div class="col">
+                            <input type="number" class="form-control" name="code" maxlength="4" minlength="4" required placeholder="验证码">
+                        </div>
+                        <div class="col">
+                            <button type="button" onclick="getCode()"class="btn">获取验证码</button>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-4">
+                        <div class="col">
+                            <input type="password" class="form-control" name="password" required placeholder="Password">
+                        </div>
+                        <div class="col">
+                            <input type="password" class="form-control" name="confirmPassword" required placeholder="Confirm Password">
+                        </div>
+                    </div>
+                    <div class="row justify-content-start mt-4">
+                        <div class="col">
+                            <!--<div class="form-check">-->
+                                <!--<label class="form-check-label">-->
+                                    <!--<input type="checkbox" class="form-check-input">-->
+                                    <!--I Read and Accept <a href="https://www.froala.com">Terms and Conditions</a>-->
+                                <!--</label>-->
+                            <!--</div>-->
+
+                            <button type="submit" class="btn mt-4">注册</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

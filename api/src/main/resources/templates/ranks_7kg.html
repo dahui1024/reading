@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+<section class="fdb-block">
+    <div class="container" th:each="book,bookStat: ${books}">
+        <div class="row align-items-center pb-xl-5">
+            <div class="col-12 col-md-10 col-xl-10">
+                <h2>[[${bookStat.index+1}]].  [(${book.name})]&nbsp;&nbsp;<small>[(${book.author})]</small></h2>
+                <p class="text-h3">[(${book.description})]</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-2 m-sm-auto mr-md-0 ml-md-auto pt-4 pt-md-0">
+                <img th:alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <h3><strong style="color:red">[[${book.pageScore / 10.0}]]</strong>KG</h3>
+                <p>重量</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <h3><strong style="color:red">[[${book.pageCount}]]</strong>条</h3>
+                <p>网站收录数</p>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <a th:href="@{/books/{id}(id=${book.id})}" th:title="${book.name}">查看详情</a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="fdb-block">
+    <div class="container text-center">
+        <a th:href="@{/books/rank/7kg?page={page}(page=${last_page})}">上一页</a>
+        <a th:href="@{/books/rank/7kg?page={page}(page=${next_page})}">下一页</a>
+    </div>
+</section>
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

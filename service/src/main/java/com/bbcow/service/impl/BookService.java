@@ -91,10 +91,23 @@ public class BookService {
         PageRequest pageRequest = new PageRequest(page - 1, 50);
         return bookRepository.findByPageScoreGreaterThanAndPageCountGreaterThan(1, 1, pageRequest).getContent();
     }
+    public List<Book> getBooksWithScoreScope(int from, int to, int page){
+        if (page < 1){
+            page = 1;
+        }
+        PageRequest pageRequest = new PageRequest(page - 1, 50);
+        return bookRepository.findByPageScoreBetween(from, to, pageRequest).getContent();
+    }
 
-    public List<Book> recommend(String author){
+    public List<Book> recommend(String name, String author){
         PageRequest pageRequest = new PageRequest(0, 5);
-        return bookRepository.findByAuthor(author, pageRequest).getContent();
+        List<Book> books = bookRepository.findByAuthor(author, pageRequest).getContent();
+        List<Book> result = new LinkedList<>();
+        books.stream().filter(book -> !name.equals(book.getName())).forEach(book -> {
+            result.add(book);
+        });
+
+        return result;
     }
 
     public void saveUrl(BookUrl bookUrl) {

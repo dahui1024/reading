@@ -47,7 +47,7 @@ public class ScoreTask {
                 }
                 int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue());
                 if (n > 0) {
-                    scoreService.addScoreLog(scoreBook.getName(), day, result.intValue(), siteCount.intValue());
+                    scoreService.addScoreLog(scoreBook.getName(), day, scoreBook.getUrls(), result.intValue(), siteCount.intValue());
                 }
             }
 

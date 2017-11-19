@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <meta name="robots" content="nofollow" />
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+
+<section class="fdb-block" style="background-image: url(/imgs/bg_0.svg)">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-7 col-xl-5 text-center">
+                <div class="fdb-box fdb-touch">
+                    <div class="row">
+                        <div class="col">
+                            <h1>登录</h1>
+                        </div>
+                    </div>
+                    <form action="/user/login" method="post">
+                        <div class="row mt-4">
+                            <div class="col">
+                                <input type="text" class="form-control" name="name" placeholder="用户名" minlength="3" maxlength="10" required>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <input type="password" class="form-control mb-1" name="password" placeholder="Password" required>
+                                <p class="text-right"><a href="/reset.html">重置密码</a></p>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <button class="btn" type="submit">登录</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>
