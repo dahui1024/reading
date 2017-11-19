@@ -29,7 +29,7 @@ public class FetchChapterProxy {
 
             return urls.subList(0, endIndex);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            System.out.println(page.getUrl()+" download chapter failed");
         }
         return Collections.EMPTY_LIST;
     }

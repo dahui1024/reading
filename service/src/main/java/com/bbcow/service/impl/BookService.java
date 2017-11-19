@@ -123,14 +123,25 @@ public class BookService {
 
         int n = mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(url)), update, BookUrl.class).getN();
     }
+    public void disableChapterUrl(String referenceKey){
+        Update update = new Update();
+        update.inc("chapter_crawl_count", 1);
+        update.set("chapter_crawl_time", new Date());
+        update.set("chapter_status", -1);
+
+        mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class);
+    }
     public void finishChapterUrl(String referenceKey){
         Update update = new Update();
         update.inc("chapter_crawl_count", 1);
         update.set("chapter_crawl_time", new Date());
         update.set("chapter_status", 1);
-        String id = mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class).getUpsertedId().toString();
 
-        Book book = bookRepository.findByCpUrl(id);
+        BookUrl bookUrl = bookUrlRepository.findByReferenceKey(referenceKey);
+
+        mongoTemplate.updateFirst(Query.query(Criteria.where("reference_key").is(referenceKey)), update, BookUrl.class);
+
+        Book book = bookRepository.findByCpUrl(bookUrl.getUrl());
         book.setReferenceKey(referenceKey);
         book.setUpdateTime(new Date());
         bookRepository.save(book);
