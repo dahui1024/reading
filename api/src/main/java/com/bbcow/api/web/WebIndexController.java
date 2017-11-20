@@ -101,7 +101,7 @@ public class WebIndexController {
         if (!scoreBookLogs.isEmpty()){
             ScoreBookLog yesterdayLog = scoreBookLogs.get(0);
             if (yesterdayLog.getUrls() != null && !yesterdayLog.getUrls().isEmpty()){
-                model.addAttribute("log", yesterdayLog.getUrls().subList(0, yesterdayLog.getUrls().size()>10 ? 10 : yesterdayLog.getUrls().size()));
+                model.addAttribute("urls", yesterdayLog.getUrls().subList(0, yesterdayLog.getUrls().size()>10 ? 10 : yesterdayLog.getUrls().size()));
             }
         }
 
