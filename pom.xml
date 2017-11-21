@@ -21,6 +21,7 @@
         <guava.version>23.0</guava.version>
         <commons-lang3.version>3.6</commons-lang3.version>
         <java-jwt.version>3.3.0</java-jwt.version>
+        <okhttp.version>3.9.1</okhttp.version>
         <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
     </properties>
 
@@ -36,7 +37,11 @@
             <artifactId>java-jwt</artifactId>
             <version>${java-jwt.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
