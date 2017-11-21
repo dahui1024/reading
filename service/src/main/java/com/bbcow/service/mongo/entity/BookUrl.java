@@ -27,6 +27,9 @@ public class BookUrl {
     @Indexed
     @Field("reference_key")
     private String referenceKey;
+    @Indexed
+    @Field("page_score")
+    private int pageScore = 0;
     // 0：待抓取，1：抓取完成，2：分析完成
     @Indexed
     @Field("chapter_status")
@@ -115,5 +118,13 @@ public class BookUrl {
 
     public void setChapterStatus(int chapterStatus) {
         this.chapterStatus = chapterStatus;
+    }
+
+    public int getPageScore() {
+        return pageScore;
+    }
+
+    public void setPageScore(int pageScore) {
+        this.pageScore = pageScore;
     }
 }

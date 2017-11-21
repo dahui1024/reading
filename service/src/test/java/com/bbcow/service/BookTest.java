@@ -185,6 +185,17 @@ public class BookTest {
     }
 
     @Test
+    public void initScore(){
+        PageRequest pageRequest = new PageRequest(0, 1000000);
+        List<Book> books = bookRepository.findByPageScoreBetween(1, 100, pageRequest).getContent();
+        System.out.println("---"+books.size());
+        books.forEach(book -> {
+            BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
+            bookUrl.setPageScore(book.getPageScore());
+            bookUrlRepository.save(bookUrl);
+        });
+    }
+    @Test
     public void test(){
         BookElement bookElement = new BookElement();
         bookElement.setAuthor("/html/body/div[2]/div[6]/div[1]/div[2]/h1/span/a/text()");

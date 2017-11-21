@@ -65,6 +65,12 @@ public class BookService {
         books.forEach(book -> {
             book.setPageScore(score);
             book.setPageCount(count);
+
+            BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
+            if (bookUrl != null){
+                bookUrl.setPageScore(score);
+                bookUrlRepository.save(bookUrl);
+            }
         });
         return bookRepository.save(books).size();
     }
@@ -155,7 +161,7 @@ public class BookService {
         return bookUrlRepository.existsByCrawlTime(null);
     }
     public List<BookUrl> getNewBookChapterUrl(){
-        PageRequest pageRequest = new PageRequest(0, 50);
+        PageRequest pageRequest = new PageRequest(0, 50, new Sort(Sort.Direction.DESC, "page_score"));
         return bookUrlRepository.findByChapterStatus(0, pageRequest);
     }
     public List<BookUrl> getFinishBookChapter(){
