@@ -9,6 +9,8 @@
     <meta name="keywords" th:attr="content=${bbcow_k}">
     <meta http-equiv="mobile-agent" th:attr="content=${'format=html5; url=http://m.bbcow.com'+bbcow_mu}" />
     <meta name="mobile-agent" th:attr="content=${'format=html5; url=http://m.bbcow.com'+bbcow_mu}" />
+
+    <link rel="canonical" th:href="@{http://www.bbcow.com{path}(path=${bbcow_mu})}"/>
     <!--<th:block th:replace="${meta}" />-->
     <!-- Common styles and scripts -->
     <link rel="shortcut icon" th:href="@{/favicon.ico}">

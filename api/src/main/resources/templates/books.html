@@ -105,6 +105,18 @@
 </section>
 <footer th:replace="common/footer :: default()"></footer>
 <script src="/js/frappe-charts.min.iife.js" ></script>
+
+<script type="application/ld+json">
+        {
+            "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+            "@id": [[${"http://www.bbcow.com"+bbcow_mu}]],
+            "appid": "1584272942248118",
+            "title": "[(${bbcow_t})]",
+            "images": [ "[[${book.cpImageUrl}]]" ],
+            "description": "[(${bbcow_d})]",
+            "pubDate": "[[${#dates.format(book.createTime, "yyyy-MM-dd'T'HH:mm:ss")}]]"
+        }
+    </script>
 <script>
   var labels = ['[(${#strings.arrayJoin(labels, "','")})]'];
   var values = [ [(${#strings.arrayJoin(values, ",")})] ];
