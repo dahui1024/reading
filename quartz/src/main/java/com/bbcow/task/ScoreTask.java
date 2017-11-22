@@ -29,7 +29,7 @@ public class ScoreTask {
     private static final int BASIC_SCORE = 86;
     private static final int BASIC_COUNT = 11;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
     public void pageScoreTask(){
         if (isRunning){
             return;
