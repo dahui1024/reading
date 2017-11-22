@@ -5,6 +5,7 @@
 </head>
 <body>
 <header th:replace="common/header :: default()"></header>
+<script>cambrian.render('head')</script>
 <section class="fdb-block">
     <div class="container" th:each="book,bookStat: ${books}">
         <div class="row align-items-center pb-xl-5">
