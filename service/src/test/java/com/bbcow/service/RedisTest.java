@@ -1,32 +1,23 @@
 package com.bbcow.service;
 
-import com.bbcow.service.impl.SiteService;
-import com.bbcow.service.mongo.entity.Book;
-import com.bbcow.service.mongo.entity.BookElement;
-import com.bbcow.service.mongo.entity.BookUrl;
-import com.bbcow.service.mongo.entity.SiteElement;
-import com.bbcow.service.mongo.reporitory.BookElementRepository;
-import com.bbcow.service.mongo.reporitory.BookRepository;
-import com.bbcow.service.mongo.reporitory.BookUrlRepository;
 import com.bbcow.service.redis.po.UrlPO;
+import com.bbcow.service.redis.template.LockRedisTemplate;
 import com.bbcow.service.redis.template.UrlRedisTemplate;
-import com.bbcow.service.util.MD5;
-import org.bson.types.ObjectId;
+import com.google.common.io.Resources;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by adan on 2017/10/21.
@@ -38,6 +29,8 @@ import java.util.Map;
 public class RedisTest {
     @Autowired
     UrlRedisTemplate urlRedisTemplate;
+    @Autowired
+    LockRedisTemplate lockRedisTemplate;
 
     @Test
     public void s(){
@@ -46,5 +39,14 @@ public class RedisTest {
         urlPO.setUrl("www.baidu.com");
         urlRedisTemplate.convertAndSend("crawler:book", urlPO);
     }
+    @Test
+    public void luaLock(){
+        System.out.println(lockRedisTemplate.lock("ttt"));
+    }
+    @Test
+    public void releaseLuaLock(){
+//        System.out.println(lockRedisTemplate.releaseLock("ttt"));
 
+        lockRedisTemplate.delete(lockRedisTemplate.keys("counter*"));
+    }
 }

@@ -5,33 +5,38 @@ import us.codecraft.webmagic.Page;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by adan on 2017/10/18.
  */
-public class FetchChapterProxy {
+public class FetchContentProxy {
     private Map<String, BookElement> elementMap;
 
-    public FetchChapterProxy(Map<String, BookElement> elementMap){
+    public FetchContentProxy(Map<String, BookElement> elementMap){
         this.elementMap = elementMap;
     }
 
-    public List<String> getUrl(Page page){
+    public String getContent(Page page) {
         try {
             String host = new URL(page.getUrl().get()).getHost();
             BookElement bookElement = elementMap.get(host);
-            List<String> urls = page.getHtml().xpath(bookElement.getChapter()).links().all();
 
-            int endIndex = urls.size() > 20 ? 20 : urls.size();
+            List<String> texts = page.getHtml().xpath(bookElement.getContent()).all();
 
-            return urls.subList(0, endIndex);
+            if (texts == null || texts.isEmpty()){
+                return null;
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            texts.forEach(text -> stringBuilder.append(text));
+
+            return stringBuilder.toString();
         } catch (MalformedURLException e) {
-            System.out.println(page.getUrl()+" download chapter failed");
+            e.printStackTrace();
         }
-        return Collections.EMPTY_LIST;
-    }
 
+        return null;
+    }
 }

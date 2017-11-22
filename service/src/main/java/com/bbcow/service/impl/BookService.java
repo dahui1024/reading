@@ -180,10 +180,11 @@ public class BookService {
 
         bookChapterRepository.save(bookChapter);
     }
-    public void updateChapterContent(String url, String text){
+    public BookChapter updateChapterContent(String url, String text){
         BookChapter bookChapter = bookChapterRepository.findOne(MD5.digest_16bit(url));
         bookChapter.setContent(text);
         bookChapterRepository.save(bookChapter);
+        return bookChapter;
     }
     public void saveWords(Iterable<BookWord> bookWords){
         bookWords.forEach(bookWord -> {
