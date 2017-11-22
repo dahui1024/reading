@@ -1,5 +1,6 @@
 package com.bbcow.service;
 
+import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.SiteService;
 import com.bbcow.service.mongo.entity.Book;
 import com.bbcow.service.mongo.entity.BookElement;
@@ -22,6 +23,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,8 @@ public class BookTest {
     MongoTemplate mongoTemplate;
     @Autowired
     SiteService siteService;
+    @Autowired
+    BookService bookService;
 
     @Test
     public void s(){
@@ -194,6 +198,41 @@ public class BookTest {
             bookUrl.setPageScore(book.getPageScore());
             bookUrlRepository.save(bookUrl);
         });
+    }
+    @Test
+    public void resetChapter(){
+        Map<String, SiteElement> elementMap = siteService.loadElements();
+
+        List<BookUrl> bookUrls = mongoTemplate.find(Query.query(Criteria.where("chapter_url").regex("null")), BookUrl.class);
+
+//        List<BookUrl> bookUrls = bookUrlRepository.existsByChapterUrl(null);
+
+        bookUrls.forEach(bookUrl -> {
+            String host = bookUrl.getHost();
+            SiteElement siteElement = elementMap.get(host);
+            String link = bookUrl.getUrl();
+
+            if (siteElement.getChapterSuffix().contains("..")){
+                String suffix = link.substring(link.lastIndexOf("/"));
+                String prefix = link.replace(suffix, "");
+                prefix = prefix.substring(0, prefix.lastIndexOf("/"));
+                String chapterUrl = prefix + siteElement.getChapterSuffix().replace("../", "/") + suffix;
+
+                bookUrl.setChapterUrl(chapterUrl);
+            }else {
+                String chapterUrl = link + siteElement.getChapterSuffix();
+
+                bookUrl.setChapterUrl(chapterUrl);
+            }
+            System.out.println(bookUrl.getChapterUrl());
+
+            bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
+
+            bookUrlRepository.save(bookUrl);
+        });
+
+        System.out.println(bookUrls.size());
+
     }
     @Test
     public void test(){

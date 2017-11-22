@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface BookUrlRepository extends MongoRepository<BookUrl, String> , PagingAndSortingRepository<BookUrl, String> {
     List<BookUrl> existsByCrawlTime(Date date);
+    List<BookUrl> existsByChapterUrl(String chapterUrl);
     List<BookUrl> findByChapterStatus(int chapterStatus, Pageable pageable);
     BookUrl findByReferenceKey(String referenceKey);
 }
