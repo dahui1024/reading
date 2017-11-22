@@ -165,7 +165,7 @@ public class BookService {
         return bookUrlRepository.findByChapterStatus(0, pageRequest);
     }
     public List<BookUrl> getFinishBookChapter(){
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "page_score"));
         return bookUrlRepository.findByChapterStatus(1, pageRequest);
     }
     public List<BookChapter> getBookChapters(String referenceKey){
