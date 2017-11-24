@@ -2,3 +2,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://reading:reading123@47.92.50.53:3717/qiusuo
+  redis:
+    host: 180.76.181.240
+    port: 7000
