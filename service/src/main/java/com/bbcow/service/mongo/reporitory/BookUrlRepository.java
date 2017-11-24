@@ -16,4 +16,5 @@ public interface BookUrlRepository extends MongoRepository<BookUrl, String> , Pa
     List<BookUrl> existsByChapterUrl(String chapterUrl);
     List<BookUrl> findByChapterStatus(int chapterStatus, Pageable pageable);
     BookUrl findByReferenceKey(String referenceKey);
+    List<BookUrl> findByPageScoreGreaterThan(int pageScore);
 }

@@ -41,6 +41,7 @@ public class FetchChapterProcessor implements PageProcessor {
                     bookService.saveChapterUrl(i+1, urls.get(i), rk);
                 }
                 stringRedisTemplate.opsForList().leftPush("queue:rk", rk);
+                stringRedisTemplate.opsForHash().put("filter:rk", rk, 1);
             }
         }catch (Exception e){
             bookService.disableChapterUrl(rk);

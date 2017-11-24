@@ -62,6 +62,13 @@ public class ScoreService {
     public List<ScoreBookLog> findTop30ByName(String name){
         return scoreBookLogRepository.findTop30ByName(name, new Sort(Sort.Direction.DESC, "day"));
     }
+    public ScoreBookLog findTodayBookLog(String name){
+        Date day = DateUtils.truncate(new Date(), Calendar.DATE);
+        return scoreBookLogRepository.findByNameAndDay(name, day);
+    }
+    public List<ScoreBookLog> getHotLog(){
+        return scoreBookLogRepository.findByPageScoreGreaterThan(80);
+    }
     public void addScoreLog(String name, Date day, List<String> urls, int pageScore, int pageCount){
 
         if (StringUtils.isBlank(name)){

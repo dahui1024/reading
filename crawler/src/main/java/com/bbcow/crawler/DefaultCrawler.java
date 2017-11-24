@@ -28,6 +28,6 @@ public abstract class DefaultCrawler<T extends PageProcessor> implements Command
 
     @Scheduled(cron = "0 * * * * ?")
     public void register(){
-        crawlerService.update(uuid, pageProcessor.getClass().getSimpleName(), spider.getStatus().name());
+//        crawlerService.update(uuid, pageProcessor.getClass().getSimpleName(), spider.getStatus().name());
     }
 }

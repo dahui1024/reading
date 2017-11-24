@@ -22,7 +22,7 @@ public class Book {
     private String author;
     @Indexed
     @Field("reference_key")
-    private String ReferenceKey;
+    private String referenceKey;
     @Field("is_vip")
     private int isVip;
     @Field("is_finish")
@@ -74,11 +74,11 @@ public class Book {
     }
 
     public String getReferenceKey() {
-        return ReferenceKey;
+        return referenceKey;
     }
 
     public void setReferenceKey(String referenceKey) {
-        ReferenceKey = referenceKey;
+        this.referenceKey = referenceKey;
     }
 
     public int getIsVip() {

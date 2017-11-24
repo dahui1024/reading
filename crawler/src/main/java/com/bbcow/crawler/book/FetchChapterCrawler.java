@@ -4,6 +4,7 @@ import com.bbcow.crawler.TaskCrawler;
 import com.bbcow.crawler.book.processor.FetchChapterProcessor;
 import com.bbcow.service.impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 public class FetchChapterCrawler extends TaskCrawler<FetchChapterProcessor> {
     @Autowired
     BookService bookService;
-
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
     public FetchChapterCrawler(@Autowired FetchChapterProcessor fetchChapterProcessor) {
         super(fetchChapterProcessor);
     }
@@ -21,7 +23,7 @@ public class FetchChapterCrawler extends TaskCrawler<FetchChapterProcessor> {
     @Override
     public void execute() {
         bookService.getNewBookChapterUrl().forEach(url -> {
-            if (url.getChapterUrl() != null){
+            if (url.getChapterUrl() != null && !stringRedisTemplate.opsForHash().hasKey("filter:rk", url.getReferenceKey())){
                 spider.addUrl(url.getChapterUrl());
             }
         });

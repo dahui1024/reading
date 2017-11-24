@@ -18,4 +18,5 @@ public interface ScoreBookLogRepository extends MongoRepository<ScoreBookLog, Ob
     List<ScoreBookLog> findByDay(Date day);
 
     List<ScoreBookLog> findTop30ByName(String name, Sort sort);
+    List<ScoreBookLog> findByPageScoreGreaterThan(int pageScore);
 }

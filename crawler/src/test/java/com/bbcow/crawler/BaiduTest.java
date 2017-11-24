@@ -22,13 +22,32 @@ public class BaiduTest {
 
     @Test
     public void testSDK(){
-        List<Book> books = bookService.getTop50();
+        List<Book> books = bookService.getBooksWithScoreScope(70, 80, 3);
         Baidu example = new Baidu();
         try {
             books.forEach(book -> {
                 String response = null;
                 try {
                     response = example.post("http://data.zz.baidu.com/urls?appid=1584272942248118&token=VMF6nZrGqwQ1wwJr&type=realtime", "http://www.bbcow.com/books/" + book.getId().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(response);
+            });
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testWeb(){
+        List<Book> books = bookService.getBooksWithScoreScope(70, 80, 2);
+        Baidu example = new Baidu();
+        try {
+            books.forEach(book -> {
+                String response = null;
+                try {
+                    response = example.post("http://data.zz.baidu.com/urls?site=https://www.bbcow.com&token=wXscD2Nt9CslRNis", "http://www.bbcow.com/books/" + book.getId().toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

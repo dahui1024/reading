@@ -78,6 +78,9 @@ public class BookService {
     public Book getById(ObjectId id) {
         return bookRepository.findOne(id);
     }
+    public Book getByReferenceKey(String rk) {
+        return bookRepository.findByReferenceKey(rk);
+    }
 
     public Map<String, BookElement> loadElements(){
         Map<String, BookElement> elementMap = new TreeMap<>();
@@ -160,6 +163,9 @@ public class BookService {
     public List<BookUrl> getNewBookUrl(){
         return bookUrlRepository.existsByCrawlTime(null);
     }
+    public List<BookUrl> getHotBookUrl(){
+        return bookUrlRepository.findByPageScoreGreaterThan(80);
+    }
     public List<BookUrl> getNewBookChapterUrl(){
         PageRequest pageRequest = new PageRequest(0, 50, new Sort(Sort.Direction.DESC, "page_score"));
         return bookUrlRepository.findByChapterStatus(0, pageRequest);
@@ -203,4 +209,5 @@ public class BookService {
         }
         return bookWordRepository.findByReferenceKeyAndTagOrderByCountDesc(referenceKey, "PER");
     }
+
 }

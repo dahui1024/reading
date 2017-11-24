@@ -82,8 +82,8 @@ public class BookTest {
     }
     @Test
     public void initRK(){
-        Query query = Query.query(Criteria.where("cp_host").is("www.qidian.com"));
-        query.addCriteria(Criteria.where("reference_key").exists(false));
+        Query query = Query.query(Criteria.where("cp_host").is("book.qidian.com"));
+//        query.addCriteria(Criteria.where("reference_key").exists(false));
         long count = mongoTemplate.count(query, Book.class);
 
         long page = count/50 + 1;
@@ -204,7 +204,7 @@ public class BookTest {
     public void resetChapter(){
         Map<String, SiteElement> elementMap = siteService.loadElements();
 
-        List<BookUrl> bookUrls = mongoTemplate.find(Query.query(Criteria.where("chapter_url").regex("null")), BookUrl.class);
+        List<BookUrl> bookUrls = mongoTemplate.find(Query.query(Criteria.where("host").is("book.qidian.com")), BookUrl.class);
 
 //        List<BookUrl> bookUrls = bookUrlRepository.existsByChapterUrl(null);
 
