@@ -1,6 +1,7 @@
 package com.bbcow.crawler.site;
 
 import com.bbcow.crawler.TaskCrawler;
+import com.bbcow.crawler.scheduler.DefaultScheduler;
 import com.bbcow.crawler.site.processor.OtherSiteChapterProcessor;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.BookSiteService;
@@ -30,23 +31,36 @@ public class OtherSiteChapterCrawler extends TaskCrawler<OtherSiteChapterProcess
 
     @Override
     public void execute() {
-        String rk = stringRedisTemplate.opsForList().rightPop("site:queue:rk");
+        for (int i = 0; i < 20; i++) {
+            String rk = stringRedisTemplate.opsForList().rightPop("site:queue:rk");
+            try {
+                stringRedisTemplate.delete("site:lock:"+rk);
 
-        if (rk == null){
-            return;
+                if (rk == null){
+                    return;
+                }
+
+                Book book = bookService.getByReferenceKey(rk);
+
+                if (book == null){
+                    continue;
+                }
+
+                ScoreBookLog scoreBookLog = scoreService.findTodayBookLog(book.getName());
+
+                scoreBookLog.getUrls().forEach(url -> {
+                    Request request = new Request(url);
+                    request.addHeader("rk", rk);
+
+                    spider.addRequest(request);
+                });
+            }catch (Exception e){
+                stringRedisTemplate.opsForList().leftPush("site:queue:rk", rk);
+                stringRedisTemplate.opsForValue().set("site:lock:"+rk, "0");
+            }
         }
 
-        Book book = bookService.getByReferenceKey(rk);
-
-        ScoreBookLog scoreBookLog = scoreService.findTodayBookLog(book.getName());
-
-        scoreBookLog.getUrls().forEach(url -> {
-            Request request = new Request(url);
-            request.addHeader("rk", rk);
-
-            System.out.println(url);
-            spider.addRequest(request);
-        });
+        spider.setScheduler(new DefaultScheduler());
 
         spider.thread(4).start();
     }

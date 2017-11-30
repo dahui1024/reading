@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -86,11 +87,13 @@ public class BookTest {
 //        query.addCriteria(Criteria.where("reference_key").exists(false));
         long count = mongoTemplate.count(query, Book.class);
 
-        long page = count/50 + 1;
+        int page = (int)count/50 + 1;
 
-        query.with(new PageRequest(0, 50));
         for (int i = 0; i < page; i++) {
-            System.out.println(i+"---");
+
+            query.with(new PageRequest(i*50, 50));
+            query.with(new Sort(Sort.Direction.DESC, "page_score"));
+
             List<Book> books = mongoTemplate.find(query, Book.class);
             if (books.isEmpty()){
                 continue;
@@ -109,6 +112,7 @@ public class BookTest {
                 }
 
             });
+            System.out.println(i+"---");
 
         }
     }

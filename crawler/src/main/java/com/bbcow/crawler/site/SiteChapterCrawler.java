@@ -1,6 +1,7 @@
 package com.bbcow.crawler.site;
 
 import com.bbcow.crawler.TaskCrawler;
+import com.bbcow.crawler.scheduler.DefaultScheduler;
 import com.bbcow.crawler.site.processor.SiteChapterProcessor;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.BookSiteService;
@@ -25,6 +26,7 @@ public class SiteChapterCrawler extends TaskCrawler<SiteChapterProcessor> {
         bookService.getHotBookUrl().forEach(bookUrl -> {
             spider.addUrl(bookUrl.getChapterUrl());
         });
+        spider.setScheduler(new DefaultScheduler());
 //        spider.addUrl("https://book.qidian.com/info/1004650252#Catalog");
 //        spider.addUrl("http://www.77xs.co/book_41575/");
 //        spider.addUrl("http://yc.ireader.com.cn/book/67409/chapters/");

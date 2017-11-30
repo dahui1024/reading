@@ -79,6 +79,7 @@ public class SiteChapterProcessor implements PageProcessor {
         }
         if (updateCount > 0){
             stringRedisTemplate.opsForList().leftPush("site:queue:rk", rk);
+            stringRedisTemplate.opsForValue().set("site:lock:"+rk, "0");
         }
     }
 

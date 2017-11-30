@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -33,7 +34,7 @@ public class OtherSiteChapterProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         String rk = page.getRequest().getHeaders().get("rk");
-        System.out.println("----"+rk);
+
         URL url = null;
         try {
             url = new URL(page.getRequest().getUrl());
@@ -60,15 +61,15 @@ public class OtherSiteChapterProcessor implements PageProcessor {
 
         BookSiteChapter lastRecord = bookSiteService.getLastOne(rk);
         BookSiteChapter last = cleanChapterLinks.get(sn.get() - 1);
-        if (lastRecord.getSn() != sn.get() || !lastRecord.getName().equals(last.getName())){
+
+        if (lastRecord.getSn() != sn.get() && lastRecord.getName().equals(last.getName())){
+
+        }else {
             logger.info("chapter not same!");
-            List<String> rks = stringRedisTemplate.opsForList().range("site:queue:rk", 0, -1);
-            rks.forEach(ork -> {
-                if (ork.equals(rk)){
-                    return;
-                }
-            });
-            stringRedisTemplate.opsForList().leftPush("site:queue:rk", rk);
+            if (!stringRedisTemplate.hasKey("site:lock:"+rk)){
+                stringRedisTemplate.opsForList().leftPush("site:queue:rk", rk);
+                stringRedisTemplate.opsForValue().set("site:lock:"+rk, "0");
+            }
             return;
         }
 
@@ -78,7 +79,13 @@ public class OtherSiteChapterProcessor implements PageProcessor {
 
                 BookSiteChapter record = cleanChapterLinks.get(sn.get());
 
-                bookSiteService.updateSite(id, record.getName(), record.getUrl());
+                int n = bookSiteService.updateSite(id, record.getName(), record.getUrl());
+
+                // 放入章节内容抓取队列
+                if (n>0 && !stringRedisTemplate.hasKey("chapter:lock:"+id)) {
+                    stringRedisTemplate.opsForList().leftPush("chapter:queue:id", id);
+                    stringRedisTemplate.opsForValue().set("chapter:lock:" + id, "0");
+                }
             }catch (Exception e){
 
             }

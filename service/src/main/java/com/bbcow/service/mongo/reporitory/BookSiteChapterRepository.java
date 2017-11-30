@@ -12,4 +12,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface BookSiteChapterRepository extends MongoRepository<BookSiteChapter, String> , PagingAndSortingRepository<BookSiteChapter, String> {
     BookSiteChapter findOneByReferenceKey(String key, Sort sort);
     long countById(String id);
+    BookSiteChapter findByIdAndStatus(String id, int status);
 }
