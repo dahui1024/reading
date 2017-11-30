@@ -60,9 +60,15 @@ public class OtherSiteChapterProcessor implements PageProcessor {
         AtomicInteger sn = new AtomicInteger(cleanChapterLinks.size());
 
         BookSiteChapter lastRecord = bookSiteService.getLastOne(rk);
+        if (sn.get() < 0){
+            return;
+        }
+        if (lastRecord.getStatus() == 3){
+            return;
+        }
         BookSiteChapter last = cleanChapterLinks.get(sn.get() - 1);
 
-        if (lastRecord.getSn() != sn.get() && lastRecord.getName().equals(last.getName())){
+        if (lastRecord.getSn() == sn.get() && lastRecord.getName().equals(last.getName())){
 
         }else {
             logger.info("chapter not same!");
@@ -80,9 +86,8 @@ public class OtherSiteChapterProcessor implements PageProcessor {
                 BookSiteChapter record = cleanChapterLinks.get(sn.get());
 
                 int n = bookSiteService.updateSite(id, record.getName(), record.getUrl());
-
                 // 放入章节内容抓取队列
-                if (n>0 && !stringRedisTemplate.hasKey("chapter:lock:"+id)) {
+                if (n > 0 && !stringRedisTemplate.hasKey("chapter:lock:"+id)) {
                     stringRedisTemplate.opsForList().leftPush("chapter:queue:id", id);
                     stringRedisTemplate.opsForValue().set("chapter:lock:" + id, "0");
                 }

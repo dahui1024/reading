@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -38,14 +39,32 @@ public class BookSiteService {
         return bookSiteChapterRepository.findByIdAndStatus(id, 2);
     }
     public int updateSite(String id, String name, String url){
+        BookSiteChapter bookSiteChapter = bookSiteChapterRepository.findOne(id);
 
-        Update update = new Update();
-        update.addToSet("site_urls", url);
-        update.set("status", 2);
-        Query query = Query.query(Criteria.where("_id").is(id));
-        query.addCriteria(Criteria.where("name").is(name));
+        if (bookSiteChapter == null){
+            return 0;
+        }
 
-        return mongoTemplate.updateFirst(query, update, BookSiteChapter.class).getN();
+        if (bookSiteChapter.getStatus() == 1){
+            List<String> urls = new LinkedList<>();
+            urls.add(url);
+            bookSiteChapter.setStatus(2);
+            bookSiteChapterRepository.save(bookSiteChapter);
+
+            return 1;
+        }else if (bookSiteChapter.getStatus() == 2){
+            if (!bookSiteChapter.getSiteUrls().contains(url)){
+                bookSiteChapter.getSiteUrls().add(url);
+                bookSiteChapterRepository.save(bookSiteChapter);
+            }
+            return 1;
+        }else {
+            if (!bookSiteChapter.getSiteUrls().contains(url)){
+                bookSiteChapter.getSiteUrls().add(url);
+                bookSiteChapterRepository.save(bookSiteChapter);
+            }
+            return 1;
+        }
     }
     public int updateContent(String id, String content){
 
@@ -53,7 +72,6 @@ public class BookSiteService {
         update.set("content", content);
         update.set("status", 3);
         Query query = Query.query(Criteria.where("_id").is(id));
-        query.addCriteria(Criteria.where("status").is(2));
 
         return mongoTemplate.updateFirst(query, update, BookSiteChapter.class).getN();
     }

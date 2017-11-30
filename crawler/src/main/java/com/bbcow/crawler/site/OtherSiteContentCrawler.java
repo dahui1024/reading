@@ -43,6 +43,8 @@ public class OtherSiteContentCrawler extends TaskCrawler<OtherSiteContentProcess
                 }
                 BookSiteChapter bookSiteChapter = bookSiteService.findByIdAndStatus(id);
                 if (bookSiteChapter == null){
+                    stringRedisTemplate.opsForList().leftPush("chapter:queue:id", id);
+                    stringRedisTemplate.opsForValue().set("chapter:lock:" + id, "0");
                     continue;
                 }
 
