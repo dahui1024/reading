@@ -49,7 +49,7 @@ public class OtherSiteChapterProcessor implements PageProcessor {
 
         save(rk, chapterLinks);
 
-        logger.info(rk + " finished!");
+        logger.info(rk + " other finished!");
     }
 
     public void save(String rk, List<BookSiteChapter> chapterLinks){
@@ -60,10 +60,10 @@ public class OtherSiteChapterProcessor implements PageProcessor {
         AtomicInteger sn = new AtomicInteger(cleanChapterLinks.size());
 
         BookSiteChapter lastRecord = bookSiteService.getLastOne(rk);
-        if (sn.get() < 0){
+        if (sn.get() < 0 || cleanChapterLinks.isEmpty()){
             return;
         }
-        if (lastRecord.getStatus() == 3){
+        if (lastRecord == null || lastRecord.getStatus() == 3){
             return;
         }
         BookSiteChapter last = cleanChapterLinks.get(sn.get() - 1);

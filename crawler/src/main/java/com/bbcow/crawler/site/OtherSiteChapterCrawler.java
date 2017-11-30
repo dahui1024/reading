@@ -37,7 +37,7 @@ public class OtherSiteChapterCrawler extends TaskCrawler<OtherSiteChapterProcess
                 stringRedisTemplate.delete("site:lock:"+rk);
 
                 if (rk == null){
-                    return;
+                    continue;
                 }
 
                 Book book = bookService.getByReferenceKey(rk);
@@ -45,13 +45,12 @@ public class OtherSiteChapterCrawler extends TaskCrawler<OtherSiteChapterProcess
                 if (book == null){
                     continue;
                 }
-
                 ScoreBookLog scoreBookLog = scoreService.findTodayBookLog(book.getName());
 
                 scoreBookLog.getUrls().forEach(url -> {
                     Request request = new Request(url);
                     request.addHeader("rk", rk);
-
+                    System.out.println(url);
                     spider.addRequest(request);
                 });
             }catch (Exception e){

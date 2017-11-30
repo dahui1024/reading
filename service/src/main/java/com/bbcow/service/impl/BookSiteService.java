@@ -48,6 +48,7 @@ public class BookSiteService {
         if (bookSiteChapter.getStatus() == 1){
             List<String> urls = new LinkedList<>();
             urls.add(url);
+            bookSiteChapter.setSiteUrls(urls);
             bookSiteChapter.setStatus(2);
             bookSiteChapterRepository.save(bookSiteChapter);
 
