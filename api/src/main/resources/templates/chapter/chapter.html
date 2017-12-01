@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+<section class="fdb-block">
+    <div class="container">
+        <h1>[(${book.name})]</h1>
+        <div class="row justify-content-left">
+            <label class="col-md-3" th:each="chapter:${chapters}">
+                <a th:href="@{/books/content/{id}?url={url}(id=${chapter.id},url=${chapter.siteUrls[0]})}" th:title="${chapter.name}" th:text="${chapter.name}"></a>
+            </label>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

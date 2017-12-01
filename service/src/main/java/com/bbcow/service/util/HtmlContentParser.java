@@ -133,9 +133,10 @@ public class HtmlContentParser {
         html = html.replaceAll("(&?(nbsp|lt|gt|amp|quot|apos|cent|pound|yen|euro|sect|copy|reg|trade|times|divide);?)", "");
         // unicode编码
         html = html.replaceAll("(&[\\S]{2,5};)+", "");
-        html = html.replaceAll("(<?/?(br|p)/?>?)+", "\r\n");
+//        html = html.replaceAll("(<?/?(br|p)/?>?)+", "\r\n");
+        html = html.replaceAll("(<?/?(br|p)/?>?)+", "<br/>");
         // 特殊html标签处理
-        html = html.replaceAll("(<[^\\u4e00-\\u9fa5]*>)", "");
+//        html = html.replaceAll("(<[^\\u4e00-\\u9fa5]*>)", "");
 
         return html;
     }

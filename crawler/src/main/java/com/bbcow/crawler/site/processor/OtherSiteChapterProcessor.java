@@ -87,10 +87,10 @@ public class OtherSiteChapterProcessor implements PageProcessor {
 
                 int n = bookSiteService.updateSite(id, record.getName(), record.getUrl());
                 // 放入章节内容抓取队列
-                if (n > 0 && !stringRedisTemplate.hasKey("chapter:lock:"+id)) {
-                    stringRedisTemplate.opsForList().leftPush("chapter:queue:id", id);
-                    stringRedisTemplate.opsForValue().set("chapter:lock:" + id, "0");
-                }
+//                if (n > 0 && !stringRedisTemplate.hasKey("chapter:lock:"+id)) {
+//                    stringRedisTemplate.opsForList().leftPush("chapter:queue:id", id);
+//                    stringRedisTemplate.opsForValue().set("chapter:lock:" + id, "0");
+//                }
             }catch (Exception e){
 
             }

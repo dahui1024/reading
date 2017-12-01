@@ -27,8 +27,6 @@ import java.util.Date;
 public class WebIndexController {
 
     @Autowired
-    ScoreService scoreService;
-    @Autowired
     BookService bookService;
     @Autowired
     SearchService searchService;
@@ -63,52 +61,7 @@ public class WebIndexController {
         model.addAttribute("bbcow_mu", "/");
         return "result";
     }
-    @RequestMapping("/books/{id}")
-    public String get(@PathVariable String id, Model model){
-        Book book = bookService.getById(new ObjectId(id));
-        model.addAttribute("book", book);
 
-        String[] labels = new String[30];
-        String[] values = new String[30];
-
-
-        List<ScoreBookLog> scoreBookLogs = scoreService.findTop30ByName(book.getName());
-
-        Date today = DateUtils.truncate(new Date(), Calendar.DATE);
-
-        for (int i = 1; i <= 30; i++) {
-            int index = 30 - i;
-            Date date = DateUtils.addDays(today, -(i-1));
-            labels[index] = DateFormatUtils.format(date, "MM-dd");
-
-            for (ScoreBookLog scoreBookLog : scoreBookLogs){
-                if (DateUtils.isSameInstant(date, scoreBookLog.getDay())){
-                    values[index] = scoreBookLog.getPageScore() / 10.0+"";
-                }
-            }
-            if (values[index] == null) {
-                values[index] = "0";
-            }
-        }
-
-        model.addAttribute("bbcow_t", "【报告】_"+book.getName()+"("+book.getAuthor()+"著)怎么样-烂白菜");
-        model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你深度解析"+book.getName()+"究竟怎样，给你一个满意的答案。");
-        model.addAttribute("bbcow_k", book.getName()+","+book.getAuthor()+","+book.getTags()+",烂白菜");
-        model.addAttribute("bbcow_mu", "/books/"+book.getId().toString());
-
-        model.addAttribute("labels", labels);
-        model.addAttribute("values", values);
-        if (!scoreBookLogs.isEmpty()){
-            ScoreBookLog yesterdayLog = scoreBookLogs.get(0);
-            if (yesterdayLog.getUrls() != null && !yesterdayLog.getUrls().isEmpty()){
-                model.addAttribute("urls", yesterdayLog.getUrls().subList(0, yesterdayLog.getUrls().size()>10 ? 10 : yesterdayLog.getUrls().size()));
-            }
-        }
-
-        model.addAttribute("person", bookService.getBookPerson(book.getReferenceKey()));
-        model.addAttribute("recommendBooks", bookService.recommend(book.getName(), book.getAuthor()));
-        return "books";
-    }
     @RequestMapping("/books/rank/page_score")
     public String getRank(Model model){
         model.addAttribute("books", bookService.getTop50());

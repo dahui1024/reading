@@ -38,6 +38,12 @@ public class BookSiteService {
     public BookSiteChapter findByIdAndStatus(String id){
         return bookSiteChapterRepository.findByIdAndStatus(id, 2);
     }
+    public List<BookSiteChapter> getChapters(String rk){
+        Query query = Query.query(Criteria.where("reference_key").is(rk));
+        query.fields().exclude("content");
+        query.with(new Sort(Sort.Direction.DESC, "sn"));
+        return mongoTemplate.find(query, BookSiteChapter.class);
+    }
     public int updateSite(String id, String name, String url){
         BookSiteChapter bookSiteChapter = bookSiteChapterRepository.findOne(id);
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: default(~{::title},~{::link},~{::meta})">
+    <link/>
+</head>
+<body>
+<header th:replace="common/header :: default()"></header>
+<section class="fdb-block">
+    <div class="container">
+        <h2>[(${chapter.name})]</h2>
+        <!--<pre>-->
+            <!--[(${content})]-->
+        <!--</pre>-->
+        <div class="row justify-content-left">
+            [(${content})]
+        </div>
+
+    </div>
+</section>
+<section class="fdb-block">
+    <div class="container text-center">
+        <a th:href="@{/books/content/{id}?url={url}(id=${chapter.referenceKey+'_'+(chapter.sn-1)}, url='')}">上一章</a>
+        <a th:href="@{/books/content/{id}?url={url}(id=${chapter.referenceKey+'_'+(chapter.sn+1)}, url='')}">下一章</a>
+    </div>
+</section>
+<footer th:replace="common/footer :: default()"></footer>
+</body>
+</html>

@@ -164,7 +164,7 @@ public class BookService {
         return bookUrlRepository.existsByCrawlTime(null);
     }
     public List<BookUrl> getHotBookUrl(){
-        return bookUrlRepository.findByPageScoreGreaterThan(80);
+        return bookUrlRepository.findByPageScoreGreaterThan(70);
     }
     public List<BookUrl> getNewBookChapterUrl(){
         PageRequest pageRequest = new PageRequest(0, 50, new Sort(Sort.Direction.DESC, "page_score"));

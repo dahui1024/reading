@@ -12,6 +12,7 @@
             <div class="col-12 col-md-10 col-xl-10">
                 <h1>[(${book.name})]<small>&nbsp;&nbsp;[(${book.author})]</small></h1>
                 <p class="text-h3">[(${book.description})]</p>
+                <a th:href="@{/books/{id}/chapters(id=${book.referenceKey})}" th:title="${book.name}"><strong>目录</strong></a>
             </div>
             <div class="col-12 col-sm-6 col-md-2 m-sm-auto mr-md-0 ml-md-auto pt-4 pt-md-0">
                 <img th:alt="${book.name}" class="img-fluid" th:src="${book.cpImageUrl}">
