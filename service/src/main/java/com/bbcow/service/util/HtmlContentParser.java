@@ -1,12 +1,13 @@
-package com.bbcow.crawler.site.core;
+package com.bbcow.service.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import us.codecraft.webmagic.Page;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,13 +15,34 @@ import java.util.List;
 /**
  * Created by adan on 2017/11/24.
  */
-public class ChapterContentMarker {
+public class HtmlContentParser {
 
     static String[] words = {"小说", "阅读", "章节", "<!--go-->『点击章节报错』","『加入书签，方便阅读』", "笔趣阁www.biqiuge.com，最快更新圣墟最新章节！"};
 
-    public static String getContent(Page page){
-        Document document = page.getHtml().getDocument();
+    public static String get(String url, List<String> secondUrls){
+        String content = null;
+        try {
+            Document doc = Jsoup.connect(url).get();
+            content = getContent(doc);
+        } catch (IOException e) {
 
+        }
+
+        for (int i = 0; i < secondUrls.size() && content != null; i++) {
+            if (!url.equals(secondUrls.get(i))){
+                try {
+                    Document doc = Jsoup.connect(secondUrls.get(i)).get();
+                    content = getContent(doc);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+
+        return content;
+    }
+
+    static String getContent(Document document){
         cleanElement(document);
 
         Element element = getMaxElement(document);

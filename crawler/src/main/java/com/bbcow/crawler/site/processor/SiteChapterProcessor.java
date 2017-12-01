@@ -60,7 +60,7 @@ public class SiteChapterProcessor implements PageProcessor {
         while (sn.decrementAndGet() >= 0){
             String id = rk+"_"+(sn.get()+1);
 
-            BookSiteChapter record = bookSiteService.getLastChapter(id);
+            BookSiteChapter record = bookSiteService.getChapter(id);
 
             if (record == null){
                 BookSiteChapter newRecord = cleanChapterLinks.get(sn.get());

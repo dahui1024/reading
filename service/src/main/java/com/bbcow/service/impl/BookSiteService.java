@@ -29,7 +29,7 @@ public class BookSiteService {
     public void save(BookSiteChapter chapter){
         bookSiteChapterRepository.save(chapter);
     }
-    public BookSiteChapter getLastChapter(String id){
+    public BookSiteChapter getChapter(String id){
         return bookSiteChapterRepository.findOne(id);
     }
     public BookSiteChapter getLastOne(String rk){
