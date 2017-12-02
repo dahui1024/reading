@@ -152,35 +152,51 @@ public class BookTest {
     }
     @Test
     public void initIReader(){
-        Query query = Query.query(Criteria.where("reference_key").exists(false));
-        query.addCriteria(Criteria.where("host").is("yc.ireader.com.cn"));
+//        Query query = Query.query(Criteria.where("reference_key").exists(false));
+//        query.addCriteria(Criteria.where("host").is("yc.ireader.com.cn"));
+        Map<String, SiteElement> elementMap = siteService.loadElements();
 
-        long count = mongoTemplate.count(query, BookUrl.class);
+        long count = 507954;//mongoTemplate.count(query, BookUrl.class);
 
         long page = count/50 + 1;
-
-        query.with(new PageRequest(0, 50));
+        Query query = new Query();
+        query.with(new Sort(Sort.Direction.DESC, "page_score"));
         for (int i = 0; i < page; i++) {
 
+            query.with(new PageRequest(i*50, 50));
             List<BookUrl> bookUrls = mongoTemplate.find(query, BookUrl.class);
 
             bookUrls.forEach(bookUrl -> {
-                String url = bookUrl.getUrl();
+                System.out.println(bookUrl.getUrl()+"----"+bookUrl.getReferenceKey());
 
+                String host = bookUrl.getHost();
+                SiteElement siteElement = elementMap.get(host);
+                String link = bookUrl.getUrl();
 
-                String chapterUrl = url+"chapters/";
+                if (siteElement.getChapterSuffix().contains("..")){
+                    String suffix = link.substring(link.lastIndexOf("/"));
+                    String prefix = link.replace(suffix, "");
+                    prefix = prefix.substring(0, prefix.lastIndexOf("/"));
+                    String chapterUrl = prefix + siteElement.getChapterSuffix().replace("../", "/") + suffix;
 
-                bookUrl.setChapterUrl(chapterUrl);
-                bookUrl.setChapterStatus(0);
+                    bookUrl.setChapterUrl(chapterUrl);
+                }else {
+                    String chapterUrl = link + siteElement.getChapterSuffix();
+
+                    bookUrl.setChapterUrl(chapterUrl);
+                }
+                System.out.println(bookUrl.getChapterUrl());
+
                 bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
 
                 bookUrlRepository.save(bookUrl);
 
-                Query bookQuery = Query.query(Criteria.where("cp_url").is(url));
+                Query bookQuery = Query.query(Criteria.where("cp_url").is(link));
                 Update bookUpdate = Update.update("reference_key", bookUrl.getReferenceKey());
 
                 mongoTemplate.updateFirst(bookQuery,bookUpdate, Book.class);
             });
+            System.out.println(i+"===================="+bookUrls.size());
         }
     }
     @Test
