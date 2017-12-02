@@ -26,8 +26,10 @@ public class FetchCoverProxy {
     }
 
     public Book getBook(Page page) {
+        String rk = null;
         try {
             String host = new URL(page.getUrl().get()).getHost();
+            rk = page.getRequest().getHeaders().get("rk");
             this.bookElement = elementMap.get(host);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -42,6 +44,7 @@ public class FetchCoverProxy {
         book.setIsVip(getVip());
         book.setIsFinish(getFinish());
         book.setIsSign(getSign());
+        book.setReferenceKey(rk);
         book.setCpUrl(page.getUrl().get());
         book.setCpName(bookElement.getCpName());
         book.setCpImageUrl(html.xpath(bookElement.getImageUrl()).get());

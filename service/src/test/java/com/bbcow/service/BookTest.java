@@ -161,9 +161,9 @@ public class BookTest {
         long page = count/50 + 1;
         Query query = new Query();
         query.with(new Sort(Sort.Direction.DESC, "page_score"));
-        for (int i = 0; i < page; i++) {
+        for (int i = 6247; i < page; i++) {
 
-            query.with(new PageRequest(i*50, 50));
+            query.with(new PageRequest(i, 50));
             List<BookUrl> bookUrls = mongoTemplate.find(query, BookUrl.class);
 
             bookUrls.forEach(bookUrl -> {
@@ -185,7 +185,6 @@ public class BookTest {
 
                     bookUrl.setChapterUrl(chapterUrl);
                 }
-                System.out.println(bookUrl.getChapterUrl());
 
                 bookUrl.setReferenceKey(MD5.digest_16bit(bookUrl.getChapterUrl()));
 

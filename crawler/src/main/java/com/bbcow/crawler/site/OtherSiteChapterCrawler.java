@@ -50,7 +50,6 @@ public class OtherSiteChapterCrawler extends TaskCrawler<OtherSiteChapterProcess
                 scoreBookLog.getUrls().forEach(url -> {
                     Request request = new Request(url);
                     request.addHeader("rk", rk);
-                    System.out.println(url);
                     spider.addRequest(request);
                 });
             }catch (Exception e){

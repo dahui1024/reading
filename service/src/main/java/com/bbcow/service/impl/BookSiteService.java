@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,11 +64,13 @@ public class BookSiteService {
             if (!bookSiteChapter.getSiteUrls().contains(url)){
                 bookSiteChapter.getSiteUrls().add(url);
                 bookSiteChapterRepository.save(bookSiteChapter);
+                bookSiteChapter.setUpdateTime(new Date());
             }
             return 1;
         }else {
             if (!bookSiteChapter.getSiteUrls().contains(url)){
                 bookSiteChapter.getSiteUrls().add(url);
+                bookSiteChapter.setUpdateTime(new Date());
                 bookSiteChapterRepository.save(bookSiteChapter);
             }
             return 1;

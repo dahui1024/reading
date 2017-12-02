@@ -1,11 +1,14 @@
 package com.bbcow.service.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -16,25 +19,35 @@ import java.util.List;
  * Created by adan on 2017/11/24.
  */
 public class HtmlContentParser {
-
+    static Logger logger = LoggerFactory.getLogger(HtmlContentParser.class);
     static String[] words = {"小说", "阅读", "章节", "<!--go-->『点击章节报错』","『加入书签，方便阅读』", "笔趣阁www.biqiuge.com，最快更新圣墟最新章节！"};
 
     public static String get(String url, List<String> secondUrls){
         String content = null;
         try {
-            Document doc = Jsoup.connect(url).get();
+            Connection connection = Jsoup.connect(url);
+            connection.timeout(1000);
+            Document doc = connection.get();
             content = getContent(doc);
+            if (content == null || content.length() < 100){
+                throw new IOException("内容不符合规范！");
+            }
         } catch (IOException e) {
-
+            logger.error(e.getMessage(), e);
         }
 
-        for (int i = 0; i < secondUrls.size() && content != null; i++) {
+        for (int i = 0; i < secondUrls.size() && content == null; i++) {
             if (!url.equals(secondUrls.get(i))){
                 try {
-                    Document doc = Jsoup.connect(secondUrls.get(i)).get();
+                    Connection connection = Jsoup.connect(secondUrls.get(i));
+                    connection.timeout(1000);
+                    Document doc = connection.get();
                     content = getContent(doc);
+                    if (content == null || content.length() < 100){
+                        throw new IOException("内容不符合规范！");
+                    }
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    logger.error(e1.getMessage(), e1);
                 }
             }
         }
