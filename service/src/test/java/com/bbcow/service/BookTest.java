@@ -1,15 +1,14 @@
 package com.bbcow.service;
 
 import com.bbcow.service.impl.BookService;
+import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.impl.SiteService;
-import com.bbcow.service.mongo.entity.Book;
-import com.bbcow.service.mongo.entity.BookElement;
-import com.bbcow.service.mongo.entity.BookUrl;
-import com.bbcow.service.mongo.entity.SiteElement;
+import com.bbcow.service.mongo.entity.*;
 import com.bbcow.service.mongo.reporitory.BookElementRepository;
 import com.bbcow.service.mongo.reporitory.BookRepository;
 import com.bbcow.service.mongo.reporitory.BookUrlRepository;
 import com.bbcow.service.util.MD5;
+import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +23,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,30 @@ public class BookTest {
     SiteService siteService;
     @Autowired
     BookService bookService;
+    @Autowired
+    ScoreService scoreService;
+
+    @Test
+    public void initSite(){
+        Date day = DateUtils.truncate(new Date(), Calendar.DATE);
+
+        List<ScoreBook> scoreBooks = scoreService.findByDay(day);
+        if (scoreBooks != null && !scoreBooks.isEmpty()){
+            for (ScoreBook scoreBook : scoreBooks){
+                try {
+                    List<Book> books = bookRepository.findByName(scoreBook.getName());
+                    books.forEach(book -> {
+                        if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
+                            book.setSiteUrls(scoreBook.getUrls());
+                        }
+                    });
+                    bookRepository.save(books);
+                }catch (Exception e){
+
+                }
+            }
+        }
+    }
 
     @Test
     public void s(){

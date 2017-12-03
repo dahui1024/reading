@@ -2,6 +2,7 @@ package com.bbcow.service.mongo.reporitory;
 
 import com.bbcow.service.mongo.entity.BookUrl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -16,5 +17,5 @@ public interface BookUrlRepository extends MongoRepository<BookUrl, String> , Pa
     List<BookUrl> existsByChapterUrl(String chapterUrl);
     List<BookUrl> findByChapterStatus(int chapterStatus, Pageable pageable);
     BookUrl findByReferenceKey(String referenceKey);
-    List<BookUrl> findByPageScoreGreaterThan(int pageScore);
+    List<BookUrl> findByPageScoreGreaterThan(int pageScore, Sort sort);
 }

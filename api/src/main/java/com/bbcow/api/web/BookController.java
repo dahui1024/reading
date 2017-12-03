@@ -1,13 +1,13 @@
 package com.bbcow.api.web;
 
+import com.bbcow.api.vo.UrlVO;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.mongo.entity.Book;
-import com.bbcow.service.mongo.entity.BookSiteChapter;
 import com.bbcow.service.mongo.entity.ScoreBookLog;
+import com.bbcow.service.util.HtmlChapterParser;
 import com.bbcow.service.util.HtmlContentParser;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * Created by adan on 2017/10/17.
@@ -71,45 +70,80 @@ public class BookController {
 
         model.addAttribute("labels", labels);
         model.addAttribute("values", values);
-        if (!scoreBookLogs.isEmpty()){
-            ScoreBookLog yesterdayLog = scoreBookLogs.get(0);
-            if (yesterdayLog.getUrls() != null && !yesterdayLog.getUrls().isEmpty()){
-                model.addAttribute("urls", yesterdayLog.getUrls().subList(0, yesterdayLog.getUrls().size()>10 ? 10 : yesterdayLog.getUrls().size()));
-            }
+
+        List<UrlVO> urls = new LinkedList<>();
+
+
+        if (book.getSiteUrls() != null){
+            book.getSiteUrls().forEach(siteUrl -> urls.add(new UrlVO("", siteUrl)));
         }
+
+        model.addAttribute("urls", urls);
 
         model.addAttribute("person", bookService.getBookPerson(book.getReferenceKey()));
         model.addAttribute("recommendBooks", bookService.recommend(book.getName(), book.getAuthor()));
         return "books";
     }
-    @RequestMapping("/books/{rk}/chapters")
-    public String chapters(@PathVariable String rk, Model model) {
+//    @RequestMapping("/books/{rk}/chapters")
+//    public String chapters(@PathVariable String rk, Model model) {
+//        Book book = bookService.getByReferenceKey(rk);
+//
+//        model.addAttribute("chapters", bookSiteService.getChapters(rk));
+//        model.addAttribute("book", book);
+//        return "chapter/chapter";
+//    }
+    @RequestMapping("/books/chapters/{rk}")
+    public String otherChapters(@PathVariable String rk, @RequestParam String url, Model model) {
         Book book = bookService.getByReferenceKey(rk);
 
-        model.addAttribute("chapters", bookSiteService.getChapters(rk));
-        model.addAttribute("book", book);
-        return "chapter/chapter";
-    }
-    @RequestMapping("books/content/{id}")
-    public String content(@RequestParam String url, @PathVariable String id, Model model) {
 
-        BookSiteChapter bookSiteChapter = bookSiteService.getChapter(id);
-
-        if (StringUtils.isBlank(url) && bookSiteChapter != null){
-            model.addAttribute("chapter", bookSiteChapter);
-            if (bookSiteChapter.getSiteUrls() != null) {
-                model.addAttribute("content", HtmlContentParser.get(bookSiteChapter.getSiteUrls().get(0), bookSiteChapter.getSiteUrls()));
-            }
-        }else {
-            model.addAttribute("chapter", bookSiteChapter);
-            if (bookSiteChapter.getSiteUrls() != null) {
-                model.addAttribute("content", HtmlContentParser.get(url, bookSiteChapter.getSiteUrls()));
-            }else {
-                model.addAttribute("content", "");
-            }
+        try {
+            model.addAttribute("chapters", HtmlChapterParser.get(URLDecoder.decode(url,"UTF-8")));
+            model.addAttribute("url", url);
+            model.addAttribute("rk", rk);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-
-
-        return "chapter/content";
+        model.addAttribute("book", book);
+        return "chapter/other_chapter";
     }
+    @RequestMapping("/books/content/{rk}")
+    public String otherContent(@PathVariable String rk, @RequestParam(required = false) String name, @RequestParam String refer, @RequestParam String url, Model model) {
+
+        try {
+            String originUrl = URLDecoder.decode(url,"UTF-8");
+            model.addAttribute("content", HtmlContentParser.get(originUrl, Collections.EMPTY_LIST));
+            model.addAttribute("url", originUrl);
+            model.addAttribute("refer", refer);
+            model.addAttribute("rk", rk);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("name", name);
+        model.addAttribute("rk", rk);
+
+        return "chapter/other_content";
+    }
+//    @RequestMapping("books/content/{id}")
+//    public String content(@RequestParam String url, @PathVariable String id, Model model) {
+//
+//        BookSiteChapter bookSiteChapter = bookSiteService.getChapter(id);
+//
+//        if (StringUtils.isBlank(url) && bookSiteChapter != null){
+//            model.addAttribute("chapter", bookSiteChapter);
+//            if (bookSiteChapter.getSiteUrls() != null) {
+//                model.addAttribute("content", HtmlContentParser.get(bookSiteChapter.getSiteUrls().get(0), bookSiteChapter.getSiteUrls()));
+//            }
+//        }else {
+//            model.addAttribute("chapter", bookSiteChapter);
+//            if (bookSiteChapter.getSiteUrls() != null) {
+//                model.addAttribute("content", HtmlContentParser.get(url, bookSiteChapter.getSiteUrls()));
+//            }else {
+//                model.addAttribute("content", "");
+//            }
+//        }
+//
+//
+//        return "chapter/content";
+//    }
 }

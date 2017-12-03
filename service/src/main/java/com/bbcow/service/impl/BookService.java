@@ -60,11 +60,14 @@ public class BookService {
     public boolean existsWithName(String name){
         return !bookRepository.findByName(name).isEmpty();
     }
-    public int resetPageScore(String name, int score, int count){
+    public int resetPageScore(String name, int score, int count, List<String> urls){
         List<Book> books = bookRepository.findByName(name);
         books.forEach(book -> {
             book.setPageScore(score);
             book.setPageCount(count);
+            if (urls != null && !urls.isEmpty()){
+                book.setSiteUrls(urls);
+            }
 
             BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
             if (bookUrl != null){
@@ -164,7 +167,7 @@ public class BookService {
         return bookUrlRepository.existsByCrawlTime(null);
     }
     public List<BookUrl> getHotBookUrl(){
-        return bookUrlRepository.findByPageScoreGreaterThan(70);
+        return bookUrlRepository.findByPageScoreGreaterThan(80, new Sort(Sort.Direction.DESC, "page_score"));
     }
     public List<BookUrl> getNewBookChapterUrl(){
         PageRequest pageRequest = new PageRequest(0, 50, new Sort(Sort.Direction.DESC, "page_score"));

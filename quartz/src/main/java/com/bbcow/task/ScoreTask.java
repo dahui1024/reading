@@ -49,7 +49,7 @@ public class ScoreTask {
                     if (result.intValue() <= 0){
                         continue;
                     }
-                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue());
+                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), scoreBook.getUrls());
                     if (n > 0) {
                         scoreService.addScoreLog(scoreBook.getName(), day, scoreBook.getUrls(), result.intValue(), siteCount.intValue());
                     }

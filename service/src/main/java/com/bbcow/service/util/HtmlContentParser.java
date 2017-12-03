@@ -26,7 +26,7 @@ public class HtmlContentParser {
         String content = null;
         try {
             Connection connection = Jsoup.connect(url);
-            connection.timeout(1000);
+            connection.timeout(3000);
             Document doc = connection.get();
             content = getContent(doc);
             if (content == null || content.length() < 100){
@@ -40,7 +40,7 @@ public class HtmlContentParser {
             if (!url.equals(secondUrls.get(i))){
                 try {
                     Connection connection = Jsoup.connect(secondUrls.get(i));
-                    connection.timeout(1000);
+                    connection.timeout(3000);
                     Document doc = connection.get();
                     content = getContent(doc);
                     if (content == null || content.length() < 100){

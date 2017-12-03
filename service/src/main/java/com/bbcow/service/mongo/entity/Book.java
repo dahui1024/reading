@@ -44,6 +44,7 @@ public class Book {
     @Field("cp_url")
     private String cpUrl;
     private List<String> tags;
+    private List<String> siteUrls;
     @Field("create_time")
     private Date createTime;
     @Field("update_time")
@@ -167,6 +168,14 @@ public class Book {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public List<String> getSiteUrls() {
+        return siteUrls;
+    }
+
+    public void setSiteUrls(List<String> siteUrls) {
+        this.siteUrls = siteUrls;
     }
 
     public Date getCreateTime() {

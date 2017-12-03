@@ -47,11 +47,14 @@ public class OtherSiteChapterCrawler extends TaskCrawler<OtherSiteChapterProcess
                 }
                 ScoreBookLog scoreBookLog = scoreService.findTodayBookLog(book.getName());
 
-                scoreBookLog.getUrls().forEach(url -> {
-                    Request request = new Request(url);
+                int size = scoreBookLog.getUrls().size() > 5 ? 5 : scoreBookLog.getUrls().size();
+
+                for (int j = 0; j < size; j++) {
+                    Request request = new Request(scoreBookLog.getUrls().get(i));
                     request.addHeader("rk", rk);
                     spider.addRequest(request);
-                });
+                }
+
             }catch (Exception e){
                 stringRedisTemplate.opsForList().leftPush("site:queue:rk", rk);
                 stringRedisTemplate.opsForValue().set("site:lock:"+rk, "0");

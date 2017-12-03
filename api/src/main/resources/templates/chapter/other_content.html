@@ -7,19 +7,22 @@
 <header th:replace="common/header :: default()"></header>
 <section class="fdb-block">
     <div class="container">
-        <h2>[(${chapter.name})]</h2>
+        <h2>[(${name})]</h2>
         <div class="row justify-content-left">
             [(${content})]
-        </div>
-        <div class="row justify-content-left">
-            <p>内容来源于：[(${chapter.siteUrls[0]})]</p>
         </div>
     </div>
 </section>
 <section class="fdb-block">
-    <div class="container text-center">
-        <a th:href="@{/books/content/{id}?url={url}(id=${chapter.referenceKey+'_'+(chapter.sn-1)}, url='')}">上一章</a>
-        <a th:href="@{/books/content/{id}?url={url}(id=${chapter.referenceKey+'_'+(chapter.sn+1)}, url='')}">下一章</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <p class="col-md-12 text-center">内容来源于：[(${url})]</p>
+        </div>
+        <div class="row justify-content-center">
+            <label class="col-md-4 text-center">
+                <a th:href="@{/books/chapters/{rk}?url={url}(rk=${rk}, url=${refer})}">目录</a>
+            </label>
+        </div>
     </div>
 </section>
 <footer th:replace="common/footer :: default()"></footer>

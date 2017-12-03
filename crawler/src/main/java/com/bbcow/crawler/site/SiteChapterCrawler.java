@@ -33,6 +33,6 @@ public class SiteChapterCrawler extends TaskCrawler<SiteChapterProcessor> {
 
 //        spider.addUrl("https://m.qidian.com/book/1003723851/catalog");
 
-        spider.thread(4).start();
+        spider.thread(8).start();
     }
 }

@@ -1,6 +1,7 @@
 package com.bbcow.crawler.site.processor;
 
 import com.bbcow.crawler.site.core.ChapterLinkMarker;
+import com.bbcow.crawler.site.core.ChapterLinkMarker2;
 import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.mongo.entity.BookSiteChapter;
 import com.bbcow.service.util.MD5;
@@ -41,21 +42,23 @@ public class SiteChapterProcessor implements PageProcessor {
             e.printStackTrace();
         }
 
-        ChapterLinkMarker.LinkNode root = ChapterLinkMarker.parseNode(page);
+//        ChapterLinkMarker.LinkNode root = ChapterLinkMarker.parseNode(page);
+//
+//        List<BookSiteChapter> chapterLinks = ChapterLinkMarker.parseLink(root, url.getProtocol() +":/");
 
-        List<BookSiteChapter> chapterLinks = ChapterLinkMarker.parseLink(root, url.getProtocol() +":/");
+        List<ChapterLinkMarker2.ChapterUrl> urls = ChapterLinkMarker2.getLinks(page.getHtml().getDocument());
 
-        save(rk, chapterLinks);
+        save(rk, urls);
 
         logger.info(rk + " finished!");
     }
 
-    public void save(String rk, List<BookSiteChapter> chapterLinks){
-        List<BookSiteChapter> cleanChapterLinks = new LinkedList<>();
-        chapterLinks.stream().filter(c -> StringUtils.containsAny(c.getName(), "第", "章", " ")).forEach(c -> {
-            cleanChapterLinks.add(c);
-        });
-        AtomicInteger sn = new AtomicInteger(cleanChapterLinks.size());
+    public void save(String rk, List<ChapterLinkMarker2.ChapterUrl> urls){
+//        List<BookSiteChapter> cleanChapterLinks = new LinkedList<>();
+//        chapterLinks.stream().filter(c -> StringUtils.containsAny(c.getName(), "第", "章", " ", "篇")).forEach(c -> {
+//            cleanChapterLinks.add(c);
+//        });
+        AtomicInteger sn = new AtomicInteger(urls.size());
         int updateCount = 0;
         while (sn.decrementAndGet() >= 0){
             String id = rk+"_"+(sn.get()+1);
@@ -63,7 +66,9 @@ public class SiteChapterProcessor implements PageProcessor {
             BookSiteChapter record = bookSiteService.getChapter(id);
 
             if (record == null){
-                BookSiteChapter newRecord = cleanChapterLinks.get(sn.get());
+                BookSiteChapter newRecord = new BookSiteChapter();
+                newRecord.setUrl(urls.get(sn.get()).url);
+                newRecord.setName(urls.get(sn.get()).name);
                 newRecord.setCreateTime(new Date());
                 newRecord.setSn(sn.get()+1);
                 newRecord.setId(rk+"_"+newRecord.getSn());

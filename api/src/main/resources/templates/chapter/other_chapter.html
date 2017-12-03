@@ -10,8 +10,7 @@
         <h2>[(${book.name})]</h2>
         <div class="row justify-content-left">
             <label class="col-md-3" th:each="chapter:${chapters}">
-                <a th:if="${chapter.siteUrls != null}" th:href="@{/books/content/{id}?url={url}(id=${chapter.id},url=${chapter.siteUrls[0]})}" th:title="${chapter.name}" th:text="${chapter.name}"></a>
-                <a th:if="${chapter.siteUrls == null}" th:href="@{#}" th:title="${chapter.name}" th:text="${chapter.name}"></a>
+                <a th:href="@{/books/content/{rk}?url={url}&name={name}&refer={refer}(rk=${book.referenceKey}, url=${chapter.encodeUrl}, name=${chapter.name}, refer=${url})}" th:title="${chapter.name}" th:text="${chapter.name}"></a>
             </label>
         </div>
     </div>
