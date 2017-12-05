@@ -8,9 +8,7 @@ import com.aliyun.opensearch.sdk.dependencies.org.json.JSONObject;
 import com.aliyun.opensearch.sdk.generated.OpenSearch;
 import com.aliyun.opensearch.sdk.generated.commons.OpenSearchClientException;
 import com.aliyun.opensearch.sdk.generated.commons.OpenSearchException;
-import com.aliyun.opensearch.sdk.generated.search.Config;
-import com.aliyun.opensearch.sdk.generated.search.SearchFormat;
-import com.aliyun.opensearch.sdk.generated.search.SearchParams;
+import com.aliyun.opensearch.sdk.generated.search.*;
 import com.aliyun.opensearch.sdk.generated.search.general.SearchResult;
 import com.aliyun.opensearch.search.SearchParamsBuilder;
 
@@ -39,11 +37,16 @@ public class RemoteSearch {
         //设置返回格式为FULLJSON，目前支持返回 XML，JSON，FULLJSON 等格式
         config.setSearchFormat(SearchFormat.FULLJSON);
         // 设置搜索结果返回应用中哪些字段
-        config.setFetchFields(Lists.newArrayList("id", "name", "author", "cp", "tags"));
+        config.setFetchFields(Lists.newArrayList("id", "name", "author", "cp", "tags", "page_score", "page_count", "chapter_status"));
         // 创建参数对象
         SearchParams searchParams = new SearchParams(config);
         // 设置查询子句，若需多个索引组合查询，需要setQuery处合并，否则若设置多个setQuery后面的会替换前面查询
         searchParams.setQuery("default:'"+word+"'");
+
+        Sort sort = new Sort();
+        sort.addToSortFields(new SortField("page_score", Order.DECREASE));
+        searchParams.setSort(sort);
+
         // SearchParams的工具类，提供了更为便捷的操作
         SearchParamsBuilder paramsBuilder = SearchParamsBuilder.create(searchParams);
         try {

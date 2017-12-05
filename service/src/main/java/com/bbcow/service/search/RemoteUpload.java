@@ -33,6 +33,9 @@ public class RemoteUpload {
             po.getFields().put("id", book.getId().toString());
             po.getFields().put("cp", book.getCpName());
             po.getFields().put("tags", book.getTags());
+            po.getFields().put("page_score", book.getPageScore());
+            po.getFields().put("page_count", book.getPageCount());
+            po.getFields().put("chapter_status", book.getIsFinish());
             pos.add(po);
             documentClient.add(po.getFields());
 
