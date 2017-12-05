@@ -63,7 +63,7 @@ public class BookController {
             }
         }
 
-        model.addAttribute("bbcow_t", "免费TXT_"+book.getName()+"("+book.getAuthor()+"著)怎么样-烂白菜");
+        model.addAttribute("bbcow_t", "免费小说_"+book.getName()+"("+book.getAuthor()+"著)-烂白菜");
         model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你深度解析"+book.getName()+"究竟怎样，给你一个满意的答案。");
         model.addAttribute("bbcow_k", book.getName()+","+book.getAuthor()+","+book.getTags()+",烂白菜");
         model.addAttribute("bbcow_mu", "/books/"+book.getId().toString());
@@ -95,12 +95,15 @@ public class BookController {
     @RequestMapping("/books/chapters/{rk}")
     public String otherChapters(@PathVariable String rk, @RequestParam String url, Model model) {
         Book book = bookService.getByReferenceKey(rk);
-
-
         try {
-            model.addAttribute("chapters", HtmlChapterParser.get(URLDecoder.decode(url,"UTF-8")));
+            model.addAttribute("chapters", HtmlChapterParser.getWithOrder(URLDecoder.decode(url,"UTF-8")));
             model.addAttribute("url", url);
             model.addAttribute("rk", rk);
+
+            model.addAttribute("bbcow_t", "全部章节_"+book.getName()+"("+book.getAuthor()+"著)免费读-烂白菜");
+            model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你提供免费章节解析！");
+            model.addAttribute("bbcow_k", book.getName()+"章节目录,"+book.getAuthor()+","+book.getTags()+",烂白菜小说网");
+            model.addAttribute("bbcow_mu", "/books/chapter/"+book.getReferenceKey());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -116,6 +119,10 @@ public class BookController {
             model.addAttribute("url", originUrl);
             model.addAttribute("refer", refer);
             model.addAttribute("rk", rk);
+
+            model.addAttribute("bbcow_t", "TXT内容_"+name+"免费读-烂白菜");
+            model.addAttribute("bbcow_d", name+"，由烂白菜为你提供免费章节内容解析！");
+            model.addAttribute("bbcow_mu", "/books/content/"+rk+"?name="+name+"&refer="+refer+"&url="+url);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

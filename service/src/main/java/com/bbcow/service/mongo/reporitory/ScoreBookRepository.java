@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface ScoreBookRepository extends MongoRepository<ScoreBook, String> , PagingAndSortingRepository<ScoreBook, String> {
     ScoreBook findByNameAndDay(String name, Date day);
+    ScoreBook findOneByName(String name);
     List<ScoreBook> findByDay(Date day);
 
     List<ScoreBook> findTop250ByDay(Date day, Sort sort);

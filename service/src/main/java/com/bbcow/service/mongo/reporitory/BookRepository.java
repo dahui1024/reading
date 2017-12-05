@@ -20,6 +20,7 @@ public interface BookRepository extends MongoRepository<Book, ObjectId> , Paging
     Page<Book> findByAuthor(String author, Pageable pageable);
     Page<Book> findByPageScoreBetween(int from, int to, Pageable pageable);
     Page<Book> findByPageScoreGreaterThanAndPageCountGreaterThan(int pageScore, int pageCount, Pageable pageable);
+    List<Book> findByPageScoreGreaterThanAndPageCountGreaterThan(int pageScore, int pageCount);
     List<Book> findTop50ByIsSignAndPageScoreGreaterThan(int isSign, int pageScore, Sort sort);
     Book findByCpUrl(String url);
 }

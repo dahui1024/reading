@@ -9,8 +9,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by adan on 2017/11/24.
@@ -26,11 +25,41 @@ public class HtmlChapterParser {
         }
         return null;
     }
+    public static List<ChapterUrl> getWithOrder(String url){
+        try {
+            Document document = Jsoup.connect(url).get();
+
+            List<ChapterUrl> chapterUrls = getLinks(document);
+
+            try {
+                Collections.sort(chapterUrls, (c1, c2) -> {
+                    String ints1 = c1.getUrl().replaceAll("[^\\d]*", "");
+                    String ints2 = c2.getUrl().replaceAll("[^\\d]*", "");
+
+                    if (StringUtils.isNotBlank(ints1) && StringUtils.isNotBlank(ints2)){
+                        if (Long.parseLong(ints1) - Long.parseLong(ints2) > 0){
+                            return -1;
+                        }else {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                });
+            }catch (Exception e){
+
+            }
+            return chapterUrls;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     static List<ChapterUrl> getLinks(Document document){
 
         Elements elements = document.getElementsByTag("a");
 
         List<ChapterUrl> urls = new LinkedList<>();
+        List<String> checkRepeatUrls = new ArrayList<>();
 
         int maxIndex = 0;
         int maxPart = 0;
@@ -44,8 +73,9 @@ public class HtmlChapterParser {
             Element element = elements.get(i);
             String url = element.absUrl("href");
             String text = element.text();
-            if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(text)){
+            if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(text) && !checkRepeatUrls.contains(url)){
                 urls.add(new ChapterUrl(url, text));
+                checkRepeatUrls.add(url);
             }
         }
 
@@ -113,14 +143,7 @@ public class HtmlChapterParser {
     }
 
     public static void main(String[] args) {
-        try {
-            Document document = Jsoup.connect("https://m.qidian.com/book/3602691/catalog").get();
-
-            System.out.println(document.html());
-            getLinks(document).forEach(chapterUrl -> System.out.println(chapterUrl.name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getWithOrder("http://www.bequge.com/42_42237/");
     }
 
 }

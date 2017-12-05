@@ -7,6 +7,7 @@ import com.bbcow.service.mongo.entity.*;
 import com.bbcow.service.mongo.reporitory.BookElementRepository;
 import com.bbcow.service.mongo.reporitory.BookRepository;
 import com.bbcow.service.mongo.reporitory.BookUrlRepository;
+import com.bbcow.service.mongo.reporitory.ScoreBookRepository;
 import com.bbcow.service.util.MD5;
 import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
@@ -52,27 +53,44 @@ public class BookTest {
     BookService bookService;
     @Autowired
     ScoreService scoreService;
+    @Autowired
+    ScoreBookRepository scoreBookRepository;
 
     @Test
     public void initSite(){
-        Date day = DateUtils.truncate(new Date(), Calendar.DATE);
+        List<Book> books = bookRepository.findByPageScoreGreaterThanAndPageCountGreaterThan(5, 0);
+        books.forEach(book -> {
+            ScoreBook scoreBook = scoreBookRepository.findOneByName(book.getName());
 
-        List<ScoreBook> scoreBooks = scoreService.findByDay(day);
-        if (scoreBooks != null && !scoreBooks.isEmpty()){
-            for (ScoreBook scoreBook : scoreBooks){
-                try {
-                    List<Book> books = bookRepository.findByName(scoreBook.getName());
-                    books.forEach(book -> {
-                        if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
-                            book.setSiteUrls(scoreBook.getUrls());
-                        }
-                    });
-                    bookRepository.save(books);
-                }catch (Exception e){
-
+            if (book.getSiteUrls() == null){
+                if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
+                    book.setSiteUrls(scoreBook.getUrls());
                 }
+                bookRepository.save(book);
+
+                System.out.println(book.getId());
             }
-        }
+
+
+        });
+//        Date day = DateUtils.truncate(new Date(), Calendar.DATE);
+//
+//        List<ScoreBook> scoreBooks = scoreService.findByDay(day);
+//        if (scoreBooks != null && !scoreBooks.isEmpty()){
+//            for (ScoreBook scoreBook : scoreBooks){
+//                try {
+//                    List<Book> books = bookRepository.findByName(scoreBook.getName());
+//                    books.forEach(book -> {
+//                        if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
+//                            book.setSiteUrls(scoreBook.getUrls());
+//                        }
+//                    });
+//                    bookRepository.save(books);
+//                }catch (Exception e){
+//
+//                }
+//            }
+//        }
     }
 
     @Test

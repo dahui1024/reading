@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -146,10 +147,11 @@ public class HtmlContentParser {
         html = html.replaceAll("(&?(nbsp|lt|gt|amp|quot|apos|cent|pound|yen|euro|sect|copy|reg|trade|times|divide);?)", "");
         // unicode编码
         html = html.replaceAll("(&[\\S]{2,5};)+", "");
-//        html = html.replaceAll("(<?/?(br|p)/?>?)+", "\r\n");
-        html = html.replaceAll("(<?/?(br|p)/?>?)+", "<br/>");
+        // html 文本标签
+        html = html.replaceAll("(<?/?(br|p)/?>?)+", "\r\n");
+//        html = html.replaceAll("(<?/?(br|p)/?>?)+", "<br/><br/>");
         // 特殊html标签处理
-//        html = html.replaceAll("(<[^\\u4e00-\\u9fa5]*>)", "");
+        html = html.replaceAll("(<[^\\u4e00-\\u9fa5]*>)", "");
 
         return html;
     }
@@ -165,10 +167,12 @@ public class HtmlContentParser {
 
         StringBuilder content = new StringBuilder(head);
         if (StringUtils.isNotBlank(head)){
-            content.append("\r\n");
+//            content.append("\r\n");
+            content.append("<br/><br/>");
         }
         for (int i = 1; i < lines.length-2; i++) {
-           content.append(lines[i]).append("\r\n");
+//           content.append(lines[i]).append("\r\n");
+            content.append(lines[i]).append("<br/><br/>");
         }
         content.append(foot);
 
@@ -176,20 +180,6 @@ public class HtmlContentParser {
     }
 
     public static void main(String[] args) {
-        String html = "&#8481;嗯嗯&#8481;嗯嗯&amp;<divid=\"wrapper\"><divid=\"content\">正在手打中，请稍等片刻，请记住zwda.内容更新后，请重新刷新页面，即可获取最新更新！←→<<!--<script>mark();</script>-->";
-        html = html.replaceAll("( |　)", "");
-        html = html.replaceAll("[\\s]*", "");
-        // html实体字符
-        html = html.replaceAll("(&?(nbsp|lt|gt|amp|quot|apos|cent|pound|yen|euro|sect|copy|reg|trade|times|divide);?)", "");
-        System.out.println(html+"--");
-        // unicode编码
-        html = html.replaceAll("(&[\\S]{2,5};)+", "");
-        System.out.println(html+"--");
-        html = html.replaceAll("(<?/?(br|p)/?>?)+", "\r\n");
-
-        System.out.println(html+"--====");
-        // 特殊html标签处理
-        html = html.replaceAll("(<[^\\u4e00-\\u9fa5]*>)", "");
-        System.out.println(html);
+        System.out.println(get("http://www.bequge.com/42_42237/11755739.html", Collections.emptyList()));
     }
 }
