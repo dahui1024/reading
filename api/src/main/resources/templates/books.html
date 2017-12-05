@@ -63,12 +63,12 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-12">
-                <h3>源链接</h3>
+                <h3>源链接（按照源站质量排序）</h3>
             </div>
         </div>
         <div class="row text-left mt-2">
             <ol>
-                <li th:each="url : ${urls}">[(${url.url})]<a th:href="@{/books/chapters/{rk}?url={url}(rk=${book.referenceKey}, url=${url.encodeUrl})}" target="_blank">(查看目录)</a></li>
+                <li th:each="url : ${urls}">[(${url.url})]&nbsp;&nbsp;&nbsp;&nbsp;<a th:href="@{/books/chapters/{rk}?url={url}(rk=${book.referenceKey}, url=${url.encodeUrl})}" target="_blank">目录</a></li>
             </ol>
         </div>
     </div>
@@ -77,7 +77,7 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-12">
-                <h3>相关故事人物</h3>
+                <h3>故事人物</h3>
             </div>
         </div>
         <div class="row text-left mt-2">
