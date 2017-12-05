@@ -128,16 +128,16 @@ public class ScoreService {
         Update update = new Update();
         update.inc("crawl_count", 1);
         update.set("crawl_time", new Date());
+
+        int rank = Math.floorDiv(usefulLinkCount, 10);
+
         // 评级网站
         if (usefulLinkCount <= 0){
             update.set("status", 0);
-            update.set("rank", 0);
-        }else if (usefulLinkCount < 10){
-            update.set("rank", 5);
         }else {
-            update.set("rank", 10);
             update.set("status", 1);
         }
+        update.set("rank", rank);
         mongoTemplate.updateFirst(Query.query(Criteria.where("host").is(host)), update, ScoreSite.class).getN();
     }
 }

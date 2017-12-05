@@ -3,6 +3,7 @@ package com.bbcow.task;
 import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.mongo.entity.ScoreBook;
+import com.bbcow.service.mongo.entity.ScoreSite;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * Created by adan on 2017/11/5.
@@ -38,6 +39,10 @@ public class ScoreTask {
 
         Date day = DateUtils.truncate(new Date(), Calendar.DATE);
 
+        List<ScoreSite> sites = scoreService.findEnableSite();
+        Map<String, Integer> siteMap = new HashMap<>();
+        sites.forEach(site -> siteMap.put(site.getHost(), site.getRank()));
+
         List<ScoreBook> scoreBooks = scoreService.findByDay(day);
         if (scoreBooks != null && !scoreBooks.isEmpty()){
             for (ScoreBook scoreBook : scoreBooks){
@@ -49,7 +54,20 @@ public class ScoreTask {
                     if (result.intValue() <= 0){
                         continue;
                     }
-                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), scoreBook.getUrls());
+                    List<String> urls = scoreBook.getUrls();
+                    try {
+                        Collections.sort(urls, (c1, c2) -> {
+                            String h1 = getHost(c1);
+                            String h2 = getHost(c2);
+                            int rank1 = siteMap.containsKey(h1) ? siteMap.get(h1) : 0;
+                            int rank2 = siteMap.containsKey(h2) ? siteMap.get(h2) : 0;
+                            return rank2 - rank1;
+                        });
+                    }catch (Exception e){
+
+                    }
+
+                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), urls);
                     if (n > 0) {
                         scoreService.addScoreLog(scoreBook.getName(), day, scoreBook.getUrls(), result.intValue(), siteCount.intValue());
                     }
@@ -63,5 +81,15 @@ public class ScoreTask {
 
         System.out.println("page score task finished!");
         isRunning = false;
+    }
+
+    private String getHost(String url){
+        try {
+            URI uri = new URI(url);
+            return uri.getHost();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
