@@ -113,18 +113,33 @@
 </section>
 <footer th:replace="common/footer :: default()"></footer>
 <script src="/js/frappe-charts.min.iife.js" ></script>
-
 <script type="application/ld+json">
-        {
-            "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
-            "@id": "[[${"http://www.bbcow.com"+bbcow_mu}]]",
-            "appid": "1584272942248118",
-            "title": "[(${bbcow_t})]",
-            "images": [ "[[${book.cpImageUrl}]]" ],
-            "description": "[(${bbcow_d})]",
-            "pubDate": "[[${#dates.format(book.createTime, "yyyy-MM-dd'T'HH:mm:ss")}]]"
-        }
-    </script>
+{
+  "@context": "http://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.bbcow.com[(${bbcow_mu})]"
+  },
+  "headline": "[(${book.name})]",
+  "image": [ "[[${book.cpImageUrl}]]" ],
+  "datePublished": "[[${#dates.formatISO(book.createTime)}]]",
+  "dateModified": "[[${#dates.formatISO(book.updateTime)}]]",
+  "author": {
+    "@type": "Person",
+    "name": "[(${book.author})]"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "烂白菜",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.bbcow.com/imgs/logo.jpg"
+    }
+  },
+  "description": "[(${bbcow_d})]"
+}
+</script>
 <script>
   var labels = ['[(${#strings.arrayJoin(labels, "','")})]'];
   var values = [ [(${#strings.arrayJoin(values, ",")})] ];

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,9 +27,16 @@ public class SearchTest {
 
     @Test
     public void test(){
-        List<Book> books = bookRepository.findAll();
+        long count = bookRepository.count();
+        long page = count/100 + 1;
 
-        RemoteUpload.upload(books);
+        for (int i = 0; i < page; i++) {
+            List<Book> books = bookRepository.findAll(new PageRequest(i, 100)).getContent();
+            RemoteUpload.upload(books);
+
+            System.out.println("page: "+ i);
+        }
+
     }
 
 }

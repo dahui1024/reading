@@ -39,16 +39,6 @@ public class RemoteUpload {
             pos.add(po);
             documentClient.add(po.getFields());
 
-            if (pos.size() % 100 == 0) {
-                try {
-                    documentClient.commit(RemoteConstant.APP_NAME, table_name);
-                } catch (OpenSearchException e) {
-                    e.printStackTrace();
-                } catch (OpenSearchClientException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("finish : " + pos.size() / 100);
-            }
         });
         try {
             documentClient.commit(RemoteConstant.APP_NAME, table_name);
