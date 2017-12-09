@@ -23,7 +23,7 @@ public class HtmlChapterParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return Collections.EMPTY_LIST;
     }
     public static List<ChapterUrl> getWithOrder(String url){
         try {
@@ -52,10 +52,30 @@ public class HtmlChapterParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return Collections.EMPTY_LIST;
+    }
+    public static List<ChapterUrl> getWithOrder(Document document){
+        List<ChapterUrl> chapterUrls = getLinks(document);
+        try {
+            Collections.sort(chapterUrls, (c1, c2) -> {
+                String ints1 = c1.getUrl().replaceAll("[^\\d]*", "");
+                String ints2 = c2.getUrl().replaceAll("[^\\d]*", "");
+
+                if (StringUtils.isNotBlank(ints1) && StringUtils.isNotBlank(ints2)){
+                    if (Long.parseLong(ints1) - Long.parseLong(ints2) > 0){
+                        return -1;
+                    }else {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+        }catch (Exception e){
+
+        }
+        return chapterUrls;
     }
     static List<ChapterUrl> getLinks(Document document){
-
         Elements elements = document.getElementsByTag("a");
 
         List<ChapterUrl> urls = new LinkedList<>();
@@ -100,7 +120,22 @@ public class HtmlChapterParser {
             }
         }
 
-        return urls.subList(maxIndex, maxIndex+maxCount);
+        List<ChapterUrl> result = urls.subList(maxIndex, maxIndex+maxCount);
+
+        int illegalCount = 0;
+        if (maxCount < 50){
+            for (int i = 0; i < result.size(); i++) {
+                if (!result.get(i).name.matches("[一二三四五六七八九十百千万亿\\d]")){
+                    illegalCount+=1;
+                }
+            }
+        }
+
+        if (illegalCount*100/maxCount > 10){
+            return Collections.EMPTY_LIST;
+        }
+
+        return result;
     }
 
     public static class ChapterUrl{

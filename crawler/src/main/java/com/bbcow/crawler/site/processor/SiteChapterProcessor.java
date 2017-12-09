@@ -4,6 +4,7 @@ import com.bbcow.crawler.site.core.ChapterLinkMarker;
 import com.bbcow.crawler.site.core.ChapterLinkMarker2;
 import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.mongo.entity.BookSiteChapter;
+import com.bbcow.service.util.HtmlChapterParser;
 import com.bbcow.service.util.MD5;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -46,14 +47,14 @@ public class SiteChapterProcessor implements PageProcessor {
 //
 //        List<BookSiteChapter> chapterLinks = ChapterLinkMarker.parseLink(root, url.getProtocol() +":/");
 
-        List<ChapterLinkMarker2.ChapterUrl> urls = ChapterLinkMarker2.getLinks(page.getHtml().getDocument());
+        List<HtmlChapterParser.ChapterUrl> urls = ChapterLinkMarker2.getLinks(url.toString(), page.getHtml().getDocument());
 
         save(rk, urls);
 
         logger.info(rk + " finished!");
     }
 
-    public void save(String rk, List<ChapterLinkMarker2.ChapterUrl> urls){
+    public void save(String rk, List<HtmlChapterParser.ChapterUrl> urls){
 //        List<BookSiteChapter> cleanChapterLinks = new LinkedList<>();
 //        chapterLinks.stream().filter(c -> StringUtils.containsAny(c.getName(), "第", "章", " ", "篇")).forEach(c -> {
 //            cleanChapterLinks.add(c);
