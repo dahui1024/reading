@@ -30,7 +30,7 @@ public class ScoreTask {
     private static final int BASIC_SCORE = 86;
     private static final int BASIC_COUNT = 11;
 
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 0 2,12,23 * * ?")
     public void pageScoreTask(){
         if (isRunning){
             return;
@@ -54,20 +54,8 @@ public class ScoreTask {
                     if (result.intValue() <= 0){
                         continue;
                     }
-                    List<String> urls = scoreBook.getUrls();
-                    try {
-                        Collections.sort(urls, (c1, c2) -> {
-                            String h1 = getHost(c1);
-                            String h2 = getHost(c2);
-                            int rank1 = siteMap.containsKey(h1) ? siteMap.get(h1) : 0;
-                            int rank2 = siteMap.containsKey(h2) ? siteMap.get(h2) : 0;
-                            return rank2 - rank1;
-                        });
-                    }catch (Exception e){
 
-                    }
-
-                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), urls);
+                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), null);
                     if (n > 0) {
                         scoreService.addScoreLog(scoreBook.getName(), day, scoreBook.getUrls(), result.intValue(), siteCount.intValue());
                     }
@@ -81,15 +69,5 @@ public class ScoreTask {
 
         System.out.println("page score task finished!");
         isRunning = false;
-    }
-
-    private String getHost(String url){
-        try {
-            URI uri = new URI(url);
-            return uri.getHost();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

@@ -70,23 +70,28 @@ public class ScoreService {
         return scoreBookLogRepository.findByPageScoreGreaterThan(80);
     }
     public void addScoreLog(String name, Date day, List<String> urls, int pageScore, int pageCount){
-
         if (StringUtils.isBlank(name)){
             return;
         }
 
         try {
             long recordCount = scoreBookLogRepository.countByName(name);
+            ScoreBookLog scoreBookLog = scoreBookLogRepository.findByNameAndDay(name, day);
+            if (scoreBookLog == null){
+                scoreBookLog = new ScoreBookLog();
+                scoreBookLog.setDay(day);
+                scoreBookLog.setName(name);
+                scoreBookLog.setPageScore(pageScore);
+                scoreBookLog.setPageCount(pageCount);
+                scoreBookLog.setUrls(urls);
 
-            ScoreBookLog scoreBookLog = new ScoreBookLog();
-            scoreBookLog.setDay(day);
-            scoreBookLog.setName(name);
-            scoreBookLog.setPageScore(pageScore);
-            scoreBookLog.setPageCount(pageCount);
-            scoreBookLog.setUrls(urls);
-
-            if (recordCount <= 0){
-                scoreBookLog.setIsNew(1);
+                if (recordCount <= 0){
+                    scoreBookLog.setIsNew(1);
+                }
+            }else {
+                scoreBookLog.setPageScore(pageScore);
+                scoreBookLog.setPageCount(pageCount);
+                scoreBookLog.setUrls(urls);
             }
 
             scoreBookLogRepository.save(scoreBookLog);

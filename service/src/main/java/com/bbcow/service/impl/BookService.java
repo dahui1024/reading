@@ -57,17 +57,17 @@ public class BookService {
         }
     }
 
-    public boolean existsWithName(String name){
-        return !bookRepository.findByName(name).isEmpty();
+    public List<Book> getByName(String name){
+        return bookRepository.findByName(name);
     }
     public int resetPageScore(String name, int score, int count, List<String> urls){
         List<Book> books = bookRepository.findByName(name);
         books.forEach(book -> {
             book.setPageScore(score);
             book.setPageCount(count);
-            if (urls != null && !urls.isEmpty()){
-                book.setSiteUrls(urls);
-            }
+//            if (urls != null && !urls.isEmpty()){
+//                book.setSiteUrls(urls);
+//            }
 
             BookUrl bookUrl = bookUrlRepository.findOne(book.getCpUrl());
             if (bookUrl != null){
@@ -103,6 +103,14 @@ public class BookService {
         }
         PageRequest pageRequest = new PageRequest(page - 1, 50);
         return bookRepository.findByIsFinishOrderByPageScoreDesc(1, pageRequest);
+    }
+    public List<Book> getAvailable(){
+
+        Query query = Query.query(Criteria.where("page_score").gt(1));
+        query.fields().include("id");
+        query.with(new Sort(Sort.Direction.DESC, "page_score"));
+        return mongoTemplate.find(query, Book.class);
+
     }
     public List<Book> getBookWithScore(int page){
         if (page < 1){

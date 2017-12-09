@@ -1,7 +1,9 @@
 package com.bbcow.service.impl;
 
+import com.bbcow.service.mongo.entity.BookSite;
 import com.bbcow.service.mongo.entity.BookSiteChapter;
 import com.bbcow.service.mongo.reporitory.BookSiteChapterRepository;
+import com.bbcow.service.mongo.reporitory.BookSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,9 +22,33 @@ import java.util.List;
 @Service
 public class BookSiteService {
     @Autowired
+    BookSiteRepository bookSiteRepository;
+    @Autowired
     BookSiteChapterRepository bookSiteChapterRepository;
     @Autowired
     MongoTemplate mongoTemplate;
+
+    public void addSite(String rk, int score, String url){
+        BookSite bookSite = bookSiteRepository.findOneByReferenceKeyAndUrl(rk, url);
+        if (bookSite == null){
+            bookSite = new BookSite();
+            bookSite.setCreateTime(new Date());
+            bookSite.setUrl(url);
+            bookSite.setCount(1);
+            bookSite.setReferenceKey(rk);
+            bookSite.setScore(score);
+            bookSite.setStatus(1);
+        }else {
+            bookSite.setUpdateTime(new Date());
+            bookSite.setScore(score);
+            bookSite.setCount(bookSite.getCount() + 1);
+        }
+        bookSiteRepository.save(bookSite);
+    }
+
+    public List<BookSite> getAvailableSites(String rk){
+        return bookSiteRepository.findByReferenceKeyAndStatusOrderByScoreDesc(rk, 1);
+    }
 
     public void save(List<BookSiteChapter> chapters){
         bookSiteChapterRepository.save(chapters);

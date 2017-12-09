@@ -1,7 +1,10 @@
 package com.bbcow.crawler.score.processor;
 
 import com.bbcow.service.impl.BookService;
+import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.impl.ScoreService;
+import com.bbcow.service.mongo.entity.Book;
+import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -23,6 +26,8 @@ import java.util.Set;
 public class PageScoreProcessor implements PageProcessor {
     @Autowired
     ScoreService scoreService;
+    @Autowired
+    BookSiteService bookSiteService;
     @Autowired
     BookService bookService;
     int basicScore = 10;
@@ -46,11 +51,18 @@ public class PageScoreProcessor implements PageProcessor {
             String href = element.absUrl("href");
             String name = element.text();
 
-            if (!names.contains(name) && bookService.existsWithName(name)){
-                scoreService.updateBookPageScore(name, href, score/elements.size());
-                names.add(name);
+            List<Book> books = bookService.getByName(name);
 
+            if (!names.contains(name) && !books.isEmpty()){
+                int finalScore = score/elements.size();
+                scoreService.updateBookPageScore(name, href, finalScore);
+                names.add(name);
                 usefulLinkCount += 1;
+
+                books.forEach(book -> {
+                    bookSiteService.addSite(book.getReferenceKey(), finalScore, href);
+                });
+
             }else {
                 continue;
             }

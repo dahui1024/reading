@@ -5,6 +5,7 @@ import com.bbcow.service.impl.BookService;
 import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.mongo.entity.Book;
+import com.bbcow.service.mongo.entity.BookSite;
 import com.bbcow.service.mongo.entity.ScoreBookLog;
 import com.bbcow.service.util.HtmlChapterParser;
 import com.bbcow.service.util.HtmlContentParser;
@@ -75,8 +76,10 @@ public class BookController {
         List<UrlVO> urls = new LinkedList<>();
 
 
-        if (book.getSiteUrls() != null){
-            book.getSiteUrls().forEach(siteUrl -> urls.add(new UrlVO("", siteUrl)));
+        List<BookSite> bookSites = bookSiteService.getAvailableSites(book.getReferenceKey());
+
+        if (bookSites != null){
+            bookSites.forEach(bookSite -> urls.add(new UrlVO("", bookSite.getUrl())));
         }
 
         model.addAttribute("urls", urls);

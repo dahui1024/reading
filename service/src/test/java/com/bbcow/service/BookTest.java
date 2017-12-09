@@ -1,6 +1,7 @@
 package com.bbcow.service;
 
 import com.bbcow.service.impl.BookService;
+import com.bbcow.service.impl.BookSiteService;
 import com.bbcow.service.impl.ScoreService;
 import com.bbcow.service.impl.SiteService;
 import com.bbcow.service.mongo.entity.*;
@@ -55,20 +56,26 @@ public class BookTest {
     ScoreService scoreService;
     @Autowired
     ScoreBookRepository scoreBookRepository;
+    @Autowired
+    BookSiteService bookSiteService;
 
     @Test
     public void initSite(){
-        List<Book> books = bookRepository.findByPageScoreGreaterThanAndPageCountGreaterThan(5, 0);
+        List<Book> books = bookService.getAvailable();
         books.forEach(book -> {
-            ScoreBook scoreBook = scoreBookRepository.findOneByName(book.getName());
+//            ScoreBook scoreBook = scoreBookRepository.findOneByName(book.getName());
 
-            if (book.getSiteUrls() == null){
-                if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
-                    book.setSiteUrls(scoreBook.getUrls());
-                }
-                bookRepository.save(book);
-
-                System.out.println(book.getId());
+//            if (book.getSiteUrls() == null){
+//                if (scoreBook.getUrls() != null && !scoreBook.getUrls().isEmpty()){
+//                    book.setSiteUrls(scoreBook.getUrls());
+//                }
+//                bookRepository.save(book);
+//
+//                System.out.println(book.getId());
+//            }
+            if (book.getSiteUrls() != null){
+                System.out.println(book.getReferenceKey());
+                book.getSiteUrls().forEach(s -> bookSiteService.addSite(book.getReferenceKey(), book.getPageScore()/10, s));
             }
 
 
