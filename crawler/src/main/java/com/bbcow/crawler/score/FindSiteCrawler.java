@@ -21,7 +21,16 @@ public class FindSiteCrawler extends TaskCrawler<FindSiteProcessor> {
     public void execute() {
         spider.setScheduler(new DefaultScheduler());
 
-        spider.addUrl("http://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=%E9%A3%9E%E5%89%91%E9%97%AE%E9%81%93&oq=%25E9%25A3%259E%25E5%2589%2591%25E9%2597%25AE%25E9%2581%2593&rsv_pq=8dfca9430000d33d&rsv_t=0a45PWCQEkZD67b%2B%2Bh61PYoy8e%2FmetjqCFLmsWXxdi5X6ruZ0u6TF13ChW4&rqlang=cn&rsv_enter=0");
+        spider.addUrl("https://www.so.com/s?q=%E5%9C%A3%E5%A2%9F&src=srp&fr=none&psid=66cb487356b0c63ff4363c8f1a04efee");
+        spider.addUrl("https://www.so.com/s?ie=utf-8&fr=none&src=360sou_newhome&q=%E5%A4%A7%E4%B8%BB%E5%AE%B0");
+        spider.addUrl("https://www.so.com/s?ie=utf-8&fr=none&src=360sou_newhome&q=%E9%BE%99%E7%8E%8B%E4%BC%A0%E8%AF%B4");
+        spider.addUrl("https://www.so.com/s?ie=utf-8&fr=none&src=360sou_newhome&q=%E7%A5%9E%E7%BA%A7%E6%8A%A4%E8%8A%B1%E4%BF%9D%E9%95%96");
+        spider.addUrl("https://www.so.com/s?ie=utf-8&fr=none&src=360sou_newhome&q=%E9%9B%AA%E9%B9%B0%E9%A2%86%E4%B8%BB");
         spider.thread(1).start();
+    }
+
+    public static void main(String[] args) {
+        FindSiteCrawler findSiteCrawler = new FindSiteCrawler(new FindSiteProcessor());
+        findSiteCrawler.execute();
     }
 }
