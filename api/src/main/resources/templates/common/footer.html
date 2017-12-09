@@ -1,32 +1,36 @@
 <footer class="fdb-block bg-dark footer-large" th:fragment="default()">
     <div class="container">
-        <div class="row align-items-top text-center">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 text-sm-left">
-                <h3><strong>链接</strong></h3>
-                <nav class="nav flex-column">
-                    <a class="nav-link" href="/">首页</a>
-                    <a class="nav-link" href="/books/rank/page_score">白菜榜</a>
-                </nav>
-            </div>
+        <!--<div class="row align-items-top text-center">-->
+            <!--<div class="col-12 col-sm-6 col-md-4 col-lg-3 text-sm-left">-->
+                <!--<h3><strong>链接</strong></h3>-->
+                <!--<nav class="nav flex-column">-->
+                    <!--<a class="nav-link" href="/">首页</a>-->
+                    <!--<a class="nav-link" href="/books/rank/page_score">白菜榜</a>-->
+                <!--</nav>-->
+            <!--</div>-->
 
-            <div class="col-12 col-md-4 col-lg-3 text-md-left mt-5 mt-md-0">
-                <h3><strong>关于我们</strong></h3>
-                <p>本站所有资源均来自于网络，如有侵权，请及时联系我们，我们将会在24小时内处理完成。
-                    <a class="nav-link" href="#">MAIL : adan@bbcow.com</a>
-                </p>
-            </div>
+            <!--<div class="col-12 col-md-4 col-lg-3 text-md-left mt-5 mt-md-0">-->
+                <!--<h3><strong>关于我们</strong></h3>-->
+                <!--<p>本站所有资源均来自于网络，如有侵权，请及时联系我们，我们将会在24小时内处理完成。-->
+                    <!--<a class="nav-link" href="#">MAIL : adan@bbcow.com</a>-->
+                <!--</p>-->
+            <!--</div>-->
 
-            <div class="col-12 col-lg-2 ml-auto text-lg-left mt-4 mt-lg-0">
-                <h3><strong>Follow Us</strong></h3>
-                <p class="text-h3">
-                    <a href="/"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                </p>
+            <!--<div class="col-12 col-lg-2 ml-auto text-lg-left mt-4 mt-lg-0">-->
+                <!--<h3><strong>Follow Us</strong></h3>-->
+                <!--<p class="text-h3">-->
+                    <!--<a href="/"><i class="fa fa-twitter" aria-hidden="true"></i></a>-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="row">
+            <div class="col text-center">
+                本站所有资源均来自于网络和用户上传数据，烂白菜只提供动态解析，不做任何内容的存储，如有侵权，请及时联系我们(adan@bbcow.com)，我们将会在24小时内处理完成。
             </div>
         </div>
-
         <div class="row mt-3">
             <div class="col text-center">
-                &copy; 2017 烂白菜. All Rights Reserved
+                &copy; 2018 烂白菜. All Rights Reserved
             </div>
         </div>
     </div>
@@ -68,7 +72,7 @@
         if(token != undefined && token != null){
             userBarData.visitor = false;
             userBarData.loginName = name;
-            userBarData.userUrl = "/user?token="+token;
+            userBarData.userUrl = "/user.html?token="+token;
             userBarData.logoutUrl = "/user/logout?token="+token;
 
             console.log("1");

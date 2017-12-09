@@ -36,9 +36,9 @@ public class WebIndexController {
 
         model.addAttribute("words", searchService.getHotWords());
 
-        model.addAttribute("bbcow_t", "烂白菜-中国网络小说世界风向标");
-        model.addAttribute("bbcow_d", "烂白菜，中国网络小说世界风向标，提供全面的小说排行分析，以及TXT免费解析服务。");
-        model.addAttribute("bbcow_k", "烂白菜,白菜,大白菜,中国网文,中国小说,China,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜");
+        model.addAttribute("bbcow_t", "烂白菜_有态度,有节操-中国网络小说风向标");
+        model.addAttribute("bbcow_d", "烂白菜，中国网络小说风向标，独特的排行体系，免费的TXT解析服务，无广告、无弹窗的5星级阅读体验。🌟🌟🌟🌟🌟");
+        model.addAttribute("bbcow_k", "烂白菜,白菜,大白菜,中国网文,中国小说,China,2017白菜榜,2017完结排行榜,2017小说排行榜");
         model.addAttribute("bbcow_mu", "/");
 
         if (request.getParameter("token") != null){
@@ -55,9 +55,9 @@ public class WebIndexController {
         model.addAttribute("results", searchService.search(word));
         model.addAttribute("word", word);
 
-        model.addAttribute("bbcow_t", word + "相关小说-烂白菜");
-        model.addAttribute("bbcow_d", word+"相关小说，烂白菜，网文世界风向标，告诉你关于网文的一切。");
-        model.addAttribute("bbcow_k", word+",烂白菜");
+        model.addAttribute("bbcow_t", word + "_烂白菜搜索");
+        model.addAttribute("bbcow_d", word+"相关中国网络小说。");
+        model.addAttribute("bbcow_k", word+",烂白菜,白菜,大白菜,中国网文,中国小说,China,网文大全,玄幻排行榜,都市排行榜,总裁排行榜,小说排行榜");
         model.addAttribute("bbcow_mu", "/");
         return "result";
     }
@@ -66,9 +66,9 @@ public class WebIndexController {
     public String getRank(Model model){
         model.addAttribute("books", bookService.getTop50());
 
-        model.addAttribute("bbcow_t", "白菜榜_TOP_热门小说推荐榜-烂白菜");
-        model.addAttribute("bbcow_d", "白菜榜，一个智能排名榜单，每日由机器自动打分分析，实时反应社会热度。");
-        model.addAttribute("bbcow_k", "白菜榜,烂白菜,小说排行榜");
+        model.addAttribute("bbcow_t", "2017白菜榜_中国网络小说排行榜-烂白菜");
+        model.addAttribute("bbcow_d", "白菜榜，一个独特的小说排行体系，通过网络智能抓取，实时反映中国网络小说热度作品，紧跟时代热点。");
+        model.addAttribute("bbcow_k", "白菜榜,烂白菜,2017小说排行榜");
         model.addAttribute("bbcow_mu", "/books/rank/page_score");
 
         return "ranks";
@@ -79,10 +79,22 @@ public class WebIndexController {
         model.addAttribute("next_page", page+1);
         model.addAttribute("last_page", page<=1 ? 1 : page-1);
 
-        model.addAttribute("bbcow_t", "7KG_大全_中国网络小说库-烂白菜");
-        model.addAttribute("bbcow_d", "7KG，高质量中国网络小说榜。");
-        model.addAttribute("bbcow_k", "7KG,白菜地,烂白菜,小说大全,小说书库");
+        model.addAttribute("bbcow_t", "7KG榜_中国网络小说排行榜-烂白菜");
+        model.addAttribute("bbcow_d", "7KG榜，一个独特的小说排行体系，通过网络智能抓取，实时反映中国网络小说热度作品，紧跟时代热点。");
+        model.addAttribute("bbcow_k", "7KG榜,烂白菜,2017小说排行榜");
         model.addAttribute("bbcow_mu", "/books/rank/7kg");
+        return "stores";
+    }
+    @RequestMapping("/books/rank/finish")
+    public String rankFinish(@RequestParam(defaultValue = "1") int page, Model model){
+        model.addAttribute("books", bookService.getFinishRank(page));
+        model.addAttribute("next_page", page+1);
+        model.addAttribute("last_page", page<=1 ? 1 : page-1);
+
+        model.addAttribute("bbcow_t", "2017完结榜_中国网络小说排行榜-烂白菜");
+        model.addAttribute("bbcow_d", "完结榜，一个独特的小说排行体系，通过网络智能抓取，实时反映中国网络小说热度作品，紧跟时代热点。");
+        model.addAttribute("bbcow_k", "完结榜,烂白菜,2017小说排行榜");
+        model.addAttribute("bbcow_mu", "/books/rank/finish");
         return "stores";
     }
     @RequestMapping("/books/stores")
@@ -91,9 +103,9 @@ public class WebIndexController {
         model.addAttribute("next_page", page+1);
         model.addAttribute("last_page", page<=1 ? 1 : page-1);
 
-        model.addAttribute("bbcow_t", "白菜地_大全_中国网络小说库-烂白菜");
-        model.addAttribute("bbcow_d", "白菜地，高质量中国网络小说榜。");
-        model.addAttribute("bbcow_k", "白菜地,烂白菜,小说大全,小说书库");
+        model.addAttribute("bbcow_t", "中国网络小说书库_白菜地-烂白菜");
+        model.addAttribute("bbcow_d", "白菜地，全面收录中国原创小说站热度作品，给你更全面的选择。");
+        model.addAttribute("bbcow_k", "白菜地,烂白菜,中国小说大全,小说书库");
         model.addAttribute("bbcow_mu", "/books/stores?page="+page);
         return "stores";
     }

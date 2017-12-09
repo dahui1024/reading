@@ -41,6 +41,11 @@ public class UserController {
         redirectAttributes.addAttribute("token", userToken.getToken());
         return "redirect:/";
     }
+    @RequestMapping(value = "/user.html", method = RequestMethod.GET)
+    public String user(@RequestParam String token, Model model, RedirectAttributes redirectAttributes) {
+
+        return "redirect:/";
+    }
     @RequestMapping(value = "/login.html", method = RequestMethod.GET)
     public String toLogin(Model model) {
 
@@ -54,8 +59,11 @@ public class UserController {
     public String login(@RequestParam String name, @RequestParam String password, RedirectAttributes redirectAttributes) {
 
         UserToken userToken = userService.loginWithName(name, password);
-        redirectAttributes.addAttribute("name", name);
-        redirectAttributes.addAttribute("token", userToken.getToken());
+        if (userToken != null){
+            redirectAttributes.addAttribute("name", name);
+            redirectAttributes.addAttribute("token", userToken.getToken());
+        }
+
         return "redirect:/";
     }
     @RequestMapping(value = "/user/logout", method = RequestMethod.POST)

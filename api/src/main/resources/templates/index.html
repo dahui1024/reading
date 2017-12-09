@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 text-center">
-                <h1>烂白菜</h1>
+                <h1>烂白菜 - 有态度,有节操</h1>
                 <form action="/search" method="post" class="">
                     <div class="input-group mt-4 mb-4">
                         <input type="text" class="form-control" name="word" placeholder="书名 作者名" th:value="${word}">
@@ -34,5 +34,22 @@
 </section>
 
 <footer th:replace="common/footer :: default()"></footer>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://www.bbcow.com"
+  },
+  "name": "[(${bbcow_t})]",
+  "logo": {
+      "@type": "ImageObject",
+      "url": "http://www.bbcow.com/imgs/logo.jpg"
+  },
+  "url":"http://www.bbcow.com",
+  "description": "[(${bbcow_d})]"
+}
+</script>
 </body>
 </html>

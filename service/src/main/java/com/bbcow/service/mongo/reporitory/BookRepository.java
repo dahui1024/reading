@@ -22,5 +22,6 @@ public interface BookRepository extends MongoRepository<Book, ObjectId> , Paging
     Page<Book> findByPageScoreGreaterThanAndPageCountGreaterThan(int pageScore, int pageCount, Pageable pageable);
     List<Book> findByPageScoreGreaterThanAndPageCountGreaterThan(int pageScore, int pageCount);
     List<Book> findTop50ByIsSignAndPageScoreGreaterThan(int isSign, int pageScore, Sort sort);
+    List<Book> findByIsFinishOrderByPageScoreDesc(int isFinish, Pageable pageable);
     Book findByCpUrl(String url);
 }

@@ -24,6 +24,9 @@ public class HtmlContentParser {
     static String[] words = {"小说", "阅读", "章节", "<!--go-->『点击章节报错』","『加入书签，方便阅读』", "笔趣阁www.biqiuge.com，最快更新圣墟最新章节！"};
 
     public static String get(String url, List<String> secondUrls){
+        url = StringUtils.replaceAll(url, "[\\s]", "");
+
+        System.out.println(url);
         String content = null;
         try {
             Connection connection = Jsoup.connect(url);

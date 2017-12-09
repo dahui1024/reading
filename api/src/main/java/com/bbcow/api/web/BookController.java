@@ -8,6 +8,7 @@ import com.bbcow.service.mongo.entity.Book;
 import com.bbcow.service.mongo.entity.ScoreBookLog;
 import com.bbcow.service.util.HtmlChapterParser;
 import com.bbcow.service.util.HtmlContentParser;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
@@ -63,8 +64,8 @@ public class BookController {
             }
         }
 
-        model.addAttribute("bbcow_t", "免费小说_"+book.getName()+"("+book.getAuthor()+"著)-烂白菜");
-        model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你深度解析"+book.getName()+"究竟怎样，给你一个满意的答案。");
+        model.addAttribute("bbcow_t", book.getName()+"("+book.getAuthor()+"著)_中国网络小说-烂白菜");
+        model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，免费提供智能解析服务，无广告，无弹窗。");
         model.addAttribute("bbcow_k", book.getName()+","+book.getAuthor()+","+book.getTags()+",烂白菜");
         model.addAttribute("bbcow_mu", "/books/"+book.getId().toString());
 
@@ -100,9 +101,9 @@ public class BookController {
             model.addAttribute("url", url);
             model.addAttribute("rk", rk);
 
-            model.addAttribute("bbcow_t", "全部章节_"+book.getName()+"("+book.getAuthor()+"著)免费读-烂白菜");
+            model.addAttribute("bbcow_t", "最新章节列表_"+book.getName()+"("+book.getAuthor()+"著)_中国网络小说-烂白菜");
             model.addAttribute("bbcow_d", book.getName()+"是由"+book.getAuthor()+"创作的"+book.getTags()+"类型作品，首发于"+book.getCpName()+"平台，由烂白菜为你提供免费章节解析！");
-            model.addAttribute("bbcow_k", book.getName()+"章节目录,"+book.getAuthor()+","+book.getTags()+",烂白菜小说网");
+            model.addAttribute("bbcow_k", book.getName()+"章节列表,"+book.getAuthor()+","+book.getTags()+",烂白菜");
             model.addAttribute("bbcow_mu", "/books/chapter/"+book.getReferenceKey());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -115,13 +116,14 @@ public class BookController {
 
         try {
             String originUrl = URLDecoder.decode(url,"UTF-8");
-            model.addAttribute("content", HtmlContentParser.get(originUrl, Collections.EMPTY_LIST));
+            String content = HtmlContentParser.get(originUrl, Collections.EMPTY_LIST);
+            model.addAttribute("content", content);
             model.addAttribute("url", originUrl);
             model.addAttribute("refer", refer);
             model.addAttribute("rk", rk);
 
-            model.addAttribute("bbcow_t", "TXT内容_"+name+"免费读-烂白菜");
-            model.addAttribute("bbcow_d", name+"，由烂白菜为你提供免费章节内容解析！");
+            model.addAttribute("bbcow_t", "TXT_"+name+"免费读_中国网络小说-烂白菜");
+            model.addAttribute("bbcow_d", name+"："+ StringUtils.substring(content, 0, 30));
             model.addAttribute("bbcow_mu", "/books/content/"+rk+"?name="+name+"&refer="+refer+"&url="+url);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
