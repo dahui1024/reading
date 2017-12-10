@@ -32,6 +32,7 @@ public class Book {
     @Indexed
     @Field("page_score")
     private int pageScore = 0;
+    @Indexed
     @Field("page_count")
     private int pageCount = 0;
     private String description;

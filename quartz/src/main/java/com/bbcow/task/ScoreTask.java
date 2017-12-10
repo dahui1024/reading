@@ -55,7 +55,7 @@ public class ScoreTask {
                         continue;
                     }
 
-                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), siteCount.intValue(), null);
+                    int n = bookService.resetPageScore(scoreBook.getName(), result.intValue(), scoreBook.getUrls().size(), null);
                     if (n > 0) {
                         scoreService.addScoreLog(scoreBook.getName(), day, scoreBook.getUrls(), result.intValue(), siteCount.intValue());
                     }

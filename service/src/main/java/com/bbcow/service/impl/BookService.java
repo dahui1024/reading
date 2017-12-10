@@ -94,7 +94,7 @@ public class BookService {
     }
 
     public List<Book> getTop50(){
-        return bookRepository.findTop50ByIsSignAndPageScoreGreaterThan(1,60, new Sort(Sort.Direction.DESC, "page_score"));
+        return bookRepository.findTop50ByIsSignOrderByPageScoreDescPageCountDesc(1);
     }
 
     public List<Book> getFinishRank(int page){
